@@ -1,0 +1,3 @@
+*.csv
+plate*
+__pycache__/
