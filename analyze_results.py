@@ -50,7 +50,7 @@ for x in controls_roundness:
 print()
 
 efficacious.sort()
-print(f"Isolate {isolate.upper()} is likely NOT resistant the following treatments:\t")
+print(f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:\t")
 for x in efficacious:
     print(f"\t{x}")
 print()
