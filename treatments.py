@@ -342,4 +342,116 @@ def get_treatments(plate, block):
             QXF2, QXF2, QXF2, QXF2,
             QXF3, QXF3, QXF3, QXF3
         ]
+    elif plate == "plate7a":
+        # Isolate: PFV-6A
+        treatments = [
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1
+        ]
+    elif plate == "plate7b":
+        # Isolate: PFV-6A
+        treatments = [
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3
+        ]
+    elif plate == "plate8a":
+        # Isolate: SE-22B
+        treatments = [
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3
+        ]
+    elif plate == "plate8b":
+        # Isolate: SE-22B
+        treatments = [
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3
+        ]
     return treatments[block]
