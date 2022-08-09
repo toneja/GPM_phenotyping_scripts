@@ -43,5 +43,7 @@ def csv_handler(plate, isolate, time):
         perim_avg = round(perim_total / roi_count, 3)
         roundness_avg = round(roundness_total / roi_count, 3)
         slice_data.append([area_avg, perim_avg, roundness_avg])
+        # close the csv file after we're done with it
+        csv_file.close()
         # return Slice data
         return slice_data
