@@ -15,9 +15,9 @@ _48hr_results = csv_handler(plate, isolate, 48)
 resistant, efficacious, controls_area, controls_perim, controls_roundness = [], [], [], [], []
 
 for i in range(96):
-    area_increase = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
-    perim_increase = round(_48hr_results[i][2] - _0hr_results[i][2], 3)
-    roundness_decrease = round(_0hr_results[i][3] - _48hr_results[i][3], 3)
+    area_increase = round(_48hr_results[i][0] - _0hr_results[i][0], 3)
+    perim_increase = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
+    roundness_decrease = round(_0hr_results[i][2] - _48hr_results[i][2], 3)
     if treatments.get_treatments(plate, i) == treatments.CNTL:
         controls_area.append(area_increase)
         controls_perim.append(perim_increase)

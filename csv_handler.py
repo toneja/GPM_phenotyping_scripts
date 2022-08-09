@@ -7,11 +7,11 @@ import csv
 # handle csv datasets
 def csv_handler(plate, isolate, time):
     """docstring goes here"""
-    # open csv file; hardcoded file name for now
+    # open csv file
     with open("Results_" + plate + "_" + isolate + "_" + str(time) + "hr.csv", "r") as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
-        # slice data list => [[slice_count, area_avg, perim_avg, roundness_avg], [...]]
+        # slice data list => [[area_avg, perim_avg, roundness_avg], [...]]
         slice_data = []
         # set counts and totals to zero
         roi_count, area_total, perim_total, roundness_total = 0, 0, 0, 0
@@ -30,7 +30,7 @@ def csv_handler(plate, isolate, time):
                 area_avg = round(area_total / roi_count, 3)
                 perim_avg = round(perim_total / roi_count, 3)
                 roundness_avg = round(roundness_total / roi_count, 3)
-                slice_data.append([slice_count, area_avg, perim_avg, roundness_avg])
+                slice_data.append([area_avg, perim_avg, roundness_avg])
                 # move to the next slice
                 slice_count += 1
                 # start counts and totals with current values since we're on the first of new slice
@@ -42,6 +42,6 @@ def csv_handler(plate, isolate, time):
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
         roundness_avg = round(roundness_total / roi_count, 3)
-        slice_data.append([slice_count, area_avg, perim_avg, roundness_avg])
+        slice_data.append([area_avg, perim_avg, roundness_avg])
         # return Slice data
         return slice_data
