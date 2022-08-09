@@ -13,3 +13,4 @@ TODO:
 - add docstrings and better code comments
 - use py2exe or similar method to allow drag-and-drop analysis of results
 - merge scripts and ImageJ macros into single repository
+- handle possible exceptions
