@@ -13,3 +13,4 @@ TODO:
 - add docstrings and better code comments
 - move code in analyze_results.py into its own function
 - use py2exe or similar method to allow drag-and-drop analysis of results
+- write results to an output file
