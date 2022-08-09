@@ -31,7 +31,263 @@ QXF3 = "Quinoxyfen 1 ug/mL"
 # maps of treatment blocks
 def get_treatments(plate, block):
     """docstring goes here"""
-    if plate == "plate6a":
+    if plate == "plate1a":
+        # Isolate: MEN8B
+        treatments = [
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3
+        ]
+    elif plate == "plate1b":
+        # Isolate: MEN8B
+        treatments = [
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3
+        ]
+    elif plate == "plate2a":
+        # Isolate: MICV3
+        treatments = [
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1
+        ]
+    elif plate == "plate2b":
+        # Isolate: MICV3
+        treatments = [
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3
+        ]
+    elif plate == "plate3a":
+        # Isolate: DDO-ME-2
+        treatments = [
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3
+        ]
+    elif plate == "plate3b":
+        # Isolate: DDO-ME-2
+        treatments = [
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3
+        ]
+    elif plate == "plate4a":
+        # Isolate: GAT1
+        treatments = [
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3
+        ]
+    elif plate == "plate4b":
+        # Isolate: GAT1 (48 hr images are missing for this plate + isolate.)
+        treatments = []
+    elif plate == "plate5a":
+        # Isolate: NAPA02-T
+        treatments = [
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3
+        ]
+    elif plate == "plate5b":
+        # Isolate: NAPA02-T
+        treatments = [
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1
+        ]
+    elif plate == "plate6a":
+        # Isolate: NAPA05-PB
         treatments = [
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
@@ -59,6 +315,7 @@ def get_treatments(plate, block):
             BOS3, BOS3, BOS3, BOS3
         ]
     elif plate == "plate6b":
+        # Isolate: NAPA05-PB
         treatments = [
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
@@ -85,5 +342,4 @@ def get_treatments(plate, block):
             QXF2, QXF2, QXF2, QXF2,
             QXF3, QXF3, QXF3, QXF3
         ]
-
     return treatments[block]
