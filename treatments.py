@@ -29,29 +29,61 @@ QXF2 = "Quinoxyfen 0.1 ug/mL"
 QXF3 = "Quinoxyfen 1 ug/mL"
 
 # maps of treatment blocks
-PLATE6A_TREATMENT_MAP = [
-    MCB1, MCB1, MCB1, MCB1,
-    MCB2, MCB2, MCB2, MCB2,
-    MCB3, MCB3, MCB3, MCB3,
-    FTF1, FTF1, FTF1, FTF1,
-    FTF2, FTF2, FTF2, FTF2,
-    FTF3, FTF3, FTF3, FTF3,
-    TEB1, TEB1, TEB1, TEB1,
-    TEB2, TEB2, TEB2, TEB2,
-    TEB3, TEB3, TEB3, TEB3,
-    QXF1, QXF1, QXF1, QXF1,
-    QXF2, QXF2, QXF2, QXF2,
-    QXF3, QXF3, QXF3, QXF3,
-    CNTL, CNTL, CNTL, CNTL,
-    SHAM, SHAM, SHAM, SHAM,
-    AZX1, AZX1, AZX1, AZX1,
-    DFC1, DFC1, DFC1, DFC1,
-    DFC2, DFC2, DFC2, DFC2,
-    DFC3, DFC3, DFC3, DFC3,
-    FLU1, FLU1, FLU1, FLU1,
-    FLU2, FLU2, FLU2, FLU2,
-    FLU3, FLU3, FLU3, FLU3,
-    BOS1, BOS1, BOS1, BOS1,
-    BOS2, BOS2, BOS2, BOS2,
-    BOS3, BOS3, BOS3, BOS3
-]
+def get_treatments(plate, block):
+    """docstring goes here"""
+    if plate == "plate6a":
+        treatments = [
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3
+        ]
+    elif plate == "plate6b":
+        treatments = [
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF3, FTF3, FTF3, FTF3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3
+        ]
+
+    return treatments[block]
