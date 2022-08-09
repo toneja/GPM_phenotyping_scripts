@@ -14,9 +14,7 @@ def csv_handler(plate, isolate, time):
         # slice data list => [[slice_count, area_avg, perim_avg], [...]]
         slice_data = []
         # set counts and totals to zero
-        roi_count = 0
-        area_total = 0
-        perim_total = 0
+        roi_count, area_total, perim_total = 0, 0, 0
         # start with Slice 1
         slice_count = 1
         # iterate over the csv values row by row

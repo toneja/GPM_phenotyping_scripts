@@ -12,10 +12,7 @@ isolate = sys.argv[2]
 _0hr_results = csv_handler(plate, isolate, 0)
 _48hr_results = csv_handler(plate, isolate, 48)
 
-resistant = []
-efficacious = []
-controls_area = []
-controls_perim = []
+resistant, efficacious, controls_area, controls_perim = [], [], [], []
 
 for i in range(96):
     area_increase = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
