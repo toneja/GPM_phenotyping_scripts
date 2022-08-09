@@ -7,6 +7,8 @@ import sys
 from csv_handler import csv_handler
 import treatments
 
+DEBUG = True
+
 plate = sys.argv[1]
 isolate = sys.argv[2]
 _0hr_results = csv_handler(plate, isolate, 0)
@@ -33,21 +35,22 @@ for i in range(96):
 print(f"Results for isolate {isolate.upper()} from {plate.upper()}:")
 print()
 
-controls_area.sort()
-print("The average area increased in the controls by:")
-for x in controls_area:
-    print(f"\t{x}")
-print()
-controls_perim.sort()
-print("The average perimeter increased in the controls by:")
-for x in controls_perim:
-    print(f"\t{x}")
-print()
-controls_roundness.sort()
-print("The average roundness decreased in the controls by:")
-for x in controls_roundness:
-    print(f"\t{x}")
-print()
+if DEBUG:
+    controls_area.sort()
+    print("The average area increased in the controls by:")
+    for x in controls_area:
+        print(f"\t{x}")
+    print()
+    controls_perim.sort()
+    print("The average perimeter increased in the controls by:")
+    for x in controls_perim:
+        print(f"\t{x}")
+    print()
+    controls_roundness.sort()
+    print("The average roundness decreased in the controls by:")
+    for x in controls_roundness:
+        print(f"\t{x}")
+    print()
 
 efficacious.sort()
 print(f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:\t")
