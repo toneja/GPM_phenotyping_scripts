@@ -31,15 +31,26 @@ for i in range(96):
             if not efficacious.count(treatments.get_treatments(plate, i)):
                 efficacious.append(treatments.get_treatments(plate, i))
 
-print("The average area increased in the controls by:")
-print(*controls_area, sep="\n")
-print()
-print("The average perimeter increased in the controls by:")
-print(*controls_perim, sep="\n")
+print(f"Results for isolate {isolate.upper()} from {plate.upper()}:")
 print()
 
-print(f"Isolate napa05-pb is likely NOT resistant the following treatments:")
-print(*efficacious, sep="\n")
+controls_area.sort()
+print("The average area increased in the controls by:")
+for x in controls_area:
+    print(f"\t{x}")
 print()
-print(f"Isolate napa05-pb is likely resistant to the following treatments:")
-print(*resistant, sep="\n")
+controls_perim.sort()
+print("The average perimeter increased in the controls by:")
+for x in controls_perim:
+    print(f"\t{x}")
+print()
+
+efficacious.sort()
+print(f"Isolate {isolate.upper()} is likely NOT resistant the following treatments:\t")
+for x in efficacious:
+    print(f"\t{x}")
+print()
+resistant.sort()
+print(f"Isolate {isolate.upper()} is likely resistant to the following treatments:\t")
+for x in resistant:
+    print(f"\t{x}")
