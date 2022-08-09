@@ -12,5 +12,4 @@ TODO:
 - tighten up ROI comparisons, don't rely only on area, perimeter, and roundness changes
 - add docstrings and better code comments
 - use py2exe or similar method to allow drag-and-drop analysis of results
-- write results to an output file
 - merge scripts and ImageJ macros into single repository

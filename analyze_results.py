@@ -2,6 +2,7 @@
 
 """docstring goes here"""
 
+import logging
 import sys
 
 from csv_handler import csv_handler
@@ -10,6 +11,13 @@ import treatments
 def analyze_results(plate, isolate):
     """docstring goes here"""
     debug = True
+    log_level = logging.INFO
+    log_format = "%(message)s"
+    log_handlers = [
+        logging.FileHandler("FinalResults_" + plate + "_" + isolate + ".txt"),
+        logging.StreamHandler()
+    ]
+    logging.basicConfig(level=log_level, format=log_format, handlers=log_handlers)
 
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
@@ -32,35 +40,35 @@ def analyze_results(plate, isolate):
                 if not efficacious.count(treatments.get_treatments(plate, i)):
                     efficacious.append(treatments.get_treatments(plate, i))
 
-    print(f"Results for isolate {isolate.upper()} from {plate.upper()}:")
-    print()
+    logging.info(f"Results for isolate {isolate.upper()} from {plate.upper()}:")
+    logging.info("")
 
     if debug:
         controls_area.sort()
-        print("The average area increased in the controls by:")
+        logging.info("The average area increased in the controls by:")
         for item in controls_area:
-            print(f"\t{item}")
-        print()
+            logging.info(f"\t{item}")
+        logging.info("")
         controls_perim.sort()
-        print("The average perimeter increased in the controls by:")
+        logging.info("The average perimeter increased in the controls by:")
         for item in controls_perim:
-            print(f"\t{item}")
-        print()
+            logging.info(f"\t{item}")
+        logging.info("")
         controls_roundness.sort()
-        print("The average roundness decreased in the controls by:")
+        logging.info("The average roundness decreased in the controls by:")
         for item in controls_roundness:
-            print(f"\t{item}")
-        print()
+            logging.info(f"\t{item}")
+        logging.info("")
 
     efficacious.sort()
-    print(f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:\t")
+    logging.info(f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:\t")
     for item in efficacious:
-        print(f"\t{item}")
-    print()
+        logging.info(f"\t{item}")
+    logging.info("")
     resistant.sort()
-    print(f"Isolate {isolate.upper()} is likely resistant to the following treatments:\t")
+    logging.info(f"Isolate {isolate.upper()} is likely resistant to the following treatments:\t")
     for item in resistant:
-        print(f"\t{item}")
+        logging.info(f"\t{item}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
