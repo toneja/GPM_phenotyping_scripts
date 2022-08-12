@@ -61,12 +61,12 @@ def analyze_results(plate, isolate):
         logging.info("")
 
     efficacious.sort()
-    logging.info(f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:\t")
+    logging.info(f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:")
     for item in efficacious:
         logging.info(f"\t{item}")
     logging.info("")
     resistant.sort()
-    logging.info(f"Isolate {isolate.upper()} is likely resistant to the following treatments:\t")
+    logging.info(f"Isolate {isolate.upper()} is likely resistant to the following treatments:")
     for item in resistant:
         logging.info(f"\t{item}")
 
