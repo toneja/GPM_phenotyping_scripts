@@ -8,6 +8,7 @@ import sys
 from csv_handler import csv_handler
 import treatments
 
+
 def analyze_results(plate, isolate):
     """docstring goes here"""
     debug = True
@@ -15,14 +16,20 @@ def analyze_results(plate, isolate):
     log_format = "%(message)s"
     log_handlers = [
         logging.FileHandler("FinalResults_" + plate + "_" + isolate + ".txt"),
-        logging.StreamHandler()
+        logging.StreamHandler(),
     ]
     logging.basicConfig(level=log_level, format=log_format, handlers=log_handlers)
 
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
-    resistant, efficacious, controls_area, controls_perim, controls_roundness = [], [], [], [], []
+    resistant, efficacious, controls_area, controls_perim, controls_roundness = (
+        [],
+        [],
+        [],
+        [],
+        [],
+    )
 
     for i in range(96):
         area_increase = round(_48hr_results[i][0] - _0hr_results[i][0], 3)
@@ -61,14 +68,19 @@ def analyze_results(plate, isolate):
         logging.info("")
 
     efficacious.sort()
-    logging.info(f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:")
+    logging.info(
+        f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:"
+    )
     for item in efficacious:
         logging.info(f"\t{item}")
     logging.info("")
     resistant.sort()
-    logging.info(f"Isolate {isolate.upper()} is likely resistant to the following treatments:")
+    logging.info(
+        f"Isolate {isolate.upper()} is likely resistant to the following treatments:"
+    )
     for item in resistant:
         logging.info(f"\t{item}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

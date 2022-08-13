@@ -4,11 +4,14 @@
 
 import csv
 
+
 # handle csv datasets
 def csv_handler(plate, isolate, time):
     """docstring goes here"""
     # open csv file
-    with open("Results_" + plate + "_" + isolate + "_" + str(time) + "hr.csv", "r") as csv_file:
+    with open(
+        "Results_" + plate + "_" + isolate + "_" + str(time) + "hr.csv", "r"
+    ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
         # slice data list => [[area_avg, perim_avg, roundness_avg], [...]]

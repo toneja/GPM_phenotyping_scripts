@@ -57,7 +57,7 @@ def get_treatments(plate, block):
             TEB3, TEB3, TEB3, TEB3,
             QXF1, QXF1, QXF1, QXF1,
             QXF2, QXF2, QXF2, QXF2,
-            QXF3, QXF3, QXF3, QXF3
+            QXF3, QXF3, QXF3, QXF3,
         ]
     elif plate == "plate1b":
         # Isolate: MEN8B
@@ -85,7 +85,7 @@ def get_treatments(plate, block):
             FLU3, FLU3, FLU3, FLU3,
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
-            MCB3, MCB3, MCB3, MCB3
+            MCB3, MCB3, MCB3, MCB3,
         ]
     elif plate == "plate2a":
         # Isolate: MICV3
@@ -113,7 +113,7 @@ def get_treatments(plate, block):
             FLU3, FLU3, FLU3, FLU3,
             CNTL, CNTL, CNTL, CNTL,
             SHAM, SHAM, SHAM, SHAM,
-            AZX1, AZX1, AZX1, AZX1
+            AZX1, AZX1, AZX1, AZX1,
         ]
     elif plate == "plate2b":
         # Isolate: MICV3
@@ -141,7 +141,7 @@ def get_treatments(plate, block):
             FTF3, FTF3, FTF3, FTF3,
             FLU1, FLU1, FLU1, FLU1,
             FLU2, FLU2, FLU2, FLU2,
-            FLU3, FLU3, FLU3, FLU3
+            FLU3, FLU3, FLU3, FLU3,
         ]
     elif plate == "plate3a":
         # Isolate: DDO-ME-2
@@ -169,7 +169,7 @@ def get_treatments(plate, block):
             BOS3, BOS3, BOS3, BOS3,
             FLU1, FLU1, FLU1, FLU1,
             FLU2, FLU2, FLU2, FLU2,
-            FLU3, FLU3, FLU3, FLU3
+            FLU3, FLU3, FLU3, FLU3,
         ]
     elif plate == "plate3b":
         # Isolate: DDO-ME-2
@@ -197,7 +197,7 @@ def get_treatments(plate, block):
             FTF3, FTF3, FTF3, FTF3,
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
-            MCB3, MCB3, MCB3, MCB3
+            MCB3, MCB3, MCB3, MCB3,
         ]
     elif plate == "plate4a":
         # Isolate: GAT1
@@ -225,7 +225,7 @@ def get_treatments(plate, block):
             AZX1, AZX1, AZX1, AZX1,
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
-            MCB3, MCB3, MCB3, MCB3
+            MCB3, MCB3, MCB3, MCB3,
         ]
     elif plate == "plate4b":
         # Isolate: GAT1 (48 hr images are missing for this plate + isolate.)
@@ -256,7 +256,7 @@ def get_treatments(plate, block):
             MCB3, MCB3, MCB3, MCB3,
             DFC1, DFC1, DFC1, DFC1,
             DFC2, DFC2, DFC2, DFC2,
-            DFC3, DFC3, DFC3, DFC3
+            DFC3, DFC3, DFC3, DFC3,
         ]
     elif plate == "plate5b":
         # Isolate: NAPA02-T
@@ -284,7 +284,7 @@ def get_treatments(plate, block):
             MCB3, MCB3, MCB3, MCB3,
             CNTL, CNTL, CNTL, CNTL,
             SHAM, SHAM, SHAM, SHAM,
-            AZX1, AZX1, AZX1, AZX1
+            AZX1, AZX1, AZX1, AZX1,
         ]
     elif plate == "plate6a":
         # Isolate: NAPA05-PB
@@ -312,7 +312,7 @@ def get_treatments(plate, block):
             FLU3, FLU3, FLU3, FLU3,
             BOS1, BOS1, BOS1, BOS1,
             BOS2, BOS2, BOS2, BOS2,
-            BOS3, BOS3, BOS3, BOS3
+            BOS3, BOS3, BOS3, BOS3,
         ]
     elif plate == "plate6b":
         # Isolate: NAPA05-PB
@@ -340,7 +340,7 @@ def get_treatments(plate, block):
             BOS3, BOS3, BOS3, BOS3,
             QXF1, QXF1, QXF1, QXF1,
             QXF2, QXF2, QXF2, QXF2,
-            QXF3, QXF3, QXF3, QXF3
+            QXF3, QXF3, QXF3, QXF3,
         ]
     elif plate == "plate7a":
         # Isolate: PFV-6A
@@ -368,7 +368,7 @@ def get_treatments(plate, block):
             FLU3, FLU3, FLU3, FLU3,
             CNTL, CNTL, CNTL, CNTL,
             SHAM, SHAM, SHAM, SHAM,
-            AZX1, AZX1, AZX1, AZX1
+            AZX1, AZX1, AZX1, AZX1,
         ]
     elif plate == "plate7b":
         # Isolate: PFV-6A
@@ -396,7 +396,7 @@ def get_treatments(plate, block):
             TEB3, TEB3, TEB3, TEB3,
             FTF1, FTF1, FTF1, FTF1,
             FTF2, FTF2, FTF2, FTF2,
-            FTF3, FTF3, FTF3, FTF3
+            FTF3, FTF3, FTF3, FTF3,
         ]
     elif plate == "plate8a":
         # Isolate: SE-22B
@@ -424,7 +424,7 @@ def get_treatments(plate, block):
             QXF3, QXF3, QXF3, QXF3,
             FTF1, FTF1, FTF1, FTF1,
             FTF2, FTF2, FTF2, FTF2,
-            FTF3, FTF3, FTF3, FTF3
+            FTF3, FTF3, FTF3, FTF3,
         ]
     elif plate == "plate8b":
         # Isolate: SE-22B
@@ -452,6 +452,6 @@ def get_treatments(plate, block):
             MCB3, MCB3, MCB3, MCB3,
             FLU1, FLU1, FLU1, FLU1,
             FLU2, FLU2, FLU2, FLU2,
-            FLU3, FLU3, FLU3, FLU3
+            FLU3, FLU3, FLU3, FLU3,
         ]
     return treatments[block]
