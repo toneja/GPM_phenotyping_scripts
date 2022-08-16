@@ -32,7 +32,7 @@ QXF3 = "Quinoxyfen 1 ug/mL"
 def get_treatments(plate, block):
     """docstring goes here"""
     if plate == "plate1a":
-        # Isolate: MEN8B
+        # Isolates: LH1, MEN8B
         treatments = [
             CNTL, CNTL, CNTL, CNTL,
             SHAM, SHAM, SHAM, SHAM,
@@ -60,7 +60,7 @@ def get_treatments(plate, block):
             QXF3, QXF3, QXF3, QXF3,
         ]
     elif plate == "plate1b":
-        # Isolate: MEN8B
+        # Isolates: LH1, MEN8B
         treatments = [
             TEB1, TEB1, TEB1, TEB1,
             TEB2, TEB2, TEB2, TEB2,
@@ -88,7 +88,7 @@ def get_treatments(plate, block):
             MCB3, MCB3, MCB3, MCB3,
         ]
     elif plate == "plate2a":
-        # Isolate: MICV3
+        # Isolates: SC4SY-B, MICV3
         treatments = [
             TEB1, TEB1, TEB1, TEB1,
             TEB2, TEB2, TEB2, TEB2,
@@ -116,7 +116,7 @@ def get_treatments(plate, block):
             AZX1, AZX1, AZX1, AZX1,
         ]
     elif plate == "plate2b":
-        # Isolate: MICV3
+        # Isolates: SC4SY-B, MICV3
         treatments = [
             TEB1, TEB1, TEB1, TEB1,
             TEB2, TEB2, TEB2, TEB2,
@@ -231,7 +231,7 @@ def get_treatments(plate, block):
         # Isolate: GAT1 (48 hr images are missing for this plate + isolate.)
         treatments = []
     elif plate == "plate5a":
-        # Isolate: NAPA02-T
+        # Isolates: KRAE1B, NAPA02-T
         treatments = [
             FTF1, FTF1, FTF1, FTF1,
             FTF2, FTF2, FTF2, FTF2,
@@ -259,7 +259,7 @@ def get_treatments(plate, block):
             DFC3, DFC3, DFC3, DFC3,
         ]
     elif plate == "plate5b":
-        # Isolate: NAPA02-T
+        # Isolates: KRAE1B, NAPA02-T
         treatments = [
             TEB1, TEB1, TEB1, TEB1,
             TEB2, TEB2, TEB2, TEB2,
@@ -287,7 +287,7 @@ def get_treatments(plate, block):
             AZX1, AZX1, AZX1, AZX1,
         ]
     elif plate == "plate6a":
-        # Isolate: NAPA05-PB
+        # Isolates: R532ST190-1, NAPA05-PB
         treatments = [
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
@@ -315,7 +315,7 @@ def get_treatments(plate, block):
             BOS3, BOS3, BOS3, BOS3,
         ]
     elif plate == "plate6b":
-        # Isolate: NAPA05-PB
+        # Isolates: R532ST190-1, NAPA05-PB
         treatments = [
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
@@ -343,7 +343,7 @@ def get_treatments(plate, block):
             QXF3, QXF3, QXF3, QXF3,
         ]
     elif plate == "plate7a":
-        # Isolate: PFV-6A
+        # Isolates: GAT1, PFV-6A
         treatments = [
             QXF1, QXF1, QXF1, QXF1,
             QXF2, QXF2, QXF2, QXF2,
@@ -371,7 +371,7 @@ def get_treatments(plate, block):
             AZX1, AZX1, AZX1, AZX1,
         ]
     elif plate == "plate7b":
-        # Isolate: PFV-6A
+        # Isolates: GAT1, PFV-6A
         treatments = [
             CNTL, CNTL, CNTL, CNTL,
             SHAM, SHAM, SHAM, SHAM,
@@ -399,7 +399,7 @@ def get_treatments(plate, block):
             FTF3, FTF3, FTF3, FTF3,
         ]
     elif plate == "plate8a":
-        # Isolate: SE-22B
+        # Isolates: HO2, SE-22B
         treatments = [
             BOS1, BOS1, BOS1, BOS1,
             BOS2, BOS2, BOS2, BOS2,
@@ -427,7 +427,7 @@ def get_treatments(plate, block):
             FTF3, FTF3, FTF3, FTF3,
         ]
     elif plate == "plate8b":
-        # Isolate: SE-22B
+        # Isolates: HO2, SE-22B
         treatments = [
             TEB1, TEB1, TEB1, TEB1,
             TEB2, TEB2, TEB2, TEB2,
