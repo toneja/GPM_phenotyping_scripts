@@ -3,6 +3,7 @@
 """docstring goes here"""
 
 import logging
+import os
 import sys
 
 from csv_handler import csv_handler
@@ -83,7 +84,15 @@ def analyze_results(plate, isolate):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} [PLATE] [ISOLATE]")
+    if len(sys.argv) == 2:
+        FN = os.path.splitext(sys.argv[1])
+        ARGS = FN[0].split("_")
+        PLATE = ARGS[1]
+        ISOLATE = ARGS[2]
+    elif len(sys.argv) == 3:
+        PLATE = sys.argv[1]
+        ISOLATE = sys.argv[2]
     else:
-        analyze_results(sys.argv[1], sys.argv[2])
+        sys.exit(f"Usage: {sys.argv[0]} [PLATE] [ISOLATE]")
+
+    analyze_results(PLATE, ISOLATE)
