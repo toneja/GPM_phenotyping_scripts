@@ -32,15 +32,15 @@ def analyze_results(plate, isolate):
     )
 
     for i in range(96):
-        area_increase = round(_48hr_results[i][0] - _0hr_results[i][0], 3)
-        perim_increase = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
-        roundness_decrease = round(_0hr_results[i][2] - _48hr_results[i][2], 3)
+        area_change = round(_48hr_results[i][0] - _0hr_results[i][0], 3)
+        perim_change = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
+        roundness_change = round(_48hr_results[i][2] - _0hr_results[i][2], 3)
         if get_treatments(plate, i) == CNTL:
-            controls_area.append(area_increase)
-            controls_perim.append(perim_increase)
-            controls_roundness.append(roundness_decrease)
+            controls_area.append(area_change)
+            controls_perim.append(perim_change)
+            controls_roundness.append(roundness_change)
         else:
-            if area_increase > 23 and perim_increase > 5 and roundness_decrease > 0.1:
+            if area_change > 23 and perim_change > 5 and roundness_change < -0.1:
                 if not resistant.count(get_treatments(plate, i)):
                     resistant.append(get_treatments(plate, i))
             else:
@@ -52,17 +52,17 @@ def analyze_results(plate, isolate):
 
     if DEBUG:
         controls_area.sort()
-        logging.info("The average area increased in the controls by:")
+        logging.info("The average area changed in the controls by:")
         for item in controls_area:
             logging.info(f"\t{item}")
         logging.info("")
         controls_perim.sort()
-        logging.info("The average perimeter increased in the controls by:")
+        logging.info("The average perimeter changed in the controls by:")
         for item in controls_perim:
             logging.info(f"\t{item}")
         logging.info("")
         controls_roundness.sort()
-        logging.info("The average roundness decreased in the controls by:")
+        logging.info("The average roundness changed in the controls by:")
         for item in controls_roundness:
             logging.info(f"\t{item}")
         logging.info("")
