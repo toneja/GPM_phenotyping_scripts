@@ -7,10 +7,11 @@ import logging
 import os
 import sys
 
+DEBUG = True
+
 
 def analyze_results(plate, isolate):
     """docstring goes here"""
-    debug = True
     log_level = logging.INFO
     log_format = "%(message)s"
     log_handlers = [
@@ -49,7 +50,7 @@ def analyze_results(plate, isolate):
     logging.info(f"Results for isolate {isolate.upper()} from {plate.upper()}:")
     logging.info("")
 
-    if debug:
+    if DEBUG:
         controls_area.sort()
         logging.info("The average area increased in the controls by:")
         for item in controls_area:
