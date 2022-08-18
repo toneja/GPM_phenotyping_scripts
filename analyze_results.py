@@ -23,7 +23,7 @@ def analyze_results(plate, isolate):
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
-    resistant, efficacious, controls_area, controls_perim, controls_roundness = (
+    resistant, efficacious, controls_area, controls_perim, controls_round = (
         [],
         [],
         [],
@@ -34,13 +34,13 @@ def analyze_results(plate, isolate):
     for i in range(96):
         area_change = round(_48hr_results[i][0] - _0hr_results[i][0], 3)
         perim_change = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
-        roundness_change = round(_48hr_results[i][2] - _0hr_results[i][2], 3)
+        round_change = round(_48hr_results[i][2] - _0hr_results[i][2], 3)
         if get_treatments(plate, i) == CNTL:
             controls_area.append(area_change)
             controls_perim.append(perim_change)
-            controls_roundness.append(roundness_change)
+            controls_round.append(round_change)
         else:
-            if area_change > 23 and perim_change > 5 and roundness_change < -0.1:
+            if area_change > 23 and perim_change > 5 and round_change < -0.1:
                 if not resistant.count(get_treatments(plate, i)):
                     resistant.append(get_treatments(plate, i))
             else:
@@ -61,9 +61,9 @@ def analyze_results(plate, isolate):
         for item in controls_perim:
             logging.info(f"\t{item}")
         logging.info("")
-        controls_roundness.sort()
+        controls_round.sort()
         logging.info("The average roundness changed in the controls by:")
-        for item in controls_roundness:
+        for item in controls_round:
             logging.info(f"\t{item}")
         logging.info("")
 
@@ -91,10 +91,10 @@ def csv_handler(plate, isolate, time):
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
-        # slice data list => [[area_avg, perim_avg, roundness_avg], [...]]
+        # slice data list => [[area_avg, perim_avg, round_avg], [...]]
         slice_data = []
         # set counts and totals to zero
-        roi_count, area_total, perim_total, roundness_total = 0, 0, 0, 0
+        roi_count, area_total, perim_total, round_total = 0, 0, 0, 0
         # start with Slice 1
         slice_count = 1
         # iterate over the csv values row by row
@@ -104,25 +104,25 @@ def csv_handler(plate, isolate, time):
                 roi_count += 1
                 area_total += int(row["Area"])
                 perim_total += float(row["Perim."])
-                roundness_total += float(row["Round"])
+                round_total += float(row["Round"])
             else:
                 # once we've hit the next slice, calculate averages and store the data
                 area_avg = round(area_total / roi_count, 3)
                 perim_avg = round(perim_total / roi_count, 3)
-                roundness_avg = round(roundness_total / roi_count, 3)
-                slice_data.append([area_avg, perim_avg, roundness_avg])
+                round_avg = round(round_total / roi_count, 3)
+                slice_data.append([area_avg, perim_avg, round_avg])
                 # move to the next slice
                 slice_count += 1
                 # start counts and totals with current values since we're on the first of new slice
                 roi_count = 1
                 area_total = int(row["Area"])
                 perim_total = float(row["Perim."])
-                roundness_total = float(row["Round"])
+                round_total = float(row["Round"])
         # outside of the loop, calculate and store values for the last slice
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
-        roundness_avg = round(roundness_total / roi_count, 3)
-        slice_data.append([area_avg, perim_avg, roundness_avg])
+        round_avg = round(round_total / roi_count, 3)
+        slice_data.append([area_avg, perim_avg, round_avg])
         # close the csv file after we're done with it
         csv_file.close()
         # return Slice data
