@@ -14,8 +14,12 @@ def analyze_results(plate, isolate):
     """docstring goes here"""
     log_level = logging.INFO
     log_format = "%(message)s"
+    if DEBUG:
+        log_file = ("DEBUG_")
+    else:
+        log_file = ("FinalResults_")
     log_handlers = [
-        logging.FileHandler("FinalResults_" + plate + "_" + isolate + ".txt"),
+        logging.FileHandler(log_file + plate + "_" + isolate + ".txt"),
         logging.StreamHandler(),
     ]
     logging.basicConfig(level=log_level, format=log_format, handlers=log_handlers)
@@ -23,7 +27,11 @@ def analyze_results(plate, isolate):
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
-    resistant, efficacious, controls_area, controls_perim, controls_round = (
+    resistant, efficacious = [], []
+    cntl_imgs, cntl_area, cntl_perim, cntl_circ, cntl_feret, cntl_AR, cntl_round, cntl_solidity = (
+        [],
+        [],
+        [],
         [],
         [],
         [],
@@ -34,11 +42,23 @@ def analyze_results(plate, isolate):
     for i in range(96):
         area_change = round(_48hr_results[i][0] - _0hr_results[i][0], 3)
         perim_change = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
-        round_change = round(_48hr_results[i][2] - _0hr_results[i][2], 3)
+        circ_change = round(_48hr_results[i][2] - _0hr_results[i][2], 3)
+        feret_change = round(_48hr_results[i][3] - _0hr_results[i][3], 3)
+        AR_change = round(_48hr_results[i][4] - _0hr_results[i][4], 3)
+        round_change = round(_48hr_results[i][5] - _0hr_results[i][5], 3)
+        solidity_change = round(_48hr_results[i][6] - _0hr_results[i][6], 3)
         if get_treatments(plate, i) == CNTL:
-            controls_area.append(area_change)
-            controls_perim.append(perim_change)
-            controls_round.append(round_change)
+            if len(str(i)) == 1:
+                cntl_imgs.append("Image_000" + str(i) + ".jpg")
+            else:
+                cntl_imgs.append("Image_00" + str(i) + ".jpg")
+            cntl_area.append(area_change)
+            cntl_perim.append(perim_change)
+            cntl_circ.append(circ_change)
+            cntl_feret.append(feret_change)
+            cntl_AR.append(AR_change)
+            cntl_round.append(round_change)
+            cntl_solidity.append(solidity_change)
         else:
             if area_change > 23 and perim_change > 5 and round_change < -0.1:
                 if not resistant.count(get_treatments(plate, i)):
@@ -51,35 +71,59 @@ def analyze_results(plate, isolate):
     logging.info("")
 
     if DEBUG:
-        controls_area.sort()
+        logging.info("The following images contain the controls:")
+        for item in cntl_imgs:
+            logging.info(f"\t{item}")
+        logging.info("")
+        cntl_area.sort()
         logging.info("The average area changed in the controls by:")
-        for item in controls_area:
+        for item in cntl_area:
             logging.info(f"\t{item}")
         logging.info("")
-        controls_perim.sort()
+        cntl_perim.sort()
         logging.info("The average perimeter changed in the controls by:")
-        for item in controls_perim:
+        for item in cntl_perim:
             logging.info(f"\t{item}")
         logging.info("")
-        controls_round.sort()
+        cntl_circ.sort()
+        logging.info("The average circularity changed in the controls by:")
+        for item in cntl_circ:
+            logging.info(f"\t{item}")
+        logging.info("")
+        cntl_feret.sort()
+        logging.info("The average feret diameter changed in the controls by:")
+        for item in cntl_feret:
+            logging.info(f"\t{item}")
+        logging.info("")
+        cntl_AR.sort()
+        logging.info("The average aspect ratio changed in the controls by:")
+        for item in cntl_AR:
+            logging.info(f"\t{item}")
+        logging.info("")
+        cntl_round.sort()
         logging.info("The average roundness changed in the controls by:")
-        for item in controls_round:
+        for item in cntl_round:
             logging.info(f"\t{item}")
         logging.info("")
-
-    efficacious.sort()
-    logging.info(
-        f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:"
-    )
-    for item in efficacious:
-        logging.info(f"\t{item}")
-    logging.info("")
-    resistant.sort()
-    logging.info(
-        f"Isolate {isolate.upper()} is likely resistant to the following treatments:"
-    )
-    for item in resistant:
-        logging.info(f"\t{item}")
+        cntl_solidity.sort()
+        logging.info("The average solidity changed in the controls by:")
+        for item in cntl_solidity:
+            logging.info(f"\t{item}")
+        logging.info("")
+    else:
+        efficacious.sort()
+        logging.info(
+            f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:"
+        )
+        for item in efficacious:
+            logging.info(f"\t{item}")
+        logging.info("")
+        resistant.sort()
+        logging.info(
+            f"Isolate {isolate.upper()} is likely resistant to the following treatments:"
+        )
+        for item in resistant:
+            logging.info(f"\t{item}")
 
 
 # handle csv datasets
@@ -93,8 +137,18 @@ def csv_handler(plate, isolate, time):
         csv_reader = csv.DictReader(csv_file, delimiter=",")
         # slice data list => [[area_avg, perim_avg, round_avg], [...]]
         slice_data = []
-        # set counts and totals to zero
-        roi_count, area_total, perim_total, round_total = 0, 0, 0, 0
+        # set ROI count to zero
+        roi_count = 0
+        # set totals to zero
+        area_total, perim_total, circ_total, feret_total, AR_total, round_total, solidity_total = (
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        )
         # start with Slice 1
         slice_count = 1
         # iterate over the csv values row by row
@@ -104,25 +158,41 @@ def csv_handler(plate, isolate, time):
                 roi_count += 1
                 area_total += int(row["Area"])
                 perim_total += float(row["Perim."])
+                circ_total += float(row["Circ."])
+                feret_total += float(row["Feret"])
+                AR_total += float(row["AR"])
                 round_total += float(row["Round"])
+                solidity_total += float(row["Solidity"])
             else:
                 # once we've hit the next slice, calculate averages and store the data
                 area_avg = round(area_total / roi_count, 3)
                 perim_avg = round(perim_total / roi_count, 3)
+                circ_avg = round(circ_total / roi_count, 3)
+                feret_avg = round(feret_total / roi_count, 3)
+                AR_avg = round(AR_total / roi_count, 3)
                 round_avg = round(round_total / roi_count, 3)
-                slice_data.append([area_avg, perim_avg, round_avg])
+                solidity_avg = round(solidity_total / roi_count, 3)
+                slice_data.append([area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg])
                 # move to the next slice
                 slice_count += 1
                 # start counts and totals with current values since we're on the first of new slice
                 roi_count = 1
                 area_total = int(row["Area"])
                 perim_total = float(row["Perim."])
+                circ_total = float(row["Circ."])
+                feret_total = float(row["Feret"])
+                AR_total = float(row["AR"])
                 round_total = float(row["Round"])
+                solidity_total = float(row["Solidity"])
         # outside of the loop, calculate and store values for the last slice
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
+        circ_avg = round(circ_total / roi_count, 3)
+        feret_avg = round(feret_total / roi_count, 3)
+        AR_avg = round(AR_total / roi_count, 3)
         round_avg = round(round_total / roi_count, 3)
-        slice_data.append([area_avg, perim_avg, round_avg])
+        solidity_avg = round(solidity_total / roi_count, 3)
+        slice_data.append([area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg])
         # close the csv file after we're done with it
         csv_file.close()
         # return Slice data
