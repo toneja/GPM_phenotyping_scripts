@@ -3,8 +3,11 @@ Python scripts for use with *Erysiphe necator* fungicide efficacy assay
 
 Usage:
 1) Place 0hr and 48hr csv files with results from ImageJ into this directory.
-2) Run analyze_results.py with the plate number and isolate name as arguments.\
-	e.g.: ./analyze_results.py plate6a napa05-pb
+2) Run analyze_results.py with either the plate number and isolate name or the\
+	name of your results csv file as arguments.\
+	e.g.: ./analyze_results.py plate6a napa05-pb\
+	or\
+	e.g.: ./analyze_results.py Results_plate6a_napa05-pb_0hr.csv
 3) The results of the analysis will be outputted to the screen.
 
 TODO:
