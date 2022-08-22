@@ -75,37 +75,30 @@ def analyze_results(plate, isolate):
         for item in cntl_imgs:
             logging.info(f"\t{item}")
         logging.info("")
-        cntl_area.sort()
         logging.info("The average area changed in the controls by:")
         for item in cntl_area:
             logging.info(f"\t{item}")
         logging.info("")
-        cntl_perim.sort()
         logging.info("The average perimeter changed in the controls by:")
         for item in cntl_perim:
             logging.info(f"\t{item}")
         logging.info("")
-        cntl_circ.sort()
         logging.info("The average circularity changed in the controls by:")
         for item in cntl_circ:
             logging.info(f"\t{item}")
         logging.info("")
-        cntl_feret.sort()
         logging.info("The average feret diameter changed in the controls by:")
         for item in cntl_feret:
             logging.info(f"\t{item}")
         logging.info("")
-        cntl_AR.sort()
         logging.info("The average aspect ratio changed in the controls by:")
         for item in cntl_AR:
             logging.info(f"\t{item}")
         logging.info("")
-        cntl_round.sort()
         logging.info("The average roundness changed in the controls by:")
         for item in cntl_round:
             logging.info(f"\t{item}")
         logging.info("")
-        cntl_solidity.sort()
         logging.info("The average solidity changed in the controls by:")
         for item in cntl_solidity:
             logging.info(f"\t{item}")
