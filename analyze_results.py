@@ -42,22 +42,22 @@ def analyze_results(plate, isolate):
         [],
     )
 
-    for i in range(96):
-        area_change = round(_48hr_results[i][0] - _0hr_results[i][0], 3)
-        perim_change = round(_48hr_results[i][1] - _0hr_results[i][1], 3)
-        angle_change = round(_48hr_results[i][2] - _0hr_results[i][2], 3)
-        circ_change = round(_48hr_results[i][3] - _0hr_results[i][3], 3)
-        feret_change = round(_48hr_results[i][4] - _0hr_results[i][4], 3)
-        feret_angle_change = round(_48hr_results[i][5] - _0hr_results[i][5], 3)
-        min_feret_change = round(_48hr_results[i][6] - _0hr_results[i][6], 3)
-        AR_change = round(_48hr_results[i][7] - _0hr_results[i][7], 3)
-        round_change = round(_48hr_results[i][8] - _0hr_results[i][8], 3)
-        solidity_change = round(_48hr_results[i][9] - _0hr_results[i][9], 3)
-        if get_treatments(plate, i) == CNTL:
-            if len(str(i)) == 1:
-                cntl_imgs.append("Image_000" + str(i) + ".jpg")
+    for block in range(96):
+        area_change = round(_48hr_results[block][0] - _0hr_results[block][0], 3)
+        perim_change = round(_48hr_results[block][1] - _0hr_results[block][1], 3)
+        angle_change = round(_48hr_results[block][2] - _0hr_results[block][2], 3)
+        circ_change = round(_48hr_results[block][3] - _0hr_results[block][3], 3)
+        feret_change = round(_48hr_results[block][4] - _0hr_results[block][4], 3)
+        feret_angle_change = round(_48hr_results[block][5] - _0hr_results[block][5], 3)
+        min_feret_change = round(_48hr_results[block][6] - _0hr_results[block][6], 3)
+        AR_change = round(_48hr_results[block][7] - _0hr_results[block][7], 3)
+        round_change = round(_48hr_results[block][8] - _0hr_results[block][8], 3)
+        solidity_change = round(_48hr_results[block][9] - _0hr_results[block][9], 3)
+        if get_treatments(plate, block) == CNTL:
+            if len(str(block)) == 1:
+                cntl_imgs.append("Image_000" + str(block) + ".jpg")
             else:
-                cntl_imgs.append("Image_00" + str(i) + ".jpg")
+                cntl_imgs.append("Image_00" + str(block) + ".jpg")
             cntl_area.append(area_change)
             cntl_perim.append(perim_change)
             cntl_angle.append(angle_change)
@@ -70,11 +70,11 @@ def analyze_results(plate, isolate):
             cntl_solidity.append(solidity_change)
         else:
             if area_change > 23 and perim_change > 5 and round_change < -0.1:
-                if not resistant.count(get_treatments(plate, i)):
-                    resistant.append(get_treatments(plate, i))
+                if not resistant.count(get_treatments(plate, block)):
+                    resistant.append(get_treatments(plate, block))
             else:
-                if not efficacious.count(get_treatments(plate, i)):
-                    efficacious.append(get_treatments(plate, i))
+                if not efficacious.count(get_treatments(plate, block)):
+                    efficacious.append(get_treatments(plate, block))
 
     logging.info(f"Results for isolate {isolate.upper()} from {plate.upper()}:")
     logging.info("")
