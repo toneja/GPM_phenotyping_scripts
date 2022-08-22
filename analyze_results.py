@@ -15,9 +15,9 @@ def analyze_results(plate, isolate):
     log_level = logging.INFO
     log_format = "%(message)s"
     if DEBUG:
-        log_file = ("DEBUG_")
+        log_file = "DEBUG_"
     else:
-        log_file = ("FinalResults_")
+        log_file = "FinalResults_"
     log_handlers = [
         logging.FileHandler(log_file + plate + "_" + isolate + ".txt"),
         logging.StreamHandler(),
@@ -63,7 +63,7 @@ def analyze_results(plate, isolate):
             cntl_angle.append(angle_change)
             cntl_circ.append(circ_change)
             cntl_feret.append(feret_change)
-            cntl_feret_angle.append(angle_change)
+            cntl_feret_angle.append(feret_angle_change)
             cntl_min_feret.append(min_feret_change)
             cntl_AR.append(AR_change)
             cntl_round.append(round_change)
@@ -195,7 +195,7 @@ def csv_handler(plate, isolate, time):
                 # once we've hit the next slice, calculate averages and store the data
                 area_avg = round(area_total / roi_count, 3)
                 perim_avg = round(perim_total / roi_count, 3)
-                angle_avg = round(angle_total /roi_count, 3)
+                angle_avg = round(angle_total / roi_count, 3)
                 circ_avg = round(circ_total / roi_count, 3)
                 feret_avg = round(feret_total / roi_count, 3)
                 feret_angle_avg = round(feret_angle_total / roi_count, 3)
@@ -203,7 +203,20 @@ def csv_handler(plate, isolate, time):
                 AR_avg = round(AR_total / roi_count, 3)
                 round_avg = round(round_total / roi_count, 3)
                 solidity_avg = round(solidity_total / roi_count, 3)
-                slice_data.append([area_avg, perim_avg, angle_avg, circ_avg, feret_avg, feret_angle_avg, min_feret_avg, AR_avg, round_avg, solidity_avg])
+                slice_data.append(
+                    [
+                        area_avg,
+                        perim_avg,
+                        angle_avg,
+                        circ_avg,
+                        feret_avg,
+                        feret_angle_avg,
+                        min_feret_avg,
+                        AR_avg,
+                        round_avg,
+                        solidity_avg,
+                    ]
+                )
                 # move to the next slice
                 slice_count += 1
                 # start counts and totals with current values since we're on the first of new slice
@@ -229,7 +242,20 @@ def csv_handler(plate, isolate, time):
         AR_avg = round(AR_total / roi_count, 3)
         round_avg = round(round_total / roi_count, 3)
         solidity_avg = round(solidity_total / roi_count, 3)
-        slice_data.append([area_avg, perim_avg, angle_avg, circ_avg, feret_avg, feret_angle_avg, min_feret_avg, AR_avg, round_avg, solidity_avg])
+        slice_data.append(
+            [
+                area_avg,
+                perim_avg,
+                angle_avg,
+                circ_avg,
+                feret_avg,
+                feret_angle_avg,
+                min_feret_avg,
+                AR_avg,
+                round_avg,
+                solidity_avg,
+            ]
+        )
         # close the csv file after we're done with it
         csv_file.close()
         # return Slice data
