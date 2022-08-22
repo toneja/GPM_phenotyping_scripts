@@ -79,72 +79,74 @@ def analyze_results(plate, isolate):
                 if not efficacious.count(get_treatments(plate, block)):
                     efficacious.append(get_treatments(plate, block))
 
-    logging.info(f"Results for isolate {isolate.upper()} from {plate.upper()}:")
+    logging.info("Results for isolate %s from %s:", isolate.upper(), plate.upper())
     logging.info("")
 
     if DEBUG:
         logging.info("The following images contain the controls:")
         for item in cntl_imgs:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average area changed in the controls by:")
         for item in cntl_area:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average perimeter changed in the controls by:")
         for item in cntl_perim:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average angle changed in the controls by:")
         for item in cntl_angle:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average circularity changed in the controls by:")
         for item in cntl_circ:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average feret diameter changed in the controls by:")
         for item in cntl_feret:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average feret angle changed in the controls by:")
         for item in cntl_feret_angle:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average feret minimum changed in the controls by:")
         for item in cntl_min_feret:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average aspect ratio changed in the controls by:")
         for item in cntl_AR:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average roundness changed in the controls by:")
         for item in cntl_round:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         logging.info("The average solidity changed in the controls by:")
         for item in cntl_solidity:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
     else:
         efficacious.sort()
         logging.info(
-            f"Isolate {isolate.upper()} is likely NOT resistant to the following treatments:"
+            "Isolate %s is likely NOT resistant to the following treatments:",
+            isolate.upper(),
         )
         for item in efficacious:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
         resistant.sort()
         logging.info(
-            f"Isolate {isolate.upper()} is likely resistant to the following treatments:"
+            "Isolate %s is likely resistant to the following treatments:",
+            isolate.upper(),
         )
         for item in resistant:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
         logging.info("")
-        logging.info(f"The following images contain the ineffective treatments:")
+        logging.info("The following images contain the ineffective treatments:")
         for item in resistant_imgs:
-            logging.info(f"\t{item}")
+            logging.info("\t%s", item)
 
 
 # handle csv datasets
