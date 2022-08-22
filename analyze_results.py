@@ -71,7 +71,16 @@ def analyze_results(plate, isolate):
             cntl_round.append(round_change)
             cntl_solidity.append(solidity_change)
         else:
-            if area_change > 23 and perim_change > 5 and round_change < -0.1:
+            if (
+                area_change > 0
+                and perim_change > 0
+                and circ_change < 0
+                and feret_change > 0
+                and min_feret_change > 0
+                and AR_change > 0
+                and round_change < 0
+                and solidity_change < 0
+            ):
                 if not resistant.count(get_treatments(plate, block)):
                     resistant.append(get_treatments(plate, block))
                 resistant_imgs.append(img_name + " : " + get_treatments(plate, block))
