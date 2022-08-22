@@ -27,7 +27,7 @@ def analyze_results(plate, isolate):
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
-    resistant, efficacious = [], []
+    resistant, efficacious, resistant_imgs = [], [], []
     cntl_imgs, cntl_area, cntl_perim, cntl_angle, cntl_circ, cntl_feret, cntl_feret_angle, cntl_min_feret, cntl_AR, cntl_round, cntl_solidity = (
         [],
         [],
@@ -72,6 +72,10 @@ def analyze_results(plate, isolate):
             if area_change > 23 and perim_change > 5 and round_change < -0.1:
                 if not resistant.count(get_treatments(plate, block)):
                     resistant.append(get_treatments(plate, block))
+                if len(str(block)) == 1:
+                    resistant_imgs.append("Image_000" + str(block) + ".jpg")
+                else:
+                    resistant_imgs.append("Image_00" + str(block) + ".jpg")
             else:
                 if not efficacious.count(get_treatments(plate, block)):
                     efficacious.append(get_treatments(plate, block))
@@ -137,6 +141,10 @@ def analyze_results(plate, isolate):
             f"Isolate {isolate.upper()} is likely resistant to the following treatments:"
         )
         for item in resistant:
+            logging.info(f"\t{item}")
+        logging.info("")
+        logging.info(f"The following images contain the ineffective treatments:")
+        for item in resistant_imgs:
             logging.info(f"\t{item}")
 
 
