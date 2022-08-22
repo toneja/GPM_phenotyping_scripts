@@ -7,7 +7,7 @@ import logging
 import os
 import sys
 
-DEBUG = True
+DEBUG = False
 
 
 def analyze_results(plate, isolate):
