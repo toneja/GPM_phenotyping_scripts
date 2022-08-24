@@ -27,12 +27,9 @@ def analyze_results(plate, isolate):
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
-    resistant, efficacious, resistant_imgs = [], [], []
-    cntl_imgs, cntl_area, cntl_perim, cntl_angle, cntl_circ, cntl_feret, cntl_feret_angle, cntl_min_feret, cntl_AR, cntl_round, cntl_solidity = (
-        [],
-        [],
-        [],
-        [],
+    resistant, efficacious = [], []
+    cntl_imgs, resistant_imgs = [], []
+    cntl_area, cntl_perim, cntl_circ, cntl_feret, cntl_AR, cntl_round, cntl_solidity = (
         [],
         [],
         [],
@@ -50,23 +47,17 @@ def analyze_results(plate, isolate):
         img_name = img_prefix + str(block) + ".jpg"
         area_change = round(_48hr_results[block][0] - _0hr_results[block][0], 3)
         perim_change = round(_48hr_results[block][1] - _0hr_results[block][1], 3)
-        angle_change = round(_48hr_results[block][2] - _0hr_results[block][2], 3)
-        circ_change = round(_48hr_results[block][3] - _0hr_results[block][3], 3)
-        feret_change = round(_48hr_results[block][4] - _0hr_results[block][4], 3)
-        feret_angle_change = round(_48hr_results[block][5] - _0hr_results[block][5], 3)
-        min_feret_change = round(_48hr_results[block][6] - _0hr_results[block][6], 3)
-        AR_change = round(_48hr_results[block][7] - _0hr_results[block][7], 3)
-        round_change = round(_48hr_results[block][8] - _0hr_results[block][8], 3)
-        solidity_change = round(_48hr_results[block][9] - _0hr_results[block][9], 3)
+        circ_change = round(_48hr_results[block][2] - _0hr_results[block][2], 3)
+        feret_change = round(_48hr_results[block][3] - _0hr_results[block][3], 3)
+        AR_change = round(_48hr_results[block][4] - _0hr_results[block][4], 3)
+        round_change = round(_48hr_results[block][5] - _0hr_results[block][5], 3)
+        solidity_change = round(_48hr_results[block][6] - _0hr_results[block][6], 3)
         if get_treatments(plate, block) == CNTL:
             cntl_imgs.append(img_name)
             cntl_area.append(area_change)
             cntl_perim.append(perim_change)
-            cntl_angle.append(angle_change)
             cntl_circ.append(circ_change)
             cntl_feret.append(feret_change)
-            cntl_feret_angle.append(feret_angle_change)
-            cntl_min_feret.append(min_feret_change)
             cntl_AR.append(AR_change)
             cntl_round.append(round_change)
             cntl_solidity.append(solidity_change)
@@ -76,7 +67,6 @@ def analyze_results(plate, isolate):
                 and perim_change > 0
                 and circ_change < 0
                 and feret_change > 0
-                and min_feret_change > 0
                 and AR_change > 0
                 and round_change < 0
                 and solidity_change < 0
@@ -104,24 +94,12 @@ def analyze_results(plate, isolate):
         for item in cntl_perim:
             logging.info("\t%s", item)
         logging.info("")
-        logging.info("The average angle changed in the controls by:")
-        for item in cntl_angle:
-            logging.info("\t%s", item)
-        logging.info("")
         logging.info("The average circularity changed in the controls by:")
         for item in cntl_circ:
             logging.info("\t%s", item)
         logging.info("")
         logging.info("The average feret diameter changed in the controls by:")
         for item in cntl_feret:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average feret angle changed in the controls by:")
-        for item in cntl_feret_angle:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average feret minimum changed in the controls by:")
-        for item in cntl_min_feret:
             logging.info("\t%s", item)
         logging.info("")
         logging.info("The average aspect ratio changed in the controls by:")
@@ -167,15 +145,12 @@ def csv_handler(plate, isolate, time):
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
-        # slice data list => [[area_avg, perim_avg, angle_avg, circ_avg, feret_avg, feret_angle_avg, min_feret_avg, AR_avg, round_avg, solidity_avg], [...]]
+        # slice data list => [[area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg], [...]]
         slice_data = []
         # set ROI count to zero
         roi_count = 0
         # set totals to zero
-        area_total, perim_total, angle_total, circ_total, feret_total, feret_angle_total, min_feret_total, AR_total, round_total, solidity_total = (
-            0,
-            0,
-            0,
+        area_total, perim_total, circ_total, feret_total, AR_total, round_total, solidity_total = (
             0,
             0,
             0,
@@ -193,11 +168,8 @@ def csv_handler(plate, isolate, time):
                 roi_count += 1
                 area_total += int(row["Area"])
                 perim_total += float(row["Perim."])
-                angle_total += float(row["Angle"])
                 circ_total += float(row["Circ."])
                 feret_total += float(row["Feret"])
-                feret_angle_total += float(row["FeretAngle"])
-                min_feret_total += float(row["MinFeret"])
                 AR_total += float(row["AR"])
                 round_total += float(row["Round"])
                 solidity_total += float(row["Solidity"])
@@ -205,11 +177,8 @@ def csv_handler(plate, isolate, time):
                 # once we've hit the next slice, calculate averages and store the data
                 area_avg = round(area_total / roi_count, 3)
                 perim_avg = round(perim_total / roi_count, 3)
-                angle_avg = round(angle_total / roi_count, 3)
                 circ_avg = round(circ_total / roi_count, 3)
                 feret_avg = round(feret_total / roi_count, 3)
-                feret_angle_avg = round(feret_angle_total / roi_count, 3)
-                min_feret_avg = round(min_feret_total / roi_count, 3)
                 AR_avg = round(AR_total / roi_count, 3)
                 round_avg = round(round_total / roi_count, 3)
                 solidity_avg = round(solidity_total / roi_count, 3)
@@ -217,11 +186,8 @@ def csv_handler(plate, isolate, time):
                     [
                         area_avg,
                         perim_avg,
-                        angle_avg,
                         circ_avg,
                         feret_avg,
-                        feret_angle_avg,
-                        min_feret_avg,
                         AR_avg,
                         round_avg,
                         solidity_avg,
@@ -233,22 +199,16 @@ def csv_handler(plate, isolate, time):
                 roi_count = 1
                 area_total = int(row["Area"])
                 perim_total = float(row["Perim."])
-                angle_total = float(row["Angle"])
                 circ_total = float(row["Circ."])
                 feret_total = float(row["Feret"])
-                feret_angle_total = float(row["FeretAngle"])
-                min_feret_total = float(row["MinFeret"])
                 AR_total = float(row["AR"])
                 round_total = float(row["Round"])
                 solidity_total = float(row["Solidity"])
         # outside of the loop, calculate and store values for the last slice
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
-        angle_avg = round(angle_total / roi_count, 3)
         circ_avg = round(circ_total / roi_count, 3)
         feret_avg = round(feret_total / roi_count, 3)
-        feret_angle_avg = round(feret_angle_total / roi_count, 3)
-        min_feret_avg = round(min_feret_total / roi_count, 3)
         AR_avg = round(AR_total / roi_count, 3)
         round_avg = round(round_total / roi_count, 3)
         solidity_avg = round(solidity_total / roi_count, 3)
@@ -256,11 +216,8 @@ def csv_handler(plate, isolate, time):
             [
                 area_avg,
                 perim_avg,
-                angle_avg,
                 circ_avg,
                 feret_avg,
-                feret_angle_avg,
-                min_feret_avg,
                 AR_avg,
                 round_avg,
                 solidity_avg,
