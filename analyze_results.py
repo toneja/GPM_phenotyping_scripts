@@ -29,7 +29,8 @@ def analyze_results(plate, isolate):
 
     resistant, efficacious = [], []
     cntl_imgs, resistant_imgs = [], []
-    cntl_area, cntl_perim, cntl_circ, cntl_feret, cntl_AR, cntl_round, cntl_solidity = (
+    cntl_area, cntl_perim, cntl_circ, cntl_feret, cntl_AR, cntl_round, cntl_solidity, cntl_convex = (
+        [],
         [],
         [],
         [],
@@ -52,6 +53,10 @@ def analyze_results(plate, isolate):
         AR_change = round(_48hr_results[block][4] - _0hr_results[block][4], 3)
         round_change = round(_48hr_results[block][5] - _0hr_results[block][5], 3)
         solidity_change = round(_48hr_results[block][6] - _0hr_results[block][6], 3)
+        if solidity_change == 0:
+            convex_change = 0
+        else:
+            convex_change = round(area_change / solidity_change, 3)
         if get_treatments(plate, block) == CNTL:
             cntl_imgs.append(img_name)
             cntl_area.append(area_change)
@@ -61,6 +66,7 @@ def analyze_results(plate, isolate):
             cntl_AR.append(AR_change)
             cntl_round.append(round_change)
             cntl_solidity.append(solidity_change)
+            cntl_convex.append(convex_change)
         else:
             if (
                 area_change > 0
@@ -70,6 +76,7 @@ def analyze_results(plate, isolate):
                 and AR_change > 0
                 and round_change < 0
                 and solidity_change < 0
+                and convex_change < 0
             ):
                 resistant.append(get_treatments(plate, block))
                 resistant_imgs.append(img_name + " : " + get_treatments(plate, block))
@@ -110,6 +117,10 @@ def analyze_results(plate, isolate):
         logging.info("")
         logging.info("The average solidity changed in the controls by:")
         for item in cntl_solidity:
+            logging.info("\t%s", item)
+        logging.info("")
+        logging.info("The average convexity changed in the controls by:")
+        for item in cntl_convex:
             logging.info("\t%s", item)
         logging.info("")
     else:
