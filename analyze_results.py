@@ -71,12 +71,10 @@ def analyze_results(plate, isolate):
                 and round_change < 0
                 and solidity_change < 0
             ):
-                if not resistant.count(get_treatments(plate, block)):
-                    resistant.append(get_treatments(plate, block))
+                resistant.append(get_treatments(plate, block))
                 resistant_imgs.append(img_name + " : " + get_treatments(plate, block))
             else:
-                if not efficacious.count(get_treatments(plate, block)):
-                    efficacious.append(get_treatments(plate, block))
+                efficacious.append(get_treatments(plate, block))
 
     logging.info("Results for isolate %s from %s:", isolate.upper(), plate.upper())
     logging.info("")
@@ -115,21 +113,23 @@ def analyze_results(plate, isolate):
             logging.info("\t%s", item)
         logging.info("")
     else:
-        efficacious.sort()
+        efficacious_uniq = list(set(efficacious))
+        efficacious_uniq.sort()
         logging.info(
             "Isolate %s is likely NOT resistant to the following treatments:",
             isolate.upper(),
         )
-        for item in efficacious:
-            logging.info("\t%s", item)
+        for item in efficacious_uniq:
+            logging.info("\t%s : %d%% certainty", item, efficacious.count(item) / 4 * 100)
         logging.info("")
-        resistant.sort()
+        resistant_uniq = list(set(resistant))
+        resistant_uniq.sort()
         logging.info(
             "Isolate %s is likely resistant to the following treatments:",
             isolate.upper(),
         )
-        for item in resistant:
-            logging.info("\t%s", item)
+        for item in resistant_uniq:
+            logging.info("\t%s : %d%% certainty", item, resistant.count(item) / 4 * 100)
         logging.info("")
         logging.info("The following images contain the ineffective treatments:")
         for item in resistant_imgs:
