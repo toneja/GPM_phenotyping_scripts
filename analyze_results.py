@@ -142,9 +142,9 @@ def analyze_results(plate, isolate):
         for item in resistant_uniq:
             logging.info("\t%s : %d%% certainty", item, resistant.count(item) / 4 * 100)
         logging.info("")
-        logging.info("The following images contain the ineffective treatments:")
-        for item in resistant_imgs:
-            logging.info("\t%s", item)
+        # logging.info("The following images contain the ineffective treatments:")
+        # for item in resistant_imgs:
+        #     logging.info("\t%s", item)
 
 
 # handle csv datasets
