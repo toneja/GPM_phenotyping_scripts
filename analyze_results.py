@@ -53,10 +53,7 @@ def analyze_results(plate, isolate):
         AR_change = round(_48hr_results[block][4] - _0hr_results[block][4], 3)
         round_change = round(_48hr_results[block][5] - _0hr_results[block][5], 3)
         solidity_change = round(_48hr_results[block][6] - _0hr_results[block][6], 3)
-        if solidity_change == 0:
-            convex_change = 0
-        else:
-            convex_change = round(area_change / solidity_change, 3)
+        convex_change = round(_48hr_results[block][7] - _0hr_results[block][7], 3)
         if get_treatments(plate, block) == CNTL:
             cntl_imgs.append(img_name)
             cntl_area.append(area_change)
@@ -76,7 +73,7 @@ def analyze_results(plate, isolate):
                 and AR_change > 0
                 and round_change < 0
                 and solidity_change < 0
-                and convex_change < 0
+                and convex_change > 0
             ):
                 resistant.append(get_treatments(plate, block))
                 resistant_imgs.append(img_name + " : " + get_treatments(plate, block))
@@ -156,12 +153,13 @@ def csv_handler(plate, isolate, time):
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
-        # slice data list => [[area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg], [...]]
+        # slice data list => [[area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg, convex_avg], [...]]
         slice_data = []
         # set ROI count to zero
         roi_count = 0
         # set totals to zero
-        area_total, perim_total, circ_total, feret_total, AR_total, round_total, solidity_total = (
+        area_total, perim_total, circ_total, feret_total, AR_total, round_total, solidity_total, convex_total = (
+            0,
             0,
             0,
             0,
@@ -184,6 +182,7 @@ def csv_handler(plate, isolate, time):
                 AR_total += float(row["AR"])
                 round_total += float(row["Round"])
                 solidity_total += float(row["Solidity"])
+                convex_total += float(area_total / solidity_total)
             else:
                 # once we've hit the next slice, calculate averages and store the data
                 area_avg = round(area_total / roi_count, 3)
@@ -193,6 +192,7 @@ def csv_handler(plate, isolate, time):
                 AR_avg = round(AR_total / roi_count, 3)
                 round_avg = round(round_total / roi_count, 3)
                 solidity_avg = round(solidity_total / roi_count, 3)
+                convex_avg = round(convex_total / roi_count, 3)
                 slice_data.append(
                     [
                         area_avg,
@@ -202,6 +202,7 @@ def csv_handler(plate, isolate, time):
                         AR_avg,
                         round_avg,
                         solidity_avg,
+                        convex_avg,
                     ]
                 )
                 # move to the next slice
@@ -215,6 +216,7 @@ def csv_handler(plate, isolate, time):
                 AR_total = float(row["AR"])
                 round_total = float(row["Round"])
                 solidity_total = float(row["Solidity"])
+                convex_total = float(area_total / solidity_total)
         # outside of the loop, calculate and store values for the last slice
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
@@ -223,6 +225,7 @@ def csv_handler(plate, isolate, time):
         AR_avg = round(AR_total / roi_count, 3)
         round_avg = round(round_total / roi_count, 3)
         solidity_avg = round(solidity_total / roi_count, 3)
+        convex_avg = round(convex_total / roi_count, 3)
         slice_data.append(
             [
                 area_avg,
@@ -232,6 +235,7 @@ def csv_handler(plate, isolate, time):
                 AR_avg,
                 round_avg,
                 solidity_avg,
+                convex_avg,
             ]
         )
         # close the csv file after we're done with it
