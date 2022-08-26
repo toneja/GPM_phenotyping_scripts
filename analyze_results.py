@@ -920,6 +920,62 @@ def get_treatments(plate, block):
             TEB3, TEB3, TEB3, TEB3,
             TEB2, TEB2, TEB2, TEB2,
         ]
+    elif plate == "plate13a":
+        # Isolate: GAT2
+        treatments = [
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            CNTL, CNTL, CNTL, CNTL,
+            DFC3, DFC3, DFC3, DFC3,
+            SHAM, SHAM, SHAM, SHAM,
+            AZX1, AZX1, AZX1, AZX1,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU3, FLU3, FLU3, FLU3,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF3, QXF3, QXF3, QXF3,
+            QXF2, QXF2, QXF2, QXF2,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB2, TEB2, TEB2, TEB2,
+            BOS1, BOS1, BOS1, BOS1,
+            TEB3, TEB3, TEB3, TEB3,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB1, MCB1, MCB1, MCB1,
+            MCB3, MCB3, MCB3, MCB3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF3, FTF3, FTF3, FTF3,
+            FTF2, FTF2, FTF2, FTF2,
+        ]
+    elif plate == "plate13b":
+        # Isolate: GAT2
+        treatments = [
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            TEB1, TEB1, TEB1, TEB1,
+            MCB3, MCB3, MCB3, MCB3,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB3, TEB3, TEB3, TEB3,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS3, BOS3, BOS3, BOS3,
+            CNTL, CNTL, CNTL, CNTL,
+            AZX1, AZX1, AZX1, AZX1,
+            SHAM, SHAM, SHAM, SHAM,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC2, DFC2, DFC2, DFC2,
+            FLU1, FLU1, FLU1, FLU1,
+            DFC3, DFC3, DFC3, DFC3,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF3, QXF3, QXF3, QXF3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF3, FTF3, FTF3, FTF3,
+            FTF2, FTF2, FTF2, FTF2,
+        ]
     return treatments[block]
 
 
