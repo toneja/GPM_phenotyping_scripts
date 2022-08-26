@@ -64,6 +64,23 @@ def analyze_results(plate, isolate):
             cntl_round.append(round_change)
             cntl_solidity.append(solidity_change)
             cntl_convex.append(convex_change)
+            # check for possible bad control data
+            if not (
+                area_change > 0
+                and perim_change > 0
+                and circ_change < 0
+                and feret_change > 0
+                and AR_change > 0
+                and round_change < 0
+                and solidity_change < 0
+                and convex_change > 0
+            ):
+                logging.info(
+                    "Isolate %s on plate %s has possible bad control data. Check image %s for germination.",
+                    isolate.upper(),
+                    plate.upper(),
+                    img_name,
+                )
         else:
             if (
                 area_change > 0
