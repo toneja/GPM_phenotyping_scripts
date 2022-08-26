@@ -976,6 +976,62 @@ def get_treatments(plate, block):
             FTF3, FTF3, FTF3, FTF3,
             FTF2, FTF2, FTF2, FTF2,
         ]
+    elif plate == "plate14a":
+        # Isolate: MICV3
+        treatments = [
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            BOS1, BOS1, BOS1, BOS1,
+            MCB3, MCB3, MCB3, MCB3,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS3, BOS3, BOS3, BOS3,
+            SHAM, SHAM, SHAM, SHAM,
+            CNTL, CNTL, CNTL, CNTL,
+            AZX1, AZX1, AZX1, AZX1,
+            FLU1, FLU1, FLU1, FLU1,
+            FLU3, FLU3, FLU3, FLU3,
+            FLU2, FLU2, FLU2, FLU2,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF2, FTF2, FTF2, FTF2,
+            QXF1, QXF1, QXF1, QXF1,
+            FTF3, FTF3, FTF3, FTF3,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF3, QXF3, QXF3, QXF3,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC3, DFC3, DFC3, DFC3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB3, TEB3, TEB3, TEB3,
+            TEB2, TEB2, TEB2, TEB2,
+        ]
+    elif plate == "plate14b":
+        # Isolate: MICV3
+        treatments = [
+            BOS1, BOS1, BOS1, BOS1,
+            BOS2, BOS2, BOS2, BOS2,
+            FLU1, FLU1, FLU1, FLU1,
+            BOS3, BOS3, BOS3, BOS3,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            QXF2, QXF2, QXF2, QXF2,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF3, QXF3, QXF3, QXF3,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF3, FTF3, FTF3, FTF3,
+            FTF2, FTF2, FTF2, FTF2,
+            CNTL, CNTL, CNTL, CNTL,
+            SHAM, SHAM, SHAM, SHAM,
+            MCB1, MCB1, MCB1, MCB1,
+            AZX1, AZX1, AZX1, AZX1,
+            MCB2, MCB2, MCB2, MCB2,
+            MCB3, MCB3, MCB3, MCB3,
+            TEB2, TEB2, TEB2, TEB2,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB3, TEB3, TEB3, TEB3,
+            DFC1, DFC1, DFC1, DFC1,
+            DFC3, DFC3, DFC3, DFC3,
+            DFC2, DFC2, DFC2, DFC2,
+        ]
     return treatments[block]
 
 
