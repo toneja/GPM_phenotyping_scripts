@@ -291,7 +291,7 @@ QXF3 = "Quinoxyfen 1 ug/mL"
 def get_treatments(plate, block):
     """docstring goes here"""
     if plate == "plate1a":
-        # Isolates: LH1, MEN8B
+        # Isolates: LH1, ALV4CH-B
         treatments = [
             CNTL, CNTL, CNTL, CNTL,
             SHAM, SHAM, SHAM, SHAM,
@@ -319,7 +319,7 @@ def get_treatments(plate, block):
             QXF2, QXF2, QXF2, QXF2,
         ]
     elif plate == "plate1b":
-        # Isolates: LH1, MEN8B
+        # Isolates: LH1, MEN8B, ALV4CH-B
         treatments = [
             TEB1, TEB1, TEB1, TEB1,
             TEB2, TEB2, TEB2, TEB2,
@@ -403,7 +403,7 @@ def get_treatments(plate, block):
             FLU2, FLU2, FLU2, FLU2,
         ]
     elif plate == "plate3a":
-        # Isolate: DDO-ME-2
+        # Isolate: DDO-ME-2, RMT2A
         treatments = [
             MCB1, MCB1, MCB1, MCB1,
             MCB2, MCB2, MCB2, MCB2,
@@ -431,7 +431,7 @@ def get_treatments(plate, block):
             FLU2, FLU2, FLU2, FLU2,
         ]
     elif plate == "plate3b":
-        # Isolate: DDO-ME-2
+        # Isolate: DDO-ME-2, RMT2A
         treatments = [
             CNTL, CNTL, CNTL, CNTL,
             SHAM, SHAM, SHAM, SHAM,
@@ -459,7 +459,7 @@ def get_treatments(plate, block):
             MCB2, MCB2, MCB2, MCB2,
         ]
     elif plate == "plate4a":
-        # Isolate: GAT1
+        # Isolate: GAT1, ADPN
         treatments = [
             QXF1, QXF1, QXF1, QXF1,
             QXF2, QXF2, QXF2, QXF2,
