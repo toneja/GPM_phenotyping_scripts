@@ -487,8 +487,33 @@ def get_treatments(plate, block):
             MCB2, MCB2, MCB2, MCB2,
         ]
     elif plate == "plate4b":
-        # Isolate: GAT1 (48 hr images are missing for this plate + isolate.)
-        treatments = []
+        # Isolate: ADPN
+        treatments = [
+            MCB1, MCB1, MCB1, MCB1,
+            MCB2, MCB2, MCB2, MCB2,
+            FLU1, FLU1, FLU1, FLU1,
+            MCB3, MCB3, MCB3, MCB3,
+            FLU2, FLU2, FLU2, FLU2,
+            FLU3, FLU3, FLU3, FLU3,
+            FTF2, FTF2, FTF2, FTF2,
+            FTF1, FTF1, FTF1, FTF1,
+            FTF3, FTF3, FTF3, FTF3,
+            CNTL, CNTL, CNTL, CNTL,
+            AZX1, AZX1, AZX1, AZX1,
+            SHAM, SHAM, SHAM, SHAM,
+            QXF1, QXF1, QXF1, QXF1,
+            QXF2, QXF2, QXF2, QXF2,
+            DFC1, DFC1, DFC1, DFC1,
+            QXF3, QXF3, QXF3, QXF3,
+            DFC2, DFC2, DFC2, DFC2,
+            DFC3, DFC3, DFC3, DFC3,
+            BOS2, BOS2, BOS2, BOS2,
+            BOS1, BOS1, BOS1, BOS1,
+            BOS3, BOS3, BOS3, BOS3,
+            TEB1, TEB1, TEB1, TEB1,
+            TEB3, TEB3, TEB3, TEB3,
+            TEB2, TEB2, TEB2, TEB2,
+        ]
     elif plate == "plate5a":
         # Isolates: KRAE1B, NAPA02-T
         treatments = [
