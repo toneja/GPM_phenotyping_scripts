@@ -8,6 +8,7 @@ setup(
         "py2exe": {
             "optimize": 2,
             "bundle_files": 1,
+            "compressed": True,
         }
     },
 )
