@@ -17,3 +17,4 @@ TODO:
 - merge scripts and ImageJ macros into single repository
 - handle possible exceptions
 - write output into a standard file format (csv, xls, etc)
+- implement numpy handling of csv inputs
