@@ -5,9 +5,48 @@
 import csv
 import logging
 import os
+import pandas
 import sys
+from sklearn import linear_model
 
 DEBUG = False
+
+
+def setup_model():
+    df = pandas.read_csv("germination_training_data.csv")
+
+    X = df[
+        [
+            "area",
+            "perim",
+            "min_feret",
+            "ar",
+            "solidity",
+        ]
+    ]
+    y = df["class"]
+
+    regr = linear_model.LinearRegression()
+    regr.fit(X, y)
+
+    return regr
+
+
+def is_germinated(row):
+    """"""
+    predictedClass = REGR.predict(
+        [
+            [
+                int(row["Area"]),
+                float(row["Perim."]),
+                float(row["MinFeret"]),
+                float(row["AR"]),
+                float(row["Solidity"]),
+            ]
+        ]
+    )
+    if float(predictedClass) >= 0.5:
+        return True
 
 
 def analyze_results(plate, isolate):
@@ -173,7 +212,7 @@ def csv_handler(plate, isolate, time):
         # slice data list => [[area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg, convex_avg], [...]]
         slice_data = []
         # set ROI count to zero
-        roi_count = 0
+        roi_count, roi_germinated, roi_ungerminated = 0, 0, 0
         # set totals to zero
         area_total, perim_total, circ_total, feret_total, AR_total, round_total, solidity_total, convex_total = (
             0,
@@ -200,6 +239,10 @@ def csv_handler(plate, isolate, time):
                 round_total += float(row["Round"])
                 solidity_total += float(row["Solidity"])
                 convex_total += float(area_total / solidity_total)
+                if is_germinated(row):
+                    roi_germinated += 1
+                else:
+                    roi_ungerminated += 1
             else:
                 # once we've hit the next slice, calculate averages and store the data
                 area_avg = round(area_total / roi_count, 3)
@@ -222,6 +265,12 @@ def csv_handler(plate, isolate, time):
                         convex_avg,
                     ]
                 )
+                logging.info(
+                    "Total percentage of germinated spores on Slice #%d = %.2f%%",
+                    slice_count,
+                    roi_germinated / (roi_germinated + roi_ungerminated) * 100,
+                )
+                roi_germinated, roi_ungerminated = 0, 0
                 # move to the next slice
                 slice_count += 1
                 # start counts and totals with current values since we're on the first of new slice
@@ -234,6 +283,10 @@ def csv_handler(plate, isolate, time):
                 round_total = float(row["Round"])
                 solidity_total = float(row["Solidity"])
                 convex_total = float(area_total / solidity_total)
+                if is_germinated(row):
+                    roi_germinated += 1
+                else:
+                    roi_ungerminated += 1
         # outside of the loop, calculate and store values for the last slice
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
@@ -254,6 +307,11 @@ def csv_handler(plate, isolate, time):
                 solidity_avg,
                 convex_avg,
             ]
+        )
+        logging.info(
+            "Total percentage of germinated spores on Slice #%d = %.2f%%",
+            slice_count,
+            roi_germinated / (roi_germinated + roi_ungerminated) * 100,
         )
         # close the csv file after we're done with it
         csv_file.close()
@@ -1145,4 +1203,5 @@ if __name__ == "__main__":
     else:
         sys.exit(f"Usage: {sys.argv[0]} [PLATE] [ISOLATE]")
 
+    REGR = setup_model()
     analyze_results(PLATE, ISOLATE)
