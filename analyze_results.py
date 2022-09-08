@@ -104,6 +104,10 @@ def analyze_results(plate, isolate):
         "0hr %",
         "48hr %",
         "Germinated",
+        "Total",
+        "Area change",
+        "Perimeter change",
+        "Feret change",
         "Image",
     ]
     for block in range(96):
@@ -113,10 +117,26 @@ def analyze_results(plate, isolate):
             img_prefix = "Image_00"
         img_name = img_prefix + str(block) + ".jpg"
         treatment = get_treatments(plate, block)
-        germination_0 = round(_0hr_results[block][1], 1)
-        germination_48 = round(_48hr_results[block][1], 1)
         germinated = int(_48hr_results[block][0])
-        germination_data.append([treatment, germination_0, germination_48, germinated, img_name])
+        total_spores = int(_48hr_results[block][1])
+        germination_0 = round(_0hr_results[block][2], 1)
+        germination_48 = round(_48hr_results[block][2], 1)
+        area_change = round(_48hr_results[block][3] - _0hr_results[block][3], 1)
+        perim_change = round(_48hr_results[block][4] - _0hr_results[block][4], 1)
+        feret_change = round(_48hr_results[block][5] - _0hr_results[block][5], 1)
+        germination_data.append(
+            [
+                treatment,
+                germination_0,
+                germination_48,
+                germinated,
+                total_spores,
+                area_change,
+                perim_change,
+                feret_change,
+                img_name,
+            ]
+        )
 
     germination_data.sort()
     with open(
@@ -146,6 +166,8 @@ def csv_handler(plate, isolate, time):
         slice_data = []
         # set ROI count to zero
         roi_count, roi_germinated = 0, 0
+        # set totals to zero
+        area_total, perim_total, feret_total = 0, 0, 0
         # start with Slice 1
         slice_count = 1
         # iterate over the csv values row by row
@@ -158,19 +180,49 @@ def csv_handler(plate, isolate, time):
                 roi_count += 1
                 if is_germinated(row):
                     roi_germinated += 1
+                area_total += int(row["Area"])
+                perim_total += float(row["Perim."])
+                feret_total += float(row["Feret"])
             else:
                 # once we've hit the next slice, calculate percentage and store the data
-                slice_data.append([roi_germinated, roi_germinated / roi_count * 100])
+                area_avg = round(area_total / roi_count, 3)
+                perim_avg = round(perim_total / roi_count, 3)
+                feret_avg = round(feret_total / roi_count, 3)
+                slice_data.append(
+                    [
+                        roi_germinated,
+                        roi_count,
+                        roi_germinated / roi_count * 100,
+                        area_avg,
+                        perim_avg,
+                        feret_avg,
+                    ]
+                )
                 # move to the next slice
                 slice_count += 1
                 # set count to 1 since we're on the first of new slice
                 roi_count = 1
+                area_total = int(row["Area"])
+                perim_total = float(row["Perim."])
+                feret_total = float(row["Feret"])
                 if is_germinated(row):
                     roi_germinated = 1
                 else:
                     roi_germinated = 0
         # outside of the loop, calculate and store value for the last slice
-        slice_data.append([roi_germinated, roi_germinated / roi_count * 100])
+        area_avg = round(area_total / roi_count, 3)
+        perim_avg = round(perim_total / roi_count, 3)
+        feret_avg = round(feret_total / roi_count, 3)
+        slice_data.append(
+            [
+                roi_germinated,
+                roi_count,
+                roi_germinated / roi_count * 100,
+                area_avg,
+                perim_avg,
+                feret_avg,
+            ]
+        )
         # return Slice data
         return slice_data
 
