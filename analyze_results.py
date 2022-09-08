@@ -11,20 +11,34 @@ from sklearn import linear_model
 
 DEBUG = False
 
-
-def setup_model():
-    df = pandas.read_csv("germination_training_data.csv")
-
-    X = df[
-        [
-            "area",
-            "perim",
-            "min_feret",
-            "ar",
-            "solidity",
+# debris ~ area + major + minor + circ + feret + min_feret + ar + convex + feret_ratio
+# germinated ~ area + perim + min_feret + ar + solidity + convex + feret_ratio
+def setup_regression(model):
+    df = pandas.read_csv("training_data.csv")
+    if model == "Debris":
+        vals = [
+            "Area",
+            "Major",
+            "Minor",
+            "Circ.",
+            "Feret",
+            "MinFeret",
+            "AR",
+            "Convex",
+            "FeretRatio",
         ]
-    ]
-    y = df["class"]
+    elif model == "Germinated":
+        vals = [
+            "Area",
+            "Perim.",
+            "MinFeret",
+            "AR",
+            "Solidity",
+            "Convex",
+            "FeretRatio",
+        ]
+    X = df[vals]
+    y = df[model]
 
     regr = linear_model.LinearRegression()
     regr.fit(X, y)
@@ -32,9 +46,30 @@ def setup_model():
     return regr
 
 
+def is_debris(row):
+    """"""
+    prediction = DEBRIS.predict(
+        [
+            [
+                int(row["Area"]),
+                float(row["Major"]),
+                float(row["Minor"]),
+                float(row["Circ."]),
+                float(row["Feret"]),
+                float(row["MinFeret"]),
+                float(row["AR"]),
+                int(row["Area"]) / float(row["Solidity"]),
+                float(row["MinFeret"]) / float(row["Feret"]),
+            ]
+        ]
+    )
+    if float(prediction) >= 0.5:
+        return True
+
+
 def is_germinated(row):
     """"""
-    predictedClass = REGR.predict(
+    prediction = GERMINATED.predict(
         [
             [
                 int(row["Area"]),
@@ -42,10 +77,12 @@ def is_germinated(row):
                 float(row["MinFeret"]),
                 float(row["AR"]),
                 float(row["Solidity"]),
+                int(row["Area"]) / float(row["Solidity"]),
+                float(row["MinFeret"]) / float(row["Feret"]),
             ]
         ]
     )
-    if float(predictedClass) >= 0.5:
+    if float(prediction) >= 0.5:
         return True
 
 
@@ -228,6 +265,9 @@ def csv_handler(plate, isolate, time):
         slice_count = 1
         # iterate over the csv values row by row
         for row in csv_reader:
+            # skip bad ROIs (debris)
+            if is_debris(row):
+                continue
             # calculate totals for each slice
             if int(row["Slice"]) == slice_count:
                 roi_count += 1
@@ -270,7 +310,6 @@ def csv_handler(plate, isolate, time):
                     slice_count,
                     roi_germinated / (roi_germinated + roi_ungerminated) * 100,
                 )
-                roi_germinated, roi_ungerminated = 0, 0
                 # move to the next slice
                 slice_count += 1
                 # start counts and totals with current values since we're on the first of new slice
@@ -284,9 +323,9 @@ def csv_handler(plate, isolate, time):
                 solidity_total = float(row["Solidity"])
                 convex_total = float(area_total / solidity_total)
                 if is_germinated(row):
-                    roi_germinated += 1
+                    roi_germinated = 1
                 else:
-                    roi_ungerminated += 1
+                    roi_ungerminated = 1
         # outside of the loop, calculate and store values for the last slice
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
@@ -1203,5 +1242,6 @@ if __name__ == "__main__":
     else:
         sys.exit(f"Usage: {sys.argv[0]} [PLATE] [ISOLATE]")
 
-    REGR = setup_model()
+    DEBRIS = setup_regression("Debris")
+    GERMINATED = setup_regression("Germinated")
     analyze_results(PLATE, ISOLATE)
