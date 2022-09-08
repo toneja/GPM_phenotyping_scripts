@@ -5,15 +5,16 @@
 import csv
 import logging
 import os
-import pandas
 import sys
+import pandas
 from sklearn import linear_model
+from tabulate import tabulate
 
-DEBUG = False
 
 # debris ~ area + major + minor + circ + feret + min_feret + ar + convex + feret_ratio
 # germinated ~ area + perim + min_feret + ar + solidity + convex + feret_ratio
 def setup_regression(model):
+    """docstring goes here"""
     df = pandas.read_csv("training_data.csv")
     if model == "Debris":
         vals = [
@@ -40,14 +41,14 @@ def setup_regression(model):
     X = df[vals]
     y = df[model]
 
-    regr = linear_model.LinearRegression()
-    regr.fit(X, y)
+    regression = linear_model.LinearRegression()
+    regression.fit(X, y)
 
-    return regr
+    return regression
 
 
 def is_debris(row):
-    """"""
+    """docstring goes here"""
     prediction = DEBRIS.predict(
         [
             [
@@ -63,12 +64,11 @@ def is_debris(row):
             ]
         ]
     )
-    if float(prediction) >= 0.5:
-        return True
+    return float(prediction) >= 0.5
 
 
 def is_germinated(row):
-    """"""
+    """docstring goes here"""
     prediction = GERMINATED.predict(
         [
             [
@@ -82,20 +82,15 @@ def is_germinated(row):
             ]
         ]
     )
-    if float(prediction) >= 0.5:
-        return True
+    return float(prediction) >= 0.5
 
 
 def analyze_results(plate, isolate):
     """docstring goes here"""
     log_level = logging.INFO
     log_format = "%(message)s"
-    if DEBUG:
-        log_file = "DEBUG_"
-    else:
-        log_file = "FinalResults_"
     log_handlers = [
-        logging.FileHandler(log_file + plate + "_" + isolate + ".txt"),
+        logging.FileHandler("FinalResults_" + plate + "_" + isolate + ".txt"),
         logging.StreamHandler(),
     ]
     logging.basicConfig(level=log_level, format=log_format, handlers=log_handlers)
@@ -103,138 +98,38 @@ def analyze_results(plate, isolate):
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
-    resistant, efficacious = [], []
-    cntl_imgs, resistant_imgs = [], []
-    cntl_area, cntl_perim, cntl_circ, cntl_feret, cntl_AR, cntl_round, cntl_solidity, cntl_convex = (
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-    )
-
+    germination_data = []
+    headers = [
+        "Treatment",
+        "0hr %",
+        "48hr %",
+        "Image",
+    ]
     for block in range(96):
         if len(str(block)) == 1:
             img_prefix = "Image_000"
         else:
             img_prefix = "Image_00"
         img_name = img_prefix + str(block) + ".jpg"
-        area_change = round(_48hr_results[block][0] - _0hr_results[block][0], 3)
-        perim_change = round(_48hr_results[block][1] - _0hr_results[block][1], 3)
-        circ_change = round(_48hr_results[block][2] - _0hr_results[block][2], 3)
-        feret_change = round(_48hr_results[block][3] - _0hr_results[block][3], 3)
-        AR_change = round(_48hr_results[block][4] - _0hr_results[block][4], 3)
-        round_change = round(_48hr_results[block][5] - _0hr_results[block][5], 3)
-        solidity_change = round(_48hr_results[block][6] - _0hr_results[block][6], 3)
-        convex_change = round(_48hr_results[block][7] - _0hr_results[block][7], 3)
-        if get_treatments(plate, block) == CNTL:
-            cntl_imgs.append(img_name)
-            cntl_area.append(area_change)
-            cntl_perim.append(perim_change)
-            cntl_circ.append(circ_change)
-            cntl_feret.append(feret_change)
-            cntl_AR.append(AR_change)
-            cntl_round.append(round_change)
-            cntl_solidity.append(solidity_change)
-            cntl_convex.append(convex_change)
-            # check for possible bad control data
-            if not (
-                area_change > 0
-                and perim_change > 0
-                and circ_change < 0
-                and feret_change > 0
-                and AR_change > 0
-                and round_change < 0
-                and solidity_change < 0
-                and convex_change > 0
-            ):
-                logging.info(
-                    "Isolate %s on plate %s has possible bad control data. Check image %s for germination.",
-                    isolate.upper(),
-                    plate.upper(),
-                    img_name,
-                )
-        else:
-            if (
-                area_change > 0
-                and perim_change > 0
-                and circ_change < 0
-                and feret_change > 0
-                and AR_change > 0
-                and round_change < 0
-                and solidity_change < 0
-                and convex_change > 0
-            ):
-                resistant.append(get_treatments(plate, block))
-                resistant_imgs.append(img_name + " : " + get_treatments(plate, block))
-            else:
-                efficacious.append(get_treatments(plate, block))
+        treatment = get_treatments(plate, block)
+        germination_0 = round(_0hr_results[block], 1)
+        germination_48 = round(_48hr_results[block], 1)
+        germination_data.append([treatment, germination_0, germination_48, img_name])
 
-    logging.info("Results for isolate %s from %s:", isolate.upper(), plate.upper())
-    logging.info("")
+    germination_data.sort()
+    with open(
+        "FinalResults_" + plate + "_" + isolate + ".csv",
+        "w",
+        newline="",
+    ) as csv_outfile:
+        csv_writer = csv.writer(csv_outfile)
+        csv_writer.writerow(headers)
+        for row in germination_data:
+            csv_writer.writerow(row)
 
-    if DEBUG:
-        logging.info("The following images contain the controls:")
-        for item in cntl_imgs:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average area changed in the controls by:")
-        for item in cntl_area:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average perimeter changed in the controls by:")
-        for item in cntl_perim:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average circularity changed in the controls by:")
-        for item in cntl_circ:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average feret diameter changed in the controls by:")
-        for item in cntl_feret:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average aspect ratio changed in the controls by:")
-        for item in cntl_AR:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average roundness changed in the controls by:")
-        for item in cntl_round:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average solidity changed in the controls by:")
-        for item in cntl_solidity:
-            logging.info("\t%s", item)
-        logging.info("")
-        logging.info("The average convexity changed in the controls by:")
-        for item in cntl_convex:
-            logging.info("\t%s", item)
-        logging.info("")
-    else:
-        efficacious_uniq = list(set(efficacious))
-        efficacious_uniq.sort()
-        logging.info(
-            "Isolate %s is likely NOT resistant to the following treatments:",
-            isolate.upper(),
-        )
-        for item in efficacious_uniq:
-            logging.info("\t%s : %d%% certainty", item, efficacious.count(item) / 4 * 100)
-        logging.info("")
-        resistant_uniq = list(set(resistant))
-        resistant_uniq.sort()
-        logging.info(
-            "Isolate %s is likely resistant to the following treatments:",
-            isolate.upper(),
-        )
-        for item in resistant_uniq:
-            logging.info("\t%s : %d%% certainty", item, resistant.count(item) / 4 * 100)
-        logging.info("")
-        # logging.info("The following images contain the ineffective treatments:")
-        # for item in resistant_imgs:
-        #     logging.info("\t%s", item)
+    logging.info(tabulate(germination_data, headers=headers))
+    logging.info("------------------------------------------------------------")
+    logging.info("* Results for isolate %s from %s", isolate.upper(), plate.upper())
 
 
 # handle csv datasets
@@ -246,117 +141,34 @@ def csv_handler(plate, isolate, time):
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
-        # slice data list => [[area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg, convex_avg], [...]]
         slice_data = []
         # set ROI count to zero
-        roi_count, roi_germinated= 0, 0
-        # set totals to zero
-        area_total, perim_total, circ_total, feret_total, AR_total, round_total, solidity_total, convex_total = (
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-        )
+        roi_count, roi_germinated = 0, 0
         # start with Slice 1
         slice_count = 1
-        debris_count = 0
         # iterate over the csv values row by row
         for row in csv_reader:
             # skip bad ROIs (debris)
             if is_debris(row):
-                debris_count += 1
                 continue
             # calculate totals for each slice
             if int(row["Slice"]) == slice_count:
                 roi_count += 1
-                area_total += int(row["Area"])
-                perim_total += float(row["Perim."])
-                circ_total += float(row["Circ."])
-                feret_total += float(row["Feret"])
-                AR_total += float(row["AR"])
-                round_total += float(row["Round"])
-                solidity_total += float(row["Solidity"])
-                convex_total += float(area_total / solidity_total)
                 if is_germinated(row):
                     roi_germinated += 1
             else:
-                # once we've hit the next slice, calculate averages and store the data
-                area_avg = round(area_total / roi_count, 3)
-                perim_avg = round(perim_total / roi_count, 3)
-                circ_avg = round(circ_total / roi_count, 3)
-                feret_avg = round(feret_total / roi_count, 3)
-                AR_avg = round(AR_total / roi_count, 3)
-                round_avg = round(round_total / roi_count, 3)
-                solidity_avg = round(solidity_total / roi_count, 3)
-                convex_avg = round(convex_total / roi_count, 3)
-                slice_data.append(
-                    [
-                        area_avg,
-                        perim_avg,
-                        circ_avg,
-                        feret_avg,
-                        AR_avg,
-                        round_avg,
-                        solidity_avg,
-                        convex_avg,
-                    ]
-                )
-                if time == 48:
-                    logging.info(
-                        "Total percentage of germinated spores on %s = %.2f%%",
-                        get_treatments(plate, slice_count - 1),
-                        roi_germinated / roi_count * 100,
-                    )
+                # once we've hit the next slice, calculate percentage and store the data
+                slice_data.append(roi_germinated / roi_count * 100)
                 # move to the next slice
                 slice_count += 1
-                # start counts and totals with current values since we're on the first of new slice
+                # set count to 1 since we're on the first of new slice
                 roi_count = 1
-                area_total = int(row["Area"])
-                perim_total = float(row["Perim."])
-                circ_total = float(row["Circ."])
-                feret_total = float(row["Feret"])
-                AR_total = float(row["AR"])
-                round_total = float(row["Round"])
-                solidity_total = float(row["Solidity"])
-                convex_total = float(area_total / solidity_total)
                 if is_germinated(row):
                     roi_germinated = 1
                 else:
                     roi_germinated = 0
-        # outside of the loop, calculate and store values for the last slice
-        area_avg = round(area_total / roi_count, 3)
-        perim_avg = round(perim_total / roi_count, 3)
-        circ_avg = round(circ_total / roi_count, 3)
-        feret_avg = round(feret_total / roi_count, 3)
-        AR_avg = round(AR_total / roi_count, 3)
-        round_avg = round(round_total / roi_count, 3)
-        solidity_avg = round(solidity_total / roi_count, 3)
-        convex_avg = round(convex_total / roi_count, 3)
-        slice_data.append(
-            [
-                area_avg,
-                perim_avg,
-                circ_avg,
-                feret_avg,
-                AR_avg,
-                round_avg,
-                solidity_avg,
-                convex_avg,
-            ]
-        )
-        if time == 48:
-            logging.info(
-                "Total percentage of germinated spores on %s = %.2f%%",
-                get_treatments(plate, slice_count - 1),
-                roi_germinated / roi_count * 100,
-            )
-        logging.info("Dropped %d bad ROIs (debris)", debris_count)
-        # close the csv file after we're done with it
-        csv_file.close()
+        # outside of the loop, calculate and store value for the last slice
+        slice_data.append(roi_germinated / roi_count * 100)
         # return Slice data
         return slice_data
 
