@@ -103,6 +103,7 @@ def analyze_results(plate, isolate):
         "Treatment",
         "0hr %",
         "48hr %",
+        "Germinated",
         "Image",
     ]
     for block in range(96):
@@ -112,9 +113,10 @@ def analyze_results(plate, isolate):
             img_prefix = "Image_00"
         img_name = img_prefix + str(block) + ".jpg"
         treatment = get_treatments(plate, block)
-        germination_0 = round(_0hr_results[block], 1)
-        germination_48 = round(_48hr_results[block], 1)
-        germination_data.append([treatment, germination_0, germination_48, img_name])
+        germination_0 = round(_0hr_results[block][1], 1)
+        germination_48 = round(_48hr_results[block][1], 1)
+        germinated = int(_48hr_results[block][0])
+        germination_data.append([treatment, germination_0, germination_48, germinated, img_name])
 
     germination_data.sort()
     with open(
@@ -158,7 +160,7 @@ def csv_handler(plate, isolate, time):
                     roi_germinated += 1
             else:
                 # once we've hit the next slice, calculate percentage and store the data
-                slice_data.append(roi_germinated / roi_count * 100)
+                slice_data.append([roi_germinated, roi_germinated / roi_count * 100])
                 # move to the next slice
                 slice_count += 1
                 # set count to 1 since we're on the first of new slice
@@ -168,7 +170,7 @@ def csv_handler(plate, isolate, time):
                 else:
                     roi_germinated = 0
         # outside of the loop, calculate and store value for the last slice
-        slice_data.append(roi_germinated / roi_count * 100)
+        slice_data.append([roi_germinated, roi_germinated / roi_count * 100])
         # return Slice data
         return slice_data
 
