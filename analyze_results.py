@@ -41,7 +41,7 @@ def setup_regression(model):
     X = df[vals]
     y = df[model]
 
-    regression = linear_model.LinearRegression()
+    regression = linear_model.LogisticRegression()
     regression.fit(X, y)
 
     return regression
