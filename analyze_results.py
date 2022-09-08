@@ -249,7 +249,7 @@ def csv_handler(plate, isolate, time):
         # slice data list => [[area_avg, perim_avg, circ_avg, feret_avg, AR_avg, round_avg, solidity_avg, convex_avg], [...]]
         slice_data = []
         # set ROI count to zero
-        roi_count, roi_germinated, roi_ungerminated = 0, 0, 0
+        roi_count, roi_germinated= 0, 0
         # set totals to zero
         area_total, perim_total, circ_total, feret_total, AR_total, round_total, solidity_total, convex_total = (
             0,
@@ -263,10 +263,12 @@ def csv_handler(plate, isolate, time):
         )
         # start with Slice 1
         slice_count = 1
+        debris_count = 0
         # iterate over the csv values row by row
         for row in csv_reader:
             # skip bad ROIs (debris)
             if is_debris(row):
+                debris_count += 1
                 continue
             # calculate totals for each slice
             if int(row["Slice"]) == slice_count:
@@ -281,8 +283,6 @@ def csv_handler(plate, isolate, time):
                 convex_total += float(area_total / solidity_total)
                 if is_germinated(row):
                     roi_germinated += 1
-                else:
-                    roi_ungerminated += 1
             else:
                 # once we've hit the next slice, calculate averages and store the data
                 area_avg = round(area_total / roi_count, 3)
@@ -305,11 +305,12 @@ def csv_handler(plate, isolate, time):
                         convex_avg,
                     ]
                 )
-                logging.info(
-                    "Total percentage of germinated spores on Slice #%d = %.2f%%",
-                    slice_count,
-                    roi_germinated / (roi_germinated + roi_ungerminated) * 100,
-                )
+                if time == 48:
+                    logging.info(
+                        "Total percentage of germinated spores on %s = %.2f%%",
+                        get_treatments(plate, slice_count - 1),
+                        roi_germinated / roi_count * 100,
+                    )
                 # move to the next slice
                 slice_count += 1
                 # start counts and totals with current values since we're on the first of new slice
@@ -325,7 +326,7 @@ def csv_handler(plate, isolate, time):
                 if is_germinated(row):
                     roi_germinated = 1
                 else:
-                    roi_ungerminated = 1
+                    roi_germinated = 0
         # outside of the loop, calculate and store values for the last slice
         area_avg = round(area_total / roi_count, 3)
         perim_avg = round(perim_total / roi_count, 3)
@@ -347,11 +348,13 @@ def csv_handler(plate, isolate, time):
                 convex_avg,
             ]
         )
-        logging.info(
-            "Total percentage of germinated spores on Slice #%d = %.2f%%",
-            slice_count,
-            roi_germinated / (roi_germinated + roi_ungerminated) * 100,
-        )
+        if time == 48:
+            logging.info(
+                "Total percentage of germinated spores on %s = %.2f%%",
+                get_treatments(plate, slice_count - 1),
+                roi_germinated / roi_count * 100,
+            )
+        logging.info("Dropped %d bad ROIs (debris)", debris_count)
         # close the csv file after we're done with it
         csv_file.close()
         # return Slice data
