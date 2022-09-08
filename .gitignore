@@ -1,4 +1,4 @@
-Results*.csv
+*Results*.csv
 *.txt
 plate*
 __pycache__/
