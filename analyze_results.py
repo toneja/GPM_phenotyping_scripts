@@ -139,6 +139,12 @@ def analyze_results(plate, isolate):
         )
 
     germination_data.sort()
+    i = 0
+    for item in germination_data:
+        if item[0] == CNTL:
+            germination_data.insert(0, germination_data.pop(i))
+        i += 1
+
     with open(
         "FinalResults_" + plate + "_" + isolate + ".csv",
         "w",
@@ -185,9 +191,9 @@ def csv_handler(plate, isolate, time):
                 feret_total += float(row["Feret"])
             else:
                 # once we've hit the next slice, calculate percentage and store the data
-                area_avg = round(area_total / roi_count, 3)
-                perim_avg = round(perim_total / roi_count, 3)
-                feret_avg = round(feret_total / roi_count, 3)
+                area_avg = round(area_total / roi_count, 1)
+                perim_avg = round(perim_total / roi_count, 1)
+                feret_avg = round(feret_total / roi_count, 1)
                 slice_data.append(
                     [
                         roi_germinated,
@@ -210,9 +216,9 @@ def csv_handler(plate, isolate, time):
                 else:
                     roi_germinated = 0
         # outside of the loop, calculate and store value for the last slice
-        area_avg = round(area_total / roi_count, 3)
-        perim_avg = round(perim_total / roi_count, 3)
-        feret_avg = round(feret_total / roi_count, 3)
+        area_avg = round(area_total / roi_count, 1)
+        perim_avg = round(perim_total / roi_count, 1)
+        feret_avg = round(feret_total / roi_count, 1)
         slice_data.append(
             [
                 roi_germinated,
