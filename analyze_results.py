@@ -3,12 +3,10 @@
 """docstring goes here"""
 
 import csv
-import logging
 import os
 import sys
 import pandas
 from sklearn import linear_model
-from tabulate import tabulate
 
 
 # debris ~ area + major + minor + circ + feret + min_feret + ar + convex + feret_ratio
@@ -87,14 +85,6 @@ def is_germinated(row):
 
 def analyze_results(plate, isolate):
     """docstring goes here"""
-    log_level = logging.INFO
-    log_format = "%(message)s"
-    log_handlers = [
-        logging.FileHandler("FinalResults_" + plate + "_" + isolate + ".txt"),
-        logging.StreamHandler(),
-    ]
-    logging.basicConfig(level=log_level, format=log_format, handlers=log_handlers)
-
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
@@ -201,9 +191,7 @@ def analyze_results(plate, isolate):
             csv_writer.writerow(master_headers)
         csv_writer.writerow(germination_avgs)
 
-    logging.info(tabulate(germination_data, headers=headers))
-    logging.info("------------------------------------------------------------")
-    logging.info("* Results for isolate %s from %s", isolate.upper(), plate.upper())
+    print(f"* Calculated results for isolate {isolate.upper()} from {plate.upper()}")
 
 
 # handle csv datasets
