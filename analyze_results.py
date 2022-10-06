@@ -99,6 +99,7 @@ def analyze_results(plate, isolate):
     _48hr_results = csv_handler(plate, isolate, 48)
 
     germination_data = []
+    germination_avgs = [plate, isolate]
     headers = [
         "Treatment",
         "0hr %",
@@ -109,6 +110,34 @@ def analyze_results(plate, isolate):
         "Perimeter change",
         "Feret change",
         "Image",
+    ]
+    master_headers = [
+        "Plate",
+        "Isol",
+        "Cont",
+        "Azox 10",
+        "Bosc 1",
+        "Bosc 10",
+        "Bosc 100",
+        "Dife 25",
+        "Dife 250",
+        "Dife 2500",
+        "Fluo 1",
+        "Fluo 10",
+        "Fluo 100",
+        "Flut 25",
+        "Flut 250",
+        "Flut 2500",
+        "Mycl 25",
+        "Mycl 250",
+        "Mycl 2500",
+        "Quin 0.01",
+        "Quin 0.1",
+        "Quin 1",
+        "SHAM 100",
+        "Tebu 25",
+        "Tebu 250",
+        "Tebu 2500",
     ]
     for block in range(96):
         if len(str(block)) == 1:
@@ -139,8 +168,12 @@ def analyze_results(plate, isolate):
         )
 
     germination_data.sort()
-    i = 0
+    i, total = 0, 0
     for item in germination_data:
+        total += item[2]
+        if (i + 1) % 4 == 0:
+            germination_avgs.append(round(total / 4, 1))
+            total = 0
         if item[0] == CNTL:
             germination_data.insert(0, germination_data.pop(i))
         i += 1
@@ -154,6 +187,19 @@ def analyze_results(plate, isolate):
         csv_writer.writerow(headers)
         for row in germination_data:
             csv_writer.writerow(row)
+
+    write_headers = True
+    if os.path.isfile("GerminationAverages.csv"):
+        write_headers = False
+    with open(
+        "GerminationAverages.csv",
+        "a",
+        newline="",
+    ) as csv_outfile:
+        csv_writer = csv.writer(csv_outfile)
+        if write_headers:
+            csv_writer.writerow(master_headers)
+        csv_writer.writerow(germination_avgs)
 
     logging.info(tabulate(germination_data, headers=headers))
     logging.info("------------------------------------------------------------")
