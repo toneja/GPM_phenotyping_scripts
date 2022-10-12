@@ -40,7 +40,7 @@ def setup_regression(model):
     y = df[model]
 
     regression = linear_model.LogisticRegression(solver="liblinear", multi_class="ovr")
-    regression.fit(X, y)
+    regression.fit(X.values, y)
 
     return regression
 
