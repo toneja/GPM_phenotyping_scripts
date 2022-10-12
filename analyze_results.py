@@ -194,6 +194,7 @@ def analyze_results(plate, isolate):
 
     print(tabulate(germination_data, headers=headers))
     print(f"* Calculated results for isolate {isolate.upper()} from {plate.upper()}")
+    input("Analysis complete. Press ENTER to exit.\n")
 
 
 # handle csv datasets
