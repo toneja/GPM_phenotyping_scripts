@@ -7,6 +7,7 @@ import os
 import sys
 import pandas
 from sklearn import linear_model
+from tabulate import tabulate
 
 
 # debris ~ area + major + minor + circ + feret + min_feret + ar + convex + feret_ratio
@@ -191,6 +192,7 @@ def analyze_results(plate, isolate):
             csv_writer.writerow(master_headers)
         csv_writer.writerow(germination_avgs)
 
+    print(tabulate(germination_data, headers=headers))
     print(f"* Calculated results for isolate {isolate.upper()} from {plate.upper()}")
 
 
