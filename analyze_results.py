@@ -1144,7 +1144,7 @@ def get_treatments(plate, block):
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
-        FN = os.path.splitext(sys.argv[1])
+        FN = os.path.splitext(os.path.basename(sys.argv[1]))
         ARGS = FN[0].split("_")
         PLATE = ARGS[1]
         ISOLATE = ARGS[2]
