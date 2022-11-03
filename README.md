@@ -11,9 +11,7 @@ Usage:
 3) The results of the analysis will be outputted to the screen.
 
 TODO:
-- add additional plate maps
-- tighten up ROI comparisons, don't rely only on area, perimeter, and roundness changes
+- add additional plate maps (still some to go)
 - add docstrings and better code comments
 - merge scripts and ImageJ macros into single repository
 - handle possible exceptions
-- write output into a standard file format (csv, xls, etc)
