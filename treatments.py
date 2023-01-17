@@ -33,6 +33,8 @@ QXF3 = "Quinoxyfen 1 ug/mL"
 # maps of treatment blocks
 def get_treatments(plate, block):
     """docstring goes here"""
+    # Handle batches, eg. plate1a-1, plate1a-2, ...
+    plate = plate.split("-")[0]
     if plate == "plate1a":
         # Isolates: LH1, ALV4CH-B
         treatments = [
