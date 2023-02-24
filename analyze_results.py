@@ -11,8 +11,6 @@ from tabulate import tabulate
 from treatments import get_treatments
 
 
-# debris ~ area + major + minor + circ + feret + min_feret + ar + convex + feret_ratio
-# germinated ~ area + perim + min_feret + ar + solidity + convex + feret_ratio
 def setup_regression(model):
     """docstring goes here"""
     df = pandas.read_csv("training_data.csv")
@@ -25,18 +23,11 @@ def setup_regression(model):
             "Feret",
             "MinFeret",
             "AR",
-            "Convex",
-            "FeretRatio",
         ]
     elif model == "Germinated":
         vals = [
-            "Area",
             "Perim.",
-            "MinFeret",
-            "AR",
-            "Solidity",
-            "Convex",
-            "FeretRatio",
+            "Circ.",
         ]
     X = df[vals]
     y = df[model]
@@ -59,12 +50,10 @@ def is_debris(row):
                 float(row["Feret"]),
                 float(row["MinFeret"]),
                 float(row["AR"]),
-                int(row["Area"]) / float(row["Solidity"]),
-                float(row["MinFeret"]) / float(row["Feret"]),
             ]
         ]
     )
-    return float(prediction) >= 0.5
+    return float(prediction) >= 0.85
 
 
 def is_germinated(row):
@@ -72,13 +61,8 @@ def is_germinated(row):
     prediction = GERMINATED.predict(
         [
             [
-                int(row["Area"]),
                 float(row["Perim."]),
-                float(row["MinFeret"]),
-                float(row["AR"]),
-                float(row["Solidity"]),
-                int(row["Area"]) / float(row["Solidity"]),
-                float(row["MinFeret"]) / float(row["Feret"]),
+                float(row["Circ."]),
             ]
         ]
     )
