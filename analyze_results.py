@@ -13,8 +13,8 @@ from treatments import get_treatments
 
 def setup_regression(model):
     """docstring goes here"""
-    df = pandas.read_csv("training_data.csv")
-    if model == "Debris":
+    df = pandas.read_csv(f"{model}_training_data.csv")
+    if model == "debris":
         vals = [
             "Area",
             "Major",
@@ -24,7 +24,7 @@ def setup_regression(model):
             "MinFeret",
             "AR",
         ]
-    elif model == "Germinated":
+    elif model == "germination":
         vals = [
             "Perim.",
             "Circ.",
@@ -58,7 +58,7 @@ def is_debris(row):
 
 def is_germinated(row):
     """docstring goes here"""
-    prediction = GERMINATED.predict(
+    prediction = GERMINATION.predict(
         [
             [
                 float(row["Perim."]),
@@ -267,6 +267,6 @@ if __name__ == "__main__":
     else:
         sys.exit(f"Usage: {sys.argv[0]} [PLATE] [ISOLATE]")
 
-    DEBRIS = setup_regression("Debris")
-    GERMINATED = setup_regression("Germinated")
+    DEBRIS = setup_regression("debris")
+    GERMINATION = setup_regression("germination")
     analyze_results(PLATE, ISOLATE)
