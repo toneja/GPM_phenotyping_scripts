@@ -133,7 +133,6 @@ def analyze_results(plate, isolate):
 
     print(tabulate(germination_data, headers=headers))
     print(f"* Calculated results for isolate {isolate.upper()} from {plate.upper()}")
-    input("Analysis complete. Press ENTER to exit.\n")
 
 
 # handle csv datasets
@@ -141,7 +140,7 @@ def csv_handler(plate, isolate, time):
     """docstring goes here"""
     # open csv file
     with open(
-        "Results_" + plate + "_" + isolate + "_" + str(time) + "hr.csv", "r"
+        f"Results_{plate}_{isolate}_{time}hr.csv", "r"
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
@@ -215,11 +214,8 @@ if __name__ == "__main__":
         ARGS = FN[0].split("_")
         PLATE = ARGS[1]
         ISOLATE = ARGS[2]
-    elif len(sys.argv) == 3:
-        PLATE = sys.argv[1]
-        ISOLATE = sys.argv[2]
     else:
-        sys.exit(f"Usage: {sys.argv[0]} [PLATE] [ISOLATE]")
+        sys.exit(f"Usage: {sys.argv[0]} [FILE]")
 
     DEBRIS = setup_regression("debris")
     GERMINATION = setup_regression("germination")
