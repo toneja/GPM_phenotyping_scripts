@@ -7,9 +7,9 @@ import csv
 import openpyxl
 
 
-def combine_csv_files_to_xlsx(workbook_file, csv_files):
+def compile_workbook(workbook_file, csv_files):
     """
-    Combines the csv files into the workbook.
+    Compiles the csv files into the workbook.
     """
     # Check if output workbook already exists
     if os.path.exists(workbook_file):
@@ -66,6 +66,6 @@ if __name__ == "__main__":
         CSV_FILES.append(f)
 
     if CSV_FILES:
-        combine_csv_files_to_xlsx(WORKBOOK_FILE, CSV_FILES)
+        compile_workbook(WORKBOOK_FILE, CSV_FILES)
     else:
         print("No csv files found.")
