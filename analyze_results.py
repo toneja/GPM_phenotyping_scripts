@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 
-"""docstring goes here"""
+"""
+    Erysiphe Necator Fungicide Efficacy Assay
+    ImageJ results analysis script
+
+"""
 
 import csv
 import os
@@ -69,11 +73,12 @@ def is_germinated(row):
     return float(prediction) >= 0.5
 
 
-def analyze_results(plate, isolate):
+def analyze_results(plate, isolate, size):
     """docstring goes here"""
     _0hr_results = csv_handler(plate, isolate, 0)
     _48hr_results = csv_handler(plate, isolate, 48)
 
+    # Output data and file headers
     germination_data = []
     headers = [
         "Treatment",
@@ -86,34 +91,27 @@ def analyze_results(plate, isolate):
         "Feret change",
         "Image",
     ]
-    for block in range(96):
-        if len(str(block)) == 1:
-            img_prefix = "Image_000"
+    for block in range(size):
+        if block > 9:
+            img_name = f"Image_00{block}.jpg"
         else:
-            img_prefix = "Image_00"
-        img_name = img_prefix + str(block) + ".jpg"
-        treatment = get_treatments(plate, block)
-        germinated = int(_48hr_results[block][0])
-        total_spores = int(_48hr_results[block][1])
-        germination_0 = round(_0hr_results[block][2], 1)
-        germination_48 = round(_48hr_results[block][2], 1)
-        area_change = round(_48hr_results[block][3] - _0hr_results[block][3], 1)
-        perim_change = round(_48hr_results[block][4] - _0hr_results[block][4], 1)
-        feret_change = round(_48hr_results[block][5] - _0hr_results[block][5], 1)
+            img_name = f"Image_000{block}.jpg"
+
         germination_data.append(
             [
-                treatment,
-                germination_0,
-                germination_48,
-                germinated,
-                total_spores,
-                area_change,
-                perim_change,
-                feret_change,
+                get_treatments(plate, block),
+                round(_0hr_results[block][2], 1),
+                round(_48hr_results[block][2], 1),
+                int(_48hr_results[block][0]),
+                int(_48hr_results[block][1]),
+                round(_48hr_results[block][3] - _0hr_results[block][3], 1),
+                round(_48hr_results[block][4] - _0hr_results[block][4], 1),
+                round(_48hr_results[block][5] - _0hr_results[block][5], 1),
                 img_name,
             ]
         )
 
+    # Sort the data by treatment with the controls at the top
     germination_data.sort()
     i = 0
     for item in germination_data:
@@ -121,8 +119,9 @@ def analyze_results(plate, isolate):
             germination_data.insert(0, germination_data.pop(i))
         i += 1
 
+    # Write the results to the output file
     with open(
-        "FinalResults_" + plate + "_" + isolate + ".csv",
+        f"FinalResults_{plate}_{isolate}.csv",
         "w",
         newline="",
     ) as csv_outfile:
@@ -131,6 +130,7 @@ def analyze_results(plate, isolate):
         for row in germination_data:
             csv_writer.writerow(row)
 
+    # Print a table of the results for the user
     print(tabulate(germination_data, headers=headers))
     print(f"* Calculated results for isolate {isolate.upper()} from {plate.upper()}")
 
@@ -145,13 +145,9 @@ def csv_handler(plate, isolate, time):
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
         slice_data = []
-        # set ROI count to zero
         roi_count, roi_germinated = 0, 0
-        # set totals to zero
         area_total, perim_total, feret_total = 0, 0, 0
-        # start with Slice 1
         slice_count = 1
-        # iterate over the csv values row by row
         for row in csv_reader:
             # skip bad ROIs (debris)
             if is_debris(row):
@@ -166,22 +162,17 @@ def csv_handler(plate, isolate, time):
                 feret_total += float(row["Feret"])
             else:
                 # once we've hit the next slice, calculate percentage and store the data
-                area_avg = round(area_total / roi_count, 1)
-                perim_avg = round(perim_total / roi_count, 1)
-                feret_avg = round(feret_total / roi_count, 1)
                 slice_data.append(
                     [
                         roi_germinated,
                         roi_count,
                         roi_germinated / roi_count * 100,
-                        area_avg,
-                        perim_avg,
-                        feret_avg,
+                        round(area_total / roi_count, 1),
+                        round(perim_total / roi_count, 1),
+                        round(feret_total / roi_count, 1),
                     ]
                 )
-                # move to the next slice
                 slice_count += 1
-                # set count to 1 since we're on the first of new slice
                 roi_count = 1
                 area_total = int(row["Area"])
                 perim_total = float(row["Perim."])
@@ -191,20 +182,16 @@ def csv_handler(plate, isolate, time):
                 else:
                     roi_germinated = 0
         # outside of the loop, calculate and store value for the last slice
-        area_avg = round(area_total / roi_count, 1)
-        perim_avg = round(perim_total / roi_count, 1)
-        feret_avg = round(feret_total / roi_count, 1)
         slice_data.append(
             [
                 roi_germinated,
                 roi_count,
                 roi_germinated / roi_count * 100,
-                area_avg,
-                perim_avg,
-                feret_avg,
+                round(area_total / roi_count, 1),
+                round(perim_total / roi_count, 1),
+                round(feret_total / roi_count, 1),
             ]
         )
-        # return Slice data
         return slice_data
 
 
@@ -214,9 +201,11 @@ if __name__ == "__main__":
         ARGS = FN[0].split("_")
         PLATE = ARGS[1]
         ISOLATE = ARGS[2]
+        # Default is 96 wells
+        SIZE = 8 * 12
     else:
         sys.exit(f"Usage: {sys.argv[0]} [FILE]")
 
     DEBRIS = setup_regression("debris")
     GERMINATION = setup_regression("germination")
-    analyze_results(PLATE, ISOLATE)
+    analyze_results(PLATE, ISOLATE, SIZE)
