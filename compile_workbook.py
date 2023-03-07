@@ -43,9 +43,9 @@ def compile_workbook(workbook_file, csv_files):
                 for row in csv_reader:
                     sheet.append(row)
 
-            print(f"Added sheet '{sheet_name}' to workbook")
+            print(f"Added sheet {sheet_name} to workbook")
         else:
-            print(f"Skipped sheet '{sheet_name}': already in the workbook")
+            print(f"Skipped sheet {sheet_name}: already in the workbook")
 
     # Sort the sheets in the workbook alphabetically by isolate name
     workbook._sheets.sort(key=lambda x: x.title)
