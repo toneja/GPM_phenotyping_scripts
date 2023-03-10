@@ -30,11 +30,20 @@ class App(tk.Tk):
         self.config(menu=menu_bar)
 
     def create_widgets(self):
+        file_label = tk.Label(self, text="No files currently open.")
+        file_label.pack(pady=10)
+
         run_button = tk.Button(self, text="Run", command=self.run_analysis)
         run_button.pack(pady=10)
 
+        self.file_label = file_label
+
     def open_files(self):
         self.filepaths = filedialog.askopenfilenames(title="Open CSV", filetypes=[("CSV files", "*.csv")])
+        if self.filepaths:
+            self.file_label.configure(text="\n".join(self.filepaths))
+        else:
+            self.file_label.configure(text="No files currently open.")
 
     def run_analysis(self):
         if self.filepaths:
