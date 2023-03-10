@@ -15,12 +15,23 @@ from tabulate import tabulate
 from treatments import get_treatments
 
 
-def setup_regression():
+def setup_regression(model):
     """docstring goes here"""
-    df = pandas.read_csv("germination_training_data.csv")
-    vals = ["Perim.", "Circ."]
+    df = pandas.read_csv(f"{model}_training_data.csv")
+    if model == "germination":
+        vals = ["Perim.", "Circ."]
+    elif model == "spore":
+        vals = [
+            "Area",
+            "Major",
+            "Minor",
+            "Circ.",
+            "Feret",
+            "MinFeret",
+            "AR",
+        ]
     X = df[vals]
-    y = df["germination"]
+    y = df[model]
 
     regression = linear_model.LogisticRegression(solver="liblinear", multi_class="ovr")
     regression.fit(X.values, y)
@@ -35,6 +46,24 @@ def is_germinated(row):
             [
                 float(row["Perim."]),
                 float(row["Circ."]),
+            ]
+        ]
+    )
+    return float(prediction) >= 0.85
+
+
+def is_spore(row):
+    """docstring goes here"""
+    prediction = SPORE.predict(
+        [
+            [
+                int(row["Area"]),
+                float(row["Major"]),
+                float(row["Minor"]),
+                float(row["Circ."]),
+                float(row["Feret"]),
+                float(row["MinFeret"]),
+                float(row["AR"]),
             ]
         ]
     )
@@ -58,6 +87,7 @@ def analyze_results(plate, isolate, size):
         "Perimeter change",
         "Feret change",
         "Image",
+        "Debris",
     ]
     for block in range(size):
         if block > 9:
@@ -76,6 +106,7 @@ def analyze_results(plate, isolate, size):
                 round(_48hr_results[block][4] - _0hr_results[block][4], 1),
                 round(_48hr_results[block][5] - _0hr_results[block][5], 1),
                 img_name,
+                int(_48hr_results[block][6]),
             ]
         )
 
@@ -113,10 +144,14 @@ def csv_handler(plate, isolate, time):
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
         slice_data = []
-        roi_count, roi_germinated = 0, 0
+        roi_count, roi_germinated, debris_rois = 0, 0, 0
         area_total, perim_total, feret_total = 0, 0, 0
         slice_count = 1
         for row in csv_reader:
+            # new debris filter
+            if not is_spore(row) and not is_germinated(row):
+                debris_rois +=1
+                continue
             # calculate totals for each slice
             if int(row["Slice"]) == slice_count:
                 roi_count += 1
@@ -135,6 +170,7 @@ def csv_handler(plate, isolate, time):
                         round(area_total / roi_count, 1),
                         round(perim_total / roi_count, 1),
                         round(feret_total / roi_count, 1),
+                        debris_rois,
                     ]
                 )
                 slice_count += 1
@@ -146,6 +182,7 @@ def csv_handler(plate, isolate, time):
                     roi_germinated = 1
                 else:
                     roi_germinated = 0
+                debris_rois = 0
         # outside of the loop, calculate and store value for the last slice
         slice_data.append(
             [
@@ -155,6 +192,7 @@ def csv_handler(plate, isolate, time):
                 round(area_total / roi_count, 1),
                 round(perim_total / roi_count, 1),
                 round(feret_total / roi_count, 1),
+                debris_rois,
             ]
         )
         return slice_data
@@ -171,5 +209,6 @@ if __name__ == "__main__":
     else:
         sys.exit(f"Usage: {sys.argv[0]} [FILE]")
 
-    GERMINATION = setup_regression()
+    GERMINATION = setup_regression("germination")
+    SPORE = setup_regression("spore")
     analyze_results(PLATE, ISOLATE, SIZE)
