@@ -30,9 +30,13 @@ class App(tk.Tk):
 
     def run_analysis(self):
         if self.filepaths:
-            for filepath in self.filepaths:
-                analyze_results.main(filepath)
-            print("Analysis complete.")
+            hr0_filepaths = [fp for fp in self.filepaths if "0hr" in fp]
+            if hr0_filepaths:
+                for filepath in hr0_filepaths:
+                    analyze_results.main(filepath)
+                print("Analysis complete.")
+            else:
+                print("No CSV files with '0hr' in their name found.")
         else:
             print("Please open at least one CSV file first.")
 
