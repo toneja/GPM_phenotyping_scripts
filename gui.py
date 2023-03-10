@@ -11,6 +11,14 @@ class App(tk.Tk):
         super().__init__()
         self.title("Analyze Results")
         self.filepaths = []
+
+        # Set window size to 50% of screen size
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        window_width = int(screen_width / 2)
+        window_height = int(screen_height / 2)
+        self.geometry(f"{window_width}x{window_height}")
+
         self.create_menu()
         self.create_widgets()
 
