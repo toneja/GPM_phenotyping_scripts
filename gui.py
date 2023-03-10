@@ -9,7 +9,7 @@ import sklearn
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Analyze Results")
+        self.title("GPM Fungicide Assay Results Analyzer")
         self.filepaths = []
 
         # Set window size to 50% of screen size
