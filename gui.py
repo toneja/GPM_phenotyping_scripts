@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 
-import os
 import tkinter as tk
 from tkinter import filedialog
 import analyze_results
-import sklearn
+
 
 class App(tk.Tk):
     def __init__(self):
@@ -39,7 +38,9 @@ class App(tk.Tk):
         self.file_label = file_label
 
     def open_files(self):
-        self.filepaths = filedialog.askopenfilenames(title="Open CSV", filetypes=[("CSV files", "*.csv")])
+        self.filepaths = filedialog.askopenfilenames(
+            title="Open CSV", filetypes=[("CSV files", "*.csv")]
+        )
         if self.filepaths:
             self.file_label.configure(text="\n".join(self.filepaths))
         else:
@@ -56,6 +57,7 @@ class App(tk.Tk):
                 print("No CSV files with '0hr' in their name found.")
         else:
             print("Please open at least one CSV file first.")
+
 
 if __name__ == "__main__":
     app = App()
