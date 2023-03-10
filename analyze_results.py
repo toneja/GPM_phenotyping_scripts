@@ -17,7 +17,7 @@ from treatments import get_treatments
 
 def setup_regression(model):
     """docstring goes here"""
-    df = pandas.read_csv(f"{model}_training_data.csv")
+    df = pandas.read_csv(f"{workdir}/{model}_training_data.csv")
     if model == "germination":
         vals = ["Perim.", "Circ."]
     elif model == "spore":
@@ -41,7 +41,7 @@ def setup_regression(model):
 
 def is_germinated(row):
     """docstring goes here"""
-    prediction = GERMINATION.predict(
+    prediction = germination.predict(
         [
             [
                 float(row["Perim."]),
@@ -54,7 +54,7 @@ def is_germinated(row):
 
 def is_spore(row):
     """docstring goes here"""
-    prediction = SPORE.predict(
+    prediction = spore.predict(
         [
             [
                 int(row["Area"]),
@@ -120,7 +120,7 @@ def analyze_results(plate, isolate, size):
 
     # Write the results to the output file
     with open(
-        f"FinalResults_{plate}_{isolate}.csv",
+        f"{workdir}/FinalResults_{plate}_{isolate}.csv",
         "w",
         newline="",
     ) as csv_outfile:
@@ -139,7 +139,7 @@ def csv_handler(plate, isolate, time):
     """docstring goes here"""
     # open csv file
     with open(
-        f"Results_{plate}_{isolate}_{time}hr.csv", "r"
+        f"{workdir}/Results_{plate}_{isolate}_{time}hr.csv", "r"
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
@@ -198,17 +198,26 @@ def csv_handler(plate, isolate, time):
         return slice_data
 
 
+def main(filename):
+    fn = os.path.splitext(os.path.basename(filename))
+    args = fn[0].split("_")
+    plate = args[1]
+    isolate = args[2]
+    # Default is 96 wells
+    size = 8 * 12
+
+    global workdir
+    workdir = os.path.dirname(filename)
+    if not workdir:
+        workdir = "."
+    global germination
+    germination = setup_regression("germination")
+    global spore
+    spore = setup_regression("spore")
+    analyze_results(plate, isolate, size)
+
 if __name__ == "__main__":
     if len(sys.argv) == 2:
-        FN = os.path.splitext(os.path.basename(sys.argv[1]))
-        ARGS = FN[0].split("_")
-        PLATE = ARGS[1]
-        ISOLATE = ARGS[2]
-        # Default is 96 wells
-        SIZE = 8 * 12
+        main(sys.argv[1])
     else:
         sys.exit(f"Usage: {sys.argv[0]} [FILE]")
-
-    GERMINATION = setup_regression("germination")
-    SPORE = setup_regression("spore")
-    analyze_results(PLATE, ISOLATE, SIZE)
