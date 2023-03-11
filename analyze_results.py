@@ -14,10 +14,13 @@ from sklearn import linear_model
 from tabulate import tabulate
 from treatments import get_treatments
 
+# globals
+WORKDIR, GERMINATION, SPORE = "", "", ""
+
 
 def setup_regression(model):
     """docstring goes here"""
-    df = pandas.read_csv(f"{workdir}/{model}_training_data.csv")
+    dataset = pandas.read_csv(f"{WORKDIR}/{model}_training_data.csv")
     if model == "germination":
         vals = ["Perim.", "Circ."]
     elif model == "spore":
@@ -30,18 +33,18 @@ def setup_regression(model):
             "MinFeret",
             "AR",
         ]
-    X = df[vals]
-    y = df[model]
+    _x = dataset[vals]
+    _y = dataset[model]
 
     regression = linear_model.LogisticRegression(solver="liblinear", multi_class="ovr")
-    regression.fit(X.values, y)
+    regression.fit(_x.values, _y)
 
     return regression
 
 
 def is_germinated(row):
     """docstring goes here"""
-    prediction = germination.predict(
+    prediction = GERMINATION.predict(
         [
             [
                 float(row["Perim."]),
@@ -54,7 +57,7 @@ def is_germinated(row):
 
 def is_spore(row):
     """docstring goes here"""
-    prediction = spore.predict(
+    prediction = SPORE.predict(
         [
             [
                 int(row["Area"]),
@@ -120,7 +123,7 @@ def analyze_results(plate, isolate, size):
 
     # Write the results to the output file
     with open(
-        f"{workdir}/FinalResults_{plate}_{isolate}.csv",
+        f"{WORKDIR}/FinalResults_{plate}_{isolate}.csv",
         "w",
         newline="",
     ) as csv_outfile:
@@ -138,9 +141,7 @@ def analyze_results(plate, isolate, size):
 def csv_handler(plate, isolate, time):
     """docstring goes here"""
     # open csv file
-    with open(
-        f"{workdir}/Results_{plate}_{isolate}_{time}hr.csv", "r"
-    ) as csv_file:
+    with open(f"{WORKDIR}/Results_{plate}_{isolate}_{time}hr.csv", "r") as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
         slice_data = []
@@ -150,7 +151,7 @@ def csv_handler(plate, isolate, time):
         for row in csv_reader:
             # new debris filter
             if not is_spore(row) and not is_germinated(row):
-                debris_rois +=1
+                debris_rois += 1
                 continue
             # calculate totals for each slice
             if int(row["Slice"]) == slice_count:
@@ -199,22 +200,21 @@ def csv_handler(plate, isolate, time):
 
 
 def main(filename):
-    fn = os.path.splitext(os.path.basename(filename))
-    args = fn[0].split("_")
+    """docstring goes here"""
+    global WORKDIR, GERMINATION, SPORE
+    args = os.path.splitext(os.path.basename(filename))[0].split("_")
     plate = args[1]
     isolate = args[2]
     # Default is 96 wells
     size = 8 * 12
 
-    global workdir
-    workdir = os.path.dirname(filename)
-    if not workdir:
-        workdir = "."
-    global germination
-    germination = setup_regression("germination")
-    global spore
-    spore = setup_regression("spore")
+    WORKDIR = os.path.dirname(filename)
+    if not WORKDIR:
+        WORKDIR = "."
+    GERMINATION = setup_regression("germination")
+    SPORE = setup_regression("spore")
     analyze_results(plate, isolate, size)
+
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
