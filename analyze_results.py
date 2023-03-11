@@ -208,7 +208,7 @@ def main(filename):
     # Default is 96 wells
     size = 8 * 12
 
-    WORKDIR = os.path.dirname(filename)
+    WORKDIR = os.path.dirname(sys.argv[0])
     if not WORKDIR:
         WORKDIR = "."
     GERMINATION = setup_regression("germination")
