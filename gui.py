@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import filedialog
 import os.path
 import analyze_results
+import compile_workbook
 
 
 class App(tk.Tk):
@@ -48,8 +49,11 @@ class App(tk.Tk):
             side="right", fill="both", expand=True, padx=(5, 10)
         )
 
-        run_button = tk.Button(self, text="Run", command=self.run_analysis)
+        run_button = tk.Button(self, text="Process Files", command=self.run_analysis)
         run_button.pack(pady=10)
+
+        workbook_button = tk.Button(self, text="Compile Workbook", command=self.make_workbook)
+        workbook_button.pack(pady=10)
 
         self.open_files_listbox = open_files_listbox
         self.processed_files_listbox = processed_files_listbox
@@ -79,6 +83,8 @@ class App(tk.Tk):
         else:
             print("Please open at least one CSV file first.")
 
+    def make_workbook(self):
+        compile_workbook.main()
 
 if __name__ == "__main__":
     app = App()

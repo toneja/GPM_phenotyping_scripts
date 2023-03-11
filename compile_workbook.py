@@ -5,6 +5,7 @@
 import os
 import csv
 import openpyxl
+import sys
 
 
 def compile_workbook(workbook_file, csv_files):
@@ -54,18 +55,26 @@ def compile_workbook(workbook_file, csv_files):
     workbook.save(workbook_file)
 
 
-if __name__ == "__main__":
-    # output file
-    WORKBOOK_FILE = "GPMFungicideAssay_Workbook.xlsx"
+def main():
+    # Get the path to the script's directory
+    script_dir = os.path.dirname(sys.argv[0])
 
-    # Get list of all usable csv files
+    # output file
+    WORKBOOK_FILE = f"{script_dir}/GPMFungicideAssay_Workbook.xlsx"
+
+    # Get list of all usable csv files in the script's directory
     CSV_FILES = []
-    for f in os.listdir("."):
+    for f in os.listdir(script_dir):
         if not (f.endswith(".csv") and f.startswith("FinalResults_plate")):
             continue
-        CSV_FILES.append(f)
+        file_path = os.path.join(script_dir, f)
+        CSV_FILES.append(file_path)
 
     if CSV_FILES:
         compile_workbook(WORKBOOK_FILE, CSV_FILES)
     else:
         print("No csv files found.")
+
+
+if __name__ == "__main__":
+    main()
