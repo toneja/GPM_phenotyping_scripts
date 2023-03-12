@@ -4,8 +4,8 @@
 
 import os
 import csv
-import openpyxl
 import sys
+import openpyxl
 
 
 def compile_workbook(workbook_file, csv_files):
@@ -56,22 +56,23 @@ def compile_workbook(workbook_file, csv_files):
 
 
 def main():
+    """Set path and get filenames"""
     # Get the path to the script's directory
     script_dir = os.path.dirname(sys.argv[0])
 
     # output file
-    WORKBOOK_FILE = f"{script_dir}/GPMFungicideAssay_Workbook.xlsx"
+    workbook_file = f"{script_dir}/GPMFungicideAssay_Workbook.xlsx"
 
     # Get list of all usable csv files in the script's directory
-    CSV_FILES = []
-    for f in os.listdir(script_dir):
-        if not (f.endswith(".csv") and f.startswith("FinalResults_plate")):
+    csv_files = []
+    for file in os.listdir(script_dir):
+        if not (file.endswith(".csv") and file.startswith("FinalResults_plate")):
             continue
-        file_path = os.path.join(script_dir, f)
-        CSV_FILES.append(file_path)
+        file_path = os.path.join(script_dir, file)
+        csv_files.append(file_path)
 
-    if CSV_FILES:
-        compile_workbook(WORKBOOK_FILE, CSV_FILES)
+    if csv_files:
+        compile_workbook(workbook_file, csv_files)
     else:
         print("No csv files found.")
 
