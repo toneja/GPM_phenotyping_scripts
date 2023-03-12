@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+"""Simple GUI wrapper for the GPM phenotyping modules"""
+
 import tkinter as tk
 from tkinter import filedialog
 import os.path
@@ -8,6 +10,8 @@ import compile_workbook
 
 
 class App(tk.Tk):
+    """GUI Application"""
+
     def __init__(self):
         super().__init__()
         self.title("GPM Fungicide Assay Results Analyzer")
@@ -24,6 +28,7 @@ class App(tk.Tk):
         self.create_widgets()
 
     def create_menu(self):
+        """File menu with 'open' and 'quit' options"""
         menu_bar = tk.Menu(self)
         file_menu = tk.Menu(menu_bar, tearoff=0)
         file_menu.add_command(label="Open", command=self.open_files)
@@ -32,6 +37,7 @@ class App(tk.Tk):
         self.config(menu=menu_bar)
 
     def create_widgets(self):
+        """UI layout - columns and buttons"""
         files_frame = tk.Frame(self)
         files_frame.pack(side="top", fill="both", expand=True)
 
@@ -52,26 +58,30 @@ class App(tk.Tk):
         run_button = tk.Button(self, text="Process Files", command=self.run_analysis)
         run_button.pack(pady=10)
 
-        workbook_button = tk.Button(self, text="Compile Workbook", command=self.make_workbook)
+        workbook_button = tk.Button(
+            self, text="Compile Workbook", command=self.make_workbook
+        )
         workbook_button.pack(pady=10)
 
         self.open_files_listbox = open_files_listbox
         self.processed_files_listbox = processed_files_listbox
 
     def open_files(self):
+        """Open csv results files"""
         self.filepaths = filedialog.askopenfilenames(
             title="Open CSV", filetypes=[("CSV files", "*.csv")]
         )
         if self.filepaths:
             self.open_files_listbox.delete(0, tk.END)
-            for fp in self.filepaths:
-                filename = os.path.basename(fp)
+            for _fp in self.filepaths:
+                filename = os.path.basename(_fp)
                 if "0hr" in filename:
                     self.open_files_listbox.insert(tk.END, filename)
 
     def run_analysis(self):
+        """Execute analysis only on 0 hour files"""
         if self.filepaths:
-            hr0_filepaths = [fp for fp in self.filepaths if "0hr" in fp]
+            hr0_filepaths = [_fp for _fp in self.filepaths if "0hr" in _fp]
             if hr0_filepaths:
                 for filepath in hr0_filepaths:
                     analyze_results.main(filepath)
@@ -84,7 +94,13 @@ class App(tk.Tk):
             print("Please open at least one CSV file first.")
 
     def make_workbook(self):
-        compile_workbook.main()
+        """Compile an Excel workbook with the results"""
+        if self.processed_files_listbox.size() > 0:
+            print("Compiling results workbook.")
+            compile_workbook.main()
+        else:
+            print("You must process csv file(s) before compiling a workbook.")
+
 
 if __name__ == "__main__":
     app = App()
