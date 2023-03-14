@@ -16,21 +16,24 @@ from treatments import get_treatments
 
 # globals
 WORKDIR, GERMINATION, SPORE = "", "", ""
+THRESHOLD = 0.85
 
 
 def setup_regression(model):
     """docstring goes here"""
     dataset = pandas.read_csv(f"{WORKDIR}/{model}_training_data.csv")
     if model == "germination":
-        vals = ["Perim.", "Circ."]
-    elif model == "spore":
         vals = [
             "Area",
-            "Major",
-            "Minor",
             "Circ.",
-            "Feret",
             "MinFeret",
+            "AR",
+        ]
+    elif model == "spore":
+        vals = [
+            "Perim.",
+            "Major",
+            "Feret",
             "AR",
         ]
     _x = dataset[vals]
@@ -44,33 +47,32 @@ def setup_regression(model):
 
 def is_germinated(row):
     """docstring goes here"""
-    prediction = GERMINATION.predict(
-        [
-            [
-                float(row["Perim."]),
-                float(row["Circ."]),
-            ]
-        ]
-    )
-    return float(prediction) >= 0.85
-
-
-def is_spore(row):
-    """docstring goes here"""
-    prediction = SPORE.predict(
+    prediction = GERMINATION.predict_proba(
         [
             [
                 int(row["Area"]),
-                float(row["Major"]),
-                float(row["Minor"]),
                 float(row["Circ."]),
-                float(row["Feret"]),
                 float(row["MinFeret"]),
                 float(row["AR"]),
             ]
         ]
     )
-    return float(prediction) >= 0.85
+    return float(prediction[0][1]) >= THRESHOLD
+
+
+def is_spore(row):
+    """docstring goes here"""
+    prediction = SPORE.predict_proba(
+        [
+            [
+                float(row["Perim."]),
+                float(row["Major"]),
+                float(row["Feret"]),
+                float(row["AR"]),
+            ]
+        ]
+    )
+    return float(prediction[0][1]) >= THRESHOLD
 
 
 def analyze_results(plate, isolate, size):
