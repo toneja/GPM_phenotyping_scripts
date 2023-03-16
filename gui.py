@@ -3,7 +3,7 @@
 """Simple GUI wrapper for the GPM phenotyping modules"""
 
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 import os.path
 import analyze_results
 import compile_workbook
@@ -88,6 +88,9 @@ class App(tk.Tk):
                     filename = os.path.basename(filepath)
                     self.processed_files_listbox.insert(tk.END, filename)
                 print("Analysis complete.")
+                messagebox.showinfo(
+                    "Analysis Complete", "Analysis is complete for all selected files."
+                )
             else:
                 print("No CSV files with '0hr' in their name found.")
         else:
@@ -96,8 +99,11 @@ class App(tk.Tk):
     def make_workbook(self):
         """Compile an Excel workbook with the results"""
         if self.processed_files_listbox.size() > 0:
-            print("Compiling results workbook.")
             compile_workbook.main()
+            print("Compiled results workbook.")
+            messagebox.showinfo(
+                "Workbook Compiled", "Workbook has been compiled successfully."
+            )
         else:
             print("You must process csv file(s) before compiling a workbook.")
 
