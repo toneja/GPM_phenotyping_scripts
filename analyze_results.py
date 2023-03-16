@@ -31,10 +31,11 @@ def setup_regression(model):
         ]
     elif model == "spore":
         vals = [
+            "Area",
             "Perim.",
-            "Major",
             "Feret",
             "AR",
+            "Round",
         ]
     _x = dataset[vals]
     _y = dataset[model]
@@ -65,10 +66,11 @@ def is_spore(row):
     prediction = SPORE.predict_proba(
         [
             [
+                int(row["Area"]),
                 float(row["Perim."]),
-                float(row["Major"]),
                 float(row["Feret"]),
                 float(row["AR"]),
+                float(row["Round"]),
             ]
         ]
     )
