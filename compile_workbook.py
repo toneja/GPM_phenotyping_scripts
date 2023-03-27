@@ -49,10 +49,13 @@ def compile_workbook(workbook_file, csv_files):
             print(f"Skipped sheet {sheet_name}: already in the workbook")
 
     # Sort the sheets in the workbook alphabetically by isolate name
-    workbook._sheets.sort(key=lambda x: x.title)
+    workbook.worksheets.sort(key=lambda sheet: sheet.title)
 
     # Save the workbook
     workbook.save(workbook_file)
+
+    # Log the number of sheets in the workbook
+    print(f"The workbookbook contains {len(workbook.sheetnames)} sheets")
 
 
 def main():
