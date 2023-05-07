@@ -3,7 +3,7 @@
 """
 Evaluate a predictive model using logistic regression with feature selection.
 
-Usage: python script.py <csv_filename> [num_runs]
+Usage: eval_model.py <csv_filename> [num_runs]
 
 Read a training dataset from a CSV file and perform logistic regression with feature selection.
 Evaluate the model's accuracy in predicting the output label and print the evaluation metrics.
