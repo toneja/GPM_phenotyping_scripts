@@ -1,6 +1,13 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
-"""docstring goes here"""
+"""
+Evaluate a predictive model using logistic regression with feature selection.
+
+Usage: python script.py <csv_filename>
+
+Read a training dataset from a CSV file and perform logistic regression with feature selection.
+Evaluate the model's accuracy in predicting the output label and print the evaluation metrics.
+"""
 
 import os
 import sys
@@ -12,8 +19,8 @@ from sklearn.feature_selection import SequentialFeatureSelector
 
 
 def evaluate_predictive_model(csv_filename):
-    """docstring goes here"""
-    # Load the dataset from CSV file
+    """Evaluate predictive model using logistic regression with feature selection."""
+    # Load dataset from CSV file
     dataset = pd.read_csv(csv_filename)
 
     # Prepare input features and output label
@@ -34,10 +41,10 @@ def evaluate_predictive_model(csv_filename):
     _x_train_sfs = sfs.transform(_x_train)
     _x_test_sfs = sfs.transform(_x_test)
 
-    # Train a logistic regression model with the selected features
+    # Train a logistic regression model with selected features
     logreg.fit(_x_train_sfs, _y_train)
 
-    # Evaluate the model's accuracy on the testing set
+    # Evaluate model's accuracy on the testing set
     accuracy = logreg.score(_x_test_sfs, _y_test)
 
     # Predict labels for the testing set
@@ -48,7 +55,7 @@ def evaluate_predictive_model(csv_filename):
     recall = recall_score(_y_test, y_pred)
     f1 = f1_score(_y_test, y_pred)
 
-    # Calculate the confusion matrix
+    # Calculate confusion matrix
     tn, fp, fn, tp = confusion_matrix(_y_test, y_pred).ravel()
 
     # Calculate specificity
@@ -63,4 +70,8 @@ def evaluate_predictive_model(csv_filename):
     print("F1-score:", f1)
 
 
-evaluate_predictive_model(sys.argv[1])
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        evaluate_predictive_model(sys.argv[1])
+    else:
+        print("Please provide the CSV filename as an argument.")
