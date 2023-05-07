@@ -23,7 +23,7 @@ def evaluate_predictive_model(csv_filename):
 
     # Split dataset into training and testing sets
     _x_train, _x_test, _y_train, _y_test = train_test_split(
-        _x, _y, test_size=0.2, random_state=42
+        _x, _y, test_size=0.5, random_state=42
     )
 
     # Use stepwise feature selection to find the best set of features
