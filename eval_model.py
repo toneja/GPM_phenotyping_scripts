@@ -6,6 +6,7 @@ import os
 import sys
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SequentialFeatureSelector
 
@@ -39,9 +40,27 @@ def evaluate_predictive_model(csv_filename):
     # Evaluate the model's accuracy on the testing set
     accuracy = logreg.score(_x_test_sfs, _y_test)
 
+    # Predict labels for the testing set
+    y_pred = logreg.predict(_x_test_sfs)
+
+    # Calculate precision, recall, and F1-score
+    precision = precision_score(_y_test, y_pred)
+    recall = recall_score(_y_test, y_pred)
+    f1 = f1_score(_y_test, y_pred)
+
+    # Calculate the confusion matrix
+    tn, fp, fn, tp = confusion_matrix(_y_test, y_pred).ravel()
+
+    # Calculate specificity
+    specificity = tn / (tn + fp)
+
     # Print the results
     print("Accuracy:", accuracy)
     print("Selected features:", _x.columns[sfs.get_support()])
+    print("Precision:", precision)
+    print("Recall:", recall)
+    print("Specificity:", specificity)
+    print("F1-score:", f1)
 
 
 evaluate_predictive_model(sys.argv[1])
