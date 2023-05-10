@@ -31,7 +31,14 @@ def evaluate_predictive_model(csv_filename, num_runs=10):
 
     # Create an empty DataFrame to store the results
     results_df = pd.DataFrame(
-        columns=["Selected Features", "Accuracy", "Precision", "Recall", "Specificity", "F1-score"]
+        columns=[
+            "Selected Features",
+            "Accuracy",
+            "Precision",
+            "Recall",
+            "Specificity",
+            "F1-score",
+        ]
     )
 
     for i in range(num_runs):
@@ -69,13 +76,23 @@ def evaluate_predictive_model(csv_filename, num_runs=10):
 
         # Store the results in the DataFrame
         selected_features = ", ".join(_x.columns[sfs.get_support()])
-        results_df.loc[i] = [selected_features, accuracy, precision, recall, specificity, f1]
+        results_df.loc[i] = [
+            selected_features,
+            accuracy,
+            precision,
+            recall,
+            specificity,
+            f1,
+        ]
 
     # Print the results
     print(f"Results [{csv_filename}]:")
     print(results_df.to_string())
     print("\nAverage:")
     print(results_df.iloc[:, 1:].mean().to_string())
+    print(
+        "--------------------------------------------------------------------------------------"
+    )
 
 
 if __name__ == "__main__":
