@@ -3,8 +3,8 @@ Python scripts for use with *Erysiphe necator* fungicide efficacy assay
 
 Usage:
 1) Install the required dependencies:\
-    Windows: Run InstallDependencies.bat\
-    Linux: Run InstallDependencies.sh\
+    Windows: Run setup/InstallDependencies.bat\
+    Linux: Run setup/InstallDependencies.sh\
     Mac: Untested/Unsupported
 2) Place 0hr and 48hr csv files with results from ImageJ into this directory.
 3) Run analyze_results.py with the name of one of your results csv files as
@@ -20,7 +20,5 @@ Usage:
     into an Excel workbook.
 
 TODO:
-- add additional plate maps (still some to go)
 - add docstrings and better code comments
-- merge scripts and ImageJ macros into single repository
 - handle possible exceptions

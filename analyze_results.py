@@ -21,7 +21,7 @@ THRESHOLD = 0.85
 
 def setup_regression(model):
     """docstring goes here"""
-    dataset = pandas.read_csv(f"{WORKDIR}/{model}_training_data.csv")
+    dataset = pandas.read_csv(f"{WORKDIR}/models/{model}_training_data.csv")
     if model == "germination":
         vals = [
             "Area",
