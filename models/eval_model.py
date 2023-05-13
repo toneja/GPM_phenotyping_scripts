@@ -58,6 +58,9 @@ def evaluate_predictive_model(csv_filename, num_runs=10):
         ]
     )
 
+    best_accuracy = 0.0
+    best_feature_set = ""
+
     for i in range(num_runs):
         # Split dataset into training and testing sets
         _x_train, _x_test, _y_train, _y_test = train_test_split(
@@ -102,11 +105,18 @@ def evaluate_predictive_model(csv_filename, num_runs=10):
             f1,
         ]
 
+        # Update the best feature set if the accuracy is higher
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            best_feature_set = selected_features
+
     # Print the results
     print(f"Results [{csv_filename}]:")
     print(results_df.to_string())
     print("\nAverage:")
     print(results_df.iloc[:, 1:].mean().to_string())
+    print("\nBest Feature Set:")
+    print(f"{best_feature_set} @ {best_accuracy}")
     print(
         "--------------------------------------------------------------------------------------"
     )
