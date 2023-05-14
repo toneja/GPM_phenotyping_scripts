@@ -49,5 +49,5 @@ else
 fi
 
 # Install the required Python3 modules
-modules="openpyxl pandas sklearn tabulate"
+modules="openpyxl pandas sklearn tabulate tqdm"
 sudo pip3 install $modules

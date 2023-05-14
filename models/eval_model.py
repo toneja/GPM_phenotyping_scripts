@@ -34,6 +34,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SequentialFeatureSelector
+from tqdm import tqdm
 
 
 def evaluate_predictive_model(csv_filename, num_runs=10):
@@ -67,7 +68,7 @@ def evaluate_predictive_model(csv_filename, num_runs=10):
         "ignore", category=FutureWarning, module="sklearn.feature_selection"
     )
 
-    for i in range(num_runs):
+    for i in tqdm(range(num_runs), unit="tests"):
         # Split dataset into training and testing sets
         _x_train, _x_test, _y_train, _y_test = train_test_split(
             _x, _y, test_size=0.5, random_state=None

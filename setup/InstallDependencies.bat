@@ -11,4 +11,5 @@ pip3.exe install pandas
 pip3.exe install scikit-learn
 pip3.exe install sklearn
 pip3.exe install tabulate
+pip3.exe install tqdm
 pause
