@@ -29,6 +29,7 @@ Evaluate the model's accuracy in predicting the output label and print the evalu
 import os
 import sys
 import pandas as pd
+import warnings
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -60,6 +61,11 @@ def evaluate_predictive_model(csv_filename, num_runs=10):
 
     best_accuracy = 0.0
     best_feature_set = ""
+
+    # ignore some annoying warnings from the code below
+    warnings.filterwarnings(
+        "ignore", category=FutureWarning, module="sklearn.feature_selection"
+    )
 
     for i in range(num_runs):
         # Split dataset into training and testing sets
