@@ -51,3 +51,20 @@ fi
 # Install the required Python3 modules
 modules="openpyxl pandas sklearn tabulate tqdm"
 sudo pip3 install $modules
+
+# Install ImageJ
+cd $(dirname $0)/../
+wget https://wsr.imagej.net/distros/linux/ij153-linux64-java8.zip
+if [ $? != 0 ]; then
+	echo "Failed to download ImageJ archive."
+	exit 1
+fi
+unzip ij153-linux64-java8.zip
+if [ $? != 0 ]; then
+	echo "Failed to unpack ImageJ archive."
+	exit 1
+fi
+rm ij153-linux64-java8.zip
+echo "Installed ImageJ application."
+echo
+echo "Setup Complete!"
