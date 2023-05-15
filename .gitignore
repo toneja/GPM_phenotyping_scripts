@@ -2,5 +2,4 @@
 *.txt
 plate*
 __pycache__/
-build/
-dist/
+ECHO Share/

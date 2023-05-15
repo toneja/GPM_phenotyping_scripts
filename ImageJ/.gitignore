@@ -1,0 +1,7 @@
+jre/
+luts/
+macros/
+plugins/
+ij.jar
+ImageJ.cfg
+ImageJ.exe
