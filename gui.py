@@ -21,7 +21,8 @@
 
 import tkinter as tk
 from tkinter import filedialog, messagebox
-import os.path
+import os
+import sys
 import analyze_results
 import compile_workbook
 
@@ -48,7 +49,6 @@ class App(tk.Tk):
         """File menu with 'open' and 'quit' options"""
         menu_bar = tk.Menu(self)
         file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="Open", command=self.open_files)
         file_menu.add_command(label="Quit", command=self.quit)
         menu_bar.add_cascade(label="File", menu=file_menu)
         self.config(menu=menu_bar)
@@ -58,7 +58,7 @@ class App(tk.Tk):
         files_frame = tk.Frame(self)
         files_frame.pack(side="top", fill="both", expand=True)
 
-        open_label = tk.Label(files_frame, text="Open Files")
+        open_label = tk.Label(files_frame, text="Available Files")
         open_label.pack(side="left", padx=(10, 5))
 
         processed_label = tk.Label(files_frame, text="Processed Files")
@@ -83,11 +83,12 @@ class App(tk.Tk):
         self.open_files_listbox = open_files_listbox
         self.processed_files_listbox = processed_files_listbox
 
-    def open_files(self):
-        """Open csv results files"""
-        self.filepaths = filedialog.askopenfilenames(
-            title="Open CSV", filetypes=[("CSV files", "*.csv")]
-        )
+        for file in os.listdir("ImageJ/GPM/results"):
+            if not (file.endswith(".csv") and file.startswith("Results_plate")):
+                continue
+            file_path = os.path.join("ImageJ/GPM/results", file)
+            self.filepaths.append(file_path)
+
         if self.filepaths:
             self.open_files_listbox.delete(0, tk.END)
             for _fp in self.filepaths:
@@ -126,5 +127,6 @@ class App(tk.Tk):
 
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(sys.argv[0]))
     app = App()
     app.mainloop()
