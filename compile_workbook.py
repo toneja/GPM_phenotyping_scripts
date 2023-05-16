@@ -77,18 +77,18 @@ def compile_workbook(workbook_file, csv_files):
 
 def main():
     """Set path and get filenames"""
-    # Get the path to the script's directory
-    script_dir = os.path.dirname(sys.argv[0])
+    # Change to the script's directory
+    os.chdir(os.path.dirname(sys.argv[0]))
 
     # output file
-    workbook_file = f"{script_dir}/GPMFungicideAssay_Workbook.xlsx"
+    workbook_file = "results/GPMFungicideAssay_Workbook.xlsx"
 
-    # Get list of all usable csv files in the script's directory
+    # Get list of all usable csv files in the results directory
     csv_files = []
-    for file in os.listdir(script_dir):
+    for file in os.listdir("results"):
         if not (file.endswith(".csv") and file.startswith("FinalResults_plate")):
             continue
-        file_path = os.path.join(script_dir, file)
+        file_path = os.path.join("results", file)
         csv_files.append(file_path)
 
     if csv_files:

@@ -1,5 +1,4 @@
-*Results*.csv
-*.txt
-plate*
+*.csv
+*.xlsx
 __pycache__/
-ECHO Share/
+ECHO Images/

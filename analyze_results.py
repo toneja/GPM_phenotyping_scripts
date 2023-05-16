@@ -32,13 +32,13 @@ from tabulate import tabulate
 from treatments import get_treatments
 
 # globals
-WORKDIR, GERMINATION, SPORE = "", "", ""
+GERMINATION, SPORE = "", ""
 THRESHOLD = 0.85
 
 
 def setup_regression(model):
     """docstring goes here"""
-    dataset = pandas.read_csv(f"{WORKDIR}/models/{model}_training_data.csv")
+    dataset = pandas.read_csv(f"models/{model}_training_data.csv")
     if model == "germination":
         vals = [
             "Area",
@@ -142,7 +142,7 @@ def analyze_results(plate, isolate, size):
 
     # Write the results to the output file
     with open(
-        f"{WORKDIR}/FinalResults_{plate}_{isolate}.csv",
+        f"results/FinalResults_{plate}_{isolate}.csv",
         "w",
         newline="",
     ) as csv_outfile:
@@ -160,7 +160,7 @@ def analyze_results(plate, isolate, size):
 def csv_handler(plate, isolate, time):
     """docstring goes here"""
     # open csv file
-    with open(f"{WORKDIR}/Results_{plate}_{isolate}_{time}hr.csv", "r") as csv_file:
+    with open(f"ImageJ/GPM/results/Results_{plate}_{isolate}_{time}hr.csv", "r") as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
         slice_data = []
@@ -217,16 +217,14 @@ def csv_handler(plate, isolate, time):
 
 def main(filename):
     """docstring goes here"""
-    global WORKDIR, GERMINATION, SPORE
+    global GERMINATION, SPORE
     args = os.path.splitext(os.path.basename(filename))[0].split("_")
     plate = args[1]
     isolate = args[2]
     # Default is 96 wells
     size = 8 * 12
 
-    WORKDIR = os.path.dirname(sys.argv[0])
-    if not WORKDIR:
-        WORKDIR = "."
+    os.chdir(os.path.dirname(sys.argv[0]))
     GERMINATION = setup_regression("germination")
     SPORE = setup_regression("spore")
     analyze_results(plate, isolate, size)
