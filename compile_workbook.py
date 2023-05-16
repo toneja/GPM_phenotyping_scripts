@@ -81,7 +81,7 @@ def main():
     os.chdir(os.path.dirname(sys.argv[0]))
 
     # output file
-    workbook_file = "results/GPMFungicideAssay_Workbook.xlsx"
+    workbook_file = "GPMFungicideAssay_Workbook.xlsx"
 
     # Get list of all usable csv files in the results directory
     csv_files = []

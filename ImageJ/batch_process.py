@@ -55,5 +55,5 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         IMAGE_FOLDER = sys.argv[1]
     else:
-        IMAGE_FOLDER = "../ECHO Share"
+        IMAGE_FOLDER = "../ECHO Images"
     batch_process(IMAGE_FOLDER)
