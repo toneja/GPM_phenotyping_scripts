@@ -88,10 +88,9 @@ class App(tk.Tk):
                 continue
             plate_isolate = file.split("_")[1:3]
             if os.path.exists(
-                "results/FinalResults_{}_{}.csv".format(
-                    plate_isolate[0], plate_isolate[1]
-                )
+                f"results/FinalResults_{plate_isolate[0]}_{plate_isolate[1]}.csv"
             ):
+                print(f"Skipping: {file}, already processed.")
                 continue
             file_path = os.path.join("ImageJ/GPM/results", file)
             self.filepaths.append(file_path)
