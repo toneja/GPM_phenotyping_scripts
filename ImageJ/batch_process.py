@@ -35,8 +35,9 @@ def batch_process(image_folder):
         if os.path.isdir(current_folder):
             # Check if the album has already been processed
             if os.path.exists(f"GPM/images/{os.path.basename(current_folder)}.tif"):
-                print(f"Skipping folder: {current_folder}, already processed.")
-                continue
+                if os.path.exists(f"GPM/results/Results_{os.path.basename(current_folder)}.csv"):
+                    print(f"Skipping folder: {current_folder}, already processed.")
+                    continue
             print(f"Processing folder: {current_folder}")
 
             # Execute the ImageJ macro for the current folder
@@ -51,7 +52,7 @@ def batch_process(image_folder):
                 subprocess.run(command, capture_output=True, text=True, check=True)
             except subprocess.CalledProcessError as exception:
                 print(f"Error executing the macro: {exception}")
-    input("Batch processing complete. Press ENTER.")
+    input("Batch processing complete. Press ENTER.\n")
 
 
 if __name__ == "__main__":
