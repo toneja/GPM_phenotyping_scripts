@@ -20,7 +20,7 @@
 """Simple GUI wrapper for the GPM phenotyping modules"""
 
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import messagebox
 import os
 import sys
 import analyze_results
@@ -85,6 +85,13 @@ class App(tk.Tk):
 
         for file in os.listdir("ImageJ/GPM/results"):
             if not (file.endswith(".csv") and file.startswith("Results_plate")):
+                continue
+            plate_isolate = file.split("_")[1:3]
+            if os.path.exists(
+                "results/FinalResults_{}_{}.csv".format(
+                    plate_isolate[0], plate_isolate[1]
+                )
+            ):
                 continue
             file_path = os.path.join("ImageJ/GPM/results", file)
             self.filepaths.append(file_path)
