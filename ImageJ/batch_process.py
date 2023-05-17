@@ -33,6 +33,10 @@ def batch_process(image_folder):
 
         # Check if the current item is a directory
         if os.path.isdir(current_folder):
+            # Check if the album has already been processed
+            if os.path.exists(f"GPM/images/{os.path.basename(current_folder)}.tif"):
+                print(f"Skipping folder: {current_folder}, already processed.")
+                continue
             print(f"Processing folder: {current_folder}")
 
             # Execute the ImageJ macro for the current folder
