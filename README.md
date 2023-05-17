@@ -8,7 +8,7 @@ This project is licensed under the GNU Affero General Public License v3.0.
 For more details, please see the LICENSE file.
 
 ## Installation
-1) Install Python 3.9 or higher.
+1) Install Python 3.9 or 3.10.
 2) Install the additional required dependencies:\
     Windows: Run setup/InstallDependencies.bat\
     Linux: Run setup/InstallDependencies.sh\
