@@ -22,10 +22,13 @@
 import os
 import subprocess
 import sys
+import time
 
 
 def batch_process(image_folder):
     """docstring goes here"""
+    # Start the timer
+    start_time = time.time()
     # Iterate through the image folders
     for folder_name in os.listdir(image_folder):
         # Full path to the current image folder
@@ -35,7 +38,9 @@ def batch_process(image_folder):
         if os.path.isdir(current_folder):
             # Check if the album has already been processed
             if os.path.exists(f"GPM/images/{os.path.basename(current_folder)}.tif"):
-                if os.path.exists(f"GPM/results/Results_{os.path.basename(current_folder)}.csv"):
+                if os.path.exists(
+                    f"GPM/results/Results_{os.path.basename(current_folder)}.csv"
+                ):
                     print(f"Skipping folder: {current_folder}, already processed.")
                     continue
             print(f"Processing folder: {current_folder}")
@@ -52,6 +57,13 @@ def batch_process(image_folder):
                 subprocess.run(command, capture_output=True, text=True, check=True)
             except subprocess.CalledProcessError as exception:
                 print(f"Error executing the macro: {exception}")
+
+    # Calculate the elapsed time
+    elapsed_time = time.time() - start_time
+    # Print elapsed time in H:M:S format
+    print(
+        "\nElapsed time: {}".format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
+    )
     input("Batch processing complete. Press ENTER.\n")
 
 
