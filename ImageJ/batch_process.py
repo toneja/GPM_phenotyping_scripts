@@ -29,6 +29,8 @@ def batch_process(image_folder):
     """docstring goes here"""
     # Start the timer
     start_time = time.time()
+    # Count how many albums are processed
+    processed = 0
     # Iterate through the image folders
     for folder_name in os.listdir(image_folder):
         # Full path to the current image folder
@@ -44,6 +46,7 @@ def batch_process(image_folder):
                     print(f"Skipping folder: {current_folder}, already processed.")
                     continue
             print(f"Processing folder: {current_folder}")
+            processed += 1
 
             # Execute the ImageJ macro for the current folder
             command = [
@@ -62,8 +65,9 @@ def batch_process(image_folder):
     elapsed_time = time.time() - start_time
     # Print elapsed time in H:M:S format
     print(
-        "\nElapsed time: {}".format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
+        f"\nElapsed time: {time.strftime('%H:%M:%S', time.gmtime(elapsed_time))}"
     )
+    print(f"Albums processed: {processed}")
     input("Batch processing complete. Press ENTER.\n")
 
 
