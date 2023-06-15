@@ -38,14 +38,23 @@ def batch_process(image_folder):
 
         # Check if the current item is a directory
         if os.path.isdir(current_folder):
+            # rename folder to fit naming convention
+            renamed_folder = "_".join(current_folder.split("_")[0:3])
+            os.rename(current_folder, renamed_folder)
+
+            # remove unnecessary extraneous files
+            for file in os.listdir(renamed_folder):
+                if not file.startswith("Tile0") and not file.endswith(".jpg"):
+                    os.remove(f"{renamed_folder}/{file}")
+
             # Check if the album has already been processed
-            if os.path.exists(f"GPM/images/{os.path.basename(current_folder)}.tif"):
+            if os.path.exists(f"GPM/images/{os.path.basename(renamed_folder)}.tif"):
                 if os.path.exists(
-                    f"GPM/results/Results_{os.path.basename(current_folder)}.csv"
+                    f"GPM/results/Results_{os.path.basename(renamed_folder)}.csv"
                 ):
-                    print(f"Skipping folder: {current_folder}, already processed.")
+                    print(f"Skipping folder: {renamed_folder}, already processed.")
                     continue
-            print(f"Processing folder: {current_folder}")
+            print(f"Processing folder: {renamed_folder}")
             processed += 1
 
             # Execute the ImageJ macro for the current folder
@@ -53,7 +62,7 @@ def batch_process(image_folder):
                 "./ImageJ.exe",
                 "-macro",
                 "GPM/AnalyzeSporesAndGermlings.ijm",
-                current_folder,
+                renamed_folder,
             ]
 
             try:
