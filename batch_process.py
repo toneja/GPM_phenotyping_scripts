@@ -24,6 +24,9 @@ import subprocess
 import sys
 import time
 
+import analyze_results
+import compile_workbook
+
 
 def batch_process(image_folder):
     """docstring goes here"""
@@ -31,6 +34,8 @@ def batch_process(image_folder):
     start_time = time.time()
     # Count how many albums are processed
     processed = 0
+    # Work inside the ImageJ directory
+    os.chdir(f"{os.path.dirname(__file__)}/ImageJ")
     # Iterate through the image folders
     for folder_name in os.listdir(image_folder):
         # Full path to the current image folder
@@ -61,6 +66,14 @@ def batch_process(image_folder):
             except subprocess.CalledProcessError as exception:
                 print(f"Error executing the macro: {exception}")
 
+    # Process the ImageJ results
+    for file in os.listdir("GPM/results"):
+        if file.startswith("Results_") and file.endswith("0hr.csv"):
+            analyze_results.main(f"ImageJ/GPM/results/{file}")
+
+    # Compile the results into a workbook
+    compile_workbook.main()
+
     # Calculate the elapsed time
     elapsed_time = time.time() - start_time
     # Print elapsed time in H:M:S format
@@ -72,9 +85,8 @@ def batch_process(image_folder):
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(sys.argv[0]))
     if len(sys.argv) > 1:
         IMAGE_FOLDER = sys.argv[1]
     else:
-        IMAGE_FOLDER = "../ECHO Images"
+        IMAGE_FOLDER = f"{os.path.dirname(__file__)}/ECHO Images"
     batch_process(IMAGE_FOLDER)
