@@ -11,7 +11,7 @@ For more details, please see the LICENSE file.
 1) Install Python 3.9 or 3.10.
 2) Install the additional required dependencies:\
     Windows: Run setup/InstallDependencies.bat\
-    Linux: Run setup/InstallDependencies.sh\
+    Linux: Untested/Unsupported\
     Mac: Untested/Unsupported
 
 ## Usage
