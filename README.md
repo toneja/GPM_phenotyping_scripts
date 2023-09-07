@@ -4,7 +4,7 @@ the high throughput *Erysiphe necator* fungicide efficacy assay developed
 by Alexander Wong and Jason Toney.
 
 ## License
-This project is licensed under the GNU Affero General Public License v3.0.
+This project is licensed under the GNU General Public License v3.0.
 For more details, please see the LICENSE file.
 
 ## Installation
