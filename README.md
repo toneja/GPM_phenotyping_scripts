@@ -16,11 +16,10 @@ For more details, please see the LICENSE file.
 
 ## Usage
 1) Place 0hr and 48hr image albums into the "ECHO Images" directory.
-2) Run ImageJ/batch_process.py to process the image albums.
-3) Run gui.py, then click the "Process Files" button to run the analysis.
-4) Click the "Compile Workbook" button to compile the results into an Excel\
-    workbook named GPMFungicideAssay_Workbook.xlsx found in this directory.\
-	The results of the analysis will also be outputted to the screen.
+2) Run batch_process.py to process the image albums. The results will be\
+    compiled into an Excel workbook named GPMFungicideAssay_Workbook.xlsx\
+    found in this directory. The results of the analysis will also be\
+    outputted to the screen.
 
 ## TODO
 - add docstrings and better code comments
