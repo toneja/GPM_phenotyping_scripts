@@ -25,19 +25,20 @@ import sys
 
 def cleanup_imagej():
     print("Cleaning up ImageJ files...")
+    imagej_path = "ImageJ/GPM"
     removed = 0
-    for file in os.listdir("GPM/images"):
+    for file in os.listdir(f"{imagej_path}/images"):
         if file.endswith(".tif"):
-            os.remove(f"GPM/images/{file}")
+            os.remove(f"{imagej_path}/images/{file}")
             removed += 1
-    for file in os.listdir("GPM/results"):
+    for file in os.listdir(f"{imagej_path}/results"):
         if file.endswith(".csv"):
-            os.remove(f"GPM/results/{file}")
+            os.remove(f"{imagej_path}/results/{file}")
             removed += 1
     print(f"Cleanup complete. Deleted {removed} files.")
-    input("Press ENTER to exit.")
+    input("Press ENTER to exit.\n")
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(sys.argv[0]))
+    os.chdir(os.path.dirname(__file__))
     cleanup_imagej()
