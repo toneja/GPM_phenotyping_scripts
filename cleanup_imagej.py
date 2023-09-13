@@ -17,14 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""docstring goes here"""
+"""This script removes the files created by AnalyzeSporesAndGermlings.ijm."""
 
 import os
-import sys
 
 
 def cleanup_imagej():
+    """Clean up any results files that exist."""
     print("Cleaning up ImageJ files...")
+    os.chdir(os.path.dirname(__file__))
     imagej_path = "ImageJ/GPM"
     removed = 0
     for file in os.listdir(f"{imagej_path}/images"):
@@ -40,5 +41,4 @@ def cleanup_imagej():
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(__file__))
     cleanup_imagej()
