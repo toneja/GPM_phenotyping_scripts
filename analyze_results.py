@@ -226,7 +226,7 @@ def main(filename):
     # Default is 96 wells
     size = 8 * 12
 
-    os.chdir(os.path.dirname(sys.argv[0]))
+    os.chdir(os.path.dirname(__file__))
     GERMINATION = setup_regression("germination")
     SPORE = setup_regression("spore")
     analyze_results(plate, isolate, size)
