@@ -114,9 +114,9 @@ def analyze_results(plate, isolate, size):
     ]
     for block in range(size):
         if (block + 1) > 9:
-            img_name = f"Tile_0000{block + 1}.jpg"
+            img_name = f"Tile0000{block + 1}.jpg"
         else:
-            img_name = f"Tile_00000{block + 1}.jpg"
+            img_name = f"Tile00000{block + 1}.jpg"
 
         germination_data.append(
             [
