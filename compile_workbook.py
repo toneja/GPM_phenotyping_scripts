@@ -85,7 +85,10 @@ def main():
 
     # Get list of all usable csv files in the results directory
     csv_files = []
-    for file in os.listdir("results"):
+    for file in sorted(
+        os.listdir("results"),
+        key=lambda x: x.split("_")[2],
+    ):
         if not (file.endswith(".csv") and file.startswith("FinalResults_plate")):
             continue
         file_path = os.path.join("results", file)
