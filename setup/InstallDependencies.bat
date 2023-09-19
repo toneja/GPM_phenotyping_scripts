@@ -43,6 +43,9 @@ del %destinationFile%
 REM Done!
 echo ImageJ has been downloaded and unpacked successfully.
 
+REM make required subfolders
+mkdir "..\ECHO Images" ..\results ..\ImageJ\GPM\images ..\ImageJ\GPM\results
+
 echo Setup Complete!
 
 pause
