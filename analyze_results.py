@@ -214,7 +214,7 @@ def csv_handler(plate, isolate, time):
                 round(feret_total / roi_count, 1),
             ]
         )
-        return slice_data
+    return slice_data
 
 
 def main(filename):
