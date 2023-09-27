@@ -6,12 +6,9 @@ if (lengthOf(getArgument()) > 0) {
 	closeWindow = true;
 }
 
-// Crop image stack to 1500px diameter circle in center of image
-r = 750;
-x = (getWidth() / 2) - r;
-y = (getHeight() / 2) - r;
-setTool("oval");
-makeOval(x, y, r * 2, r * 2);
+// Crop image stack to 1000x1000 in center of image
+size = 1000;
+makeRectangle(getWidth()/2-size/2, getHeight()/2-size/2, size, size);
 run("Crop");
 saveAs("tif", "GPM/images/" + getTitle());
 
