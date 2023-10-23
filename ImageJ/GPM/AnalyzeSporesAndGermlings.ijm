@@ -17,7 +17,7 @@ run("Subtract Background...", "rolling=10 light stack");
 // Blur image to reduce breaking up of germination tubes
 run("Gaussian Blur...", "sigma=1 stack");
 // normalize contrast 
-run("Enhance Contrast...", "saturated=0.50 normalize process_all use");
+run("Enhance Contrast...", "saturated=0.350 normalize process_all use");
 
 // Generate a binary image from our image stack
 setAutoThreshold("MaxEntropy stack");
