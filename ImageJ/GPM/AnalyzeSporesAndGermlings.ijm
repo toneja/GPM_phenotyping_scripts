@@ -10,7 +10,7 @@ if (lengthOf(getArgument()) > 0) {
 size = 1000;
 makeRectangle(getWidth()/2-size/2, getHeight()/2-size/2, size, size);
 run("Crop");
-saveAs("tif", "GPM/images/" + getTitle());
+// saveAs("tif", "GPM/images/" + getTitle());
 
 // Subtract background from image stack
 run("Subtract Background...", "rolling=10 light stack");
