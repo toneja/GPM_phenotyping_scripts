@@ -33,7 +33,6 @@ from treatments import get_treatments
 
 # globals
 GERMINATION, SPORE = "", ""
-THRESHOLD = 0.85
 
 
 def setup_regression(model):
@@ -146,6 +145,7 @@ def analyze_results(plate, isolate, size):
     with open(
         f"results/FinalResults_{plate}_{isolate}.csv",
         "w",
+        encoding="utf-8",
         newline="",
     ) as csv_outfile:
         csv_writer = csv.writer(csv_outfile)
@@ -163,7 +163,9 @@ def csv_handler(plate, isolate, time):
     """docstring goes here"""
     # open csv file
     with open(
-        f"ImageJ/GPM/results/Results_{plate}_{isolate}_{time}hr.csv", "r"
+        f"ImageJ/GPM/results/Results_{plate}_{isolate}_{time}hr.csv",
+        "r",
+        encoding="utf-8",
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")

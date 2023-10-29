@@ -54,7 +54,7 @@ def compile_workbook(workbook_file, csv_files):
             sheet = workbook.create_sheet(title=sheet_name)
 
             # Open the csv file and read in the data
-            with open(file, "r") as csv_file:
+            with open(file, "r", encoding="utf-8") as csv_file:
                 csv_reader = csv.reader(csv_file)
 
                 # Loop through the rows  and add them to the sheet
