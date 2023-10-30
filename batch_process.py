@@ -49,7 +49,7 @@ def batch_process(image_folder):
 
             # remove unnecessary extraneous files
             for file in os.listdir(renamed_folder):
-                if not file.startswith("Tile0") and not file.endswith(".jpg"):
+                if not (file.startswith("Tile0") and file.endswith(".jpg")):
                     os.remove(f"{renamed_folder}/{file}")
 
             # Check if the album has already been processed
