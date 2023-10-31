@@ -22,5 +22,4 @@ For more details, please see the LICENSE file.
     outputted to the screen.
 
 ## TODO
-- add docstrings and better code comments
-- handle possible exceptions
+- improve code style and readability

@@ -36,7 +36,7 @@ GERMINATION, SPORE = "", ""
 
 
 def setup_regression(model):
-    """docstring goes here"""
+    """Setup the logistic regressions used to determine ROI identity."""
     dataset = pandas.read_csv(f"models/{model}_training_data.csv")
     if model == "germination":
         vals = [
@@ -64,7 +64,7 @@ def setup_regression(model):
 
 
 def is_germinated(row):
-    """docstring goes here"""
+    """Returns whether or not the ROI is determined to be a germinated spore."""
     prediction = GERMINATION.predict_proba(
         [
             [
@@ -80,7 +80,7 @@ def is_germinated(row):
 
 
 def is_spore(row):
-    """docstring goes here"""
+    """Returns whether or not the ROI is determined to be an ungerminated spore."""
     prediction = SPORE.predict_proba(
         [
             [
@@ -96,7 +96,7 @@ def is_spore(row):
 
 
 def analyze_results(plate, isolate, size):
-    """docstring goes here"""
+    """Compare 0hr and 48hr results and calculate full results for the plate."""
     _0hr_results = csv_handler(plate, isolate, 0)
     if len(_0hr_results) != size:
         print(
@@ -170,7 +170,7 @@ def analyze_results(plate, isolate, size):
 
 # handle csv datasets
 def csv_handler(plate, isolate, time):
-    """docstring goes here"""
+    """Read CSV file produced by ImageJ and analyze each ROI using logistic regression."""
     # open csv file
     with open(
         f"ImageJ/GPM/results/Results_{plate}_{isolate}_{time}hr.csv",
@@ -249,7 +249,7 @@ def csv_handler(plate, isolate, time):
 
 
 def main(filename):
-    """docstring goes here"""
+    """Execute the main objective."""
     global GERMINATION, SPORE
     args = os.path.splitext(os.path.basename(filename))[0].split("_")
     plate = args[1]

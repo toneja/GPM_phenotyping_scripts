@@ -17,7 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""docstring goes here"""
+"""
+    This script executes the ImageJ macro and python scripts in a batch process.
+    Input: all images found within the local "ECHO Images" folder.
+    Output: XLSX file containing the total counts of conidia germination states.
+"""
+
 
 import os
 import subprocess
@@ -29,7 +34,7 @@ import compile_workbook
 
 
 def batch_process(image_folder):
-    """docstring goes here"""
+    """Analyze all the images found in "ECHO Images" subdirectories."""
     # Start the timer
     start_time = time.time()
     # Count how many albums are processed
