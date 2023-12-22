@@ -33,6 +33,7 @@ from treatments import get_treatments
 
 # globals
 GERMINATION, SPORE = "", ""
+DEBUG = True
 
 
 def setup_regression(model):
@@ -97,13 +98,13 @@ def is_spore(row):
 
 def analyze_results(plate, isolate, size):
     """Compare 0hr and 48hr results and calculate full results for the plate."""
-    _0hr_results = csv_handler(plate, isolate, 0)
+    _0hr_results = csv_handler(plate, isolate, 0, size)
     if len(_0hr_results) != size:
         print(
             f"0hr results for {plate} {isolate} does not contain data for {size} images"
         )
         return
-    _48hr_results = csv_handler(plate, isolate, 48)
+    _48hr_results = csv_handler(plate, isolate, 48, size)
     if len(_48hr_results) != size:
         print(
             f"48hr results for {plate} {isolate} does not contain data for {size} images"
@@ -169,7 +170,7 @@ def analyze_results(plate, isolate, size):
 
 
 # handle csv datasets
-def csv_handler(plate, isolate, time):
+def csv_handler(plate, isolate, time, size):
     """Read CSV file produced by ImageJ and analyze each ROI using logistic regression."""
     # open csv file
     with open(
@@ -198,9 +199,16 @@ def csv_handler(plate, isolate, time):
                 perim_total += float(row["Perim."])
                 feret_total += float(row["Feret"])
             else:
+                # try to handle an empty slice, fill it with zeroes
+                while slice_count < int(row["Slice"]) - 1:
+                    slice_count += 1
+                    if DEBUG:
+                        print(
+                            f"{isolate.upper()} {plate.upper()}: Missing data for slice {slice_count}"
+                        )
+                    slice_data.append([0, 0, 0, 0, 0, 0])
                 # once we've hit the next slice, calculate percentage and store the data
-                # try to handle an empty slice
-                slice_count = int(row["Slice"])
+                slice_count += 1
                 # avoid division by zero from empty or missing slices
                 if roi_count == 0:
                     percent_germinated, area_avg, perim_avg, feret_avg = 0, 0, 0, 0
@@ -245,6 +253,14 @@ def csv_handler(plate, isolate, time):
                 feret_avg,
             ]
         )
+    # the final slice(s) could also be empty for some reason
+    while len(slice_data) < size:
+        slice_count += 1
+        if DEBUG:
+            print(
+                f"{isolate.upper()} {plate.upper()}: Missing data for slice {slice_count}"
+            )
+        slice_data.append([0, 0, 0, 0, 0, 0])
     return slice_data
 
 
