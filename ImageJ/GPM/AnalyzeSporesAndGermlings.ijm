@@ -17,16 +17,11 @@ run("Crop");
 
 // Subtract background from image stack
 run("Subtract Background...", "rolling=10 light stack");
-// Blur image to reduce breaking up of germination tubes
-run("Gaussian Blur...", "sigma=1 stack");
-// normalize contrast 
-run("Enhance Contrast...", "saturated=0.50 normalize process_all use");
 
 // Generate a binary image from our image stack
-setAutoThreshold("MaxEntropy stack");
-run("Convert to Mask", "method=MaxEntropy background=Light");
-// Remove some of the small speckles
-run("Despeckle", "stack");
+setAutoThreshold("Default stack");
+run("Convert to Mask", "method=Default background=Light");
+run("Fill Holes", "stack");
 saveAs("tif", "GPM/images/" + getTitle());
 
 // Generate ROIs
