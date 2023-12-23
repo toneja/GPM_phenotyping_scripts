@@ -72,7 +72,7 @@ def compile_workbook(workbook_file, csv_files):
     workbook.save(workbook_file)
 
     # Log the number of sheets in the workbook
-    print(f"The workbookbook contains {len(workbook.sheetnames)} sheets")
+    print(f"The workbook contains {len(workbook.sheetnames)} sheets")
 
 
 def main():
