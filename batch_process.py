@@ -47,7 +47,7 @@ def batch_process(image_folder):
         current_folder = os.path.join(image_folder, folder_name)
 
         # Check if the current item is a directory
-        if os.path.isdir(current_folder):
+        if os.path.isdir(current_folder) and "plate" in current_folder:
             # rename folder to fit naming convention
             renamed_folder = "_".join(current_folder.split("_")[0:3])
             os.rename(current_folder, renamed_folder)
