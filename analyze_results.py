@@ -99,18 +99,7 @@ def is_spore(row):
 def analyze_results(plate, isolate, size):
     """Compare 0hr and 48hr results and calculate full results for the plate."""
     _0hr_results = csv_handler(plate, isolate, 0, size)
-    if len(_0hr_results) != size:
-        print(
-            f"0hr results for {plate} {isolate} does not contain data for {size} images"
-        )
-        return
     _48hr_results = csv_handler(plate, isolate, 48, size)
-    if len(_48hr_results) != size:
-        print(
-            f"48hr results for {plate} {isolate} does not contain data for {size} images"
-        )
-        return
-
     # Output data and file headers
     germination_data = []
     headers = [
@@ -209,22 +198,14 @@ def csv_handler(plate, isolate, time, size):
                     slice_data.append([0, 0, 0, 0, 0, 0])
                 # once we've hit the next slice, calculate percentage and store the data
                 slice_count += 1
-                # avoid division by zero from empty or missing slices
-                if roi_count == 0:
-                    percent_germinated, area_avg, perim_avg, feret_avg = 0, 0, 0, 0
-                else:
-                    percent_germinated = roi_germinated / roi_count * 100
-                    area_avg = round(area_total / roi_count, 1)
-                    perim_avg = round(perim_total / roi_count, 1)
-                    feret_avg = round(feret_total / roi_count, 1)
                 slice_data.append(
                     [
                         roi_germinated,
                         roi_count,
-                        percent_germinated,
-                        area_avg,
-                        perim_avg,
-                        feret_avg,
+                        roi_germinated / roi_count * 100,
+                        round(area_total / roi_count, 1),
+                        round(perim_total / roi_count, 1),
+                        round(feret_total / roi_count, 1),
                     ]
                 )
                 roi_count = 1
@@ -236,21 +217,14 @@ def csv_handler(plate, isolate, time, size):
                 else:
                     roi_germinated = 0
         # outside of the loop, calculate and store value for the last slice
-        if roi_count == 0:
-            percent_germinated, area_avg, perim_avg, feret_avg = 0, 0, 0, 0
-        else:
-            percent_germinated = roi_germinated / roi_count * 100
-            area_avg = round(area_total / roi_count, 1)
-            perim_avg = round(perim_total / roi_count, 1)
-            feret_avg = round(feret_total / roi_count, 1)
         slice_data.append(
             [
                 roi_germinated,
                 roi_count,
-                percent_germinated,
-                area_avg,
-                perim_avg,
-                feret_avg,
+                roi_germinated / roi_count * 100,
+                round(area_total / roi_count, 1),
+                round(perim_total / roi_count, 1),
+                round(feret_total / roi_count, 1),
             ]
         )
     # the final slice(s) could also be empty for some reason
