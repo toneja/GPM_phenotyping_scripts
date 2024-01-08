@@ -133,12 +133,14 @@ def analyze_results(plate, isolate, size):
             ]
         )
 
-    # Sort the data by treatment with the controls at the top
+    # Sort the data by treatment with the controls and SHAM at the top
     germination_data.sort()
     i = 0
     for item in germination_data:
         if item[0] == "Control":
             germination_data.insert(0, germination_data.pop(i))
+        elif item[0] == "SHAM 100 ug/mL":
+            germination_data.insert(4, germination_data.pop(i))
         i += 1
 
     # Write the results to the output file
