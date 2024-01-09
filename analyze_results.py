@@ -195,7 +195,7 @@ def csv_handler(plate, isolate, time, size):
                     slice_count += 1
                     if DEBUG:
                         print(
-                            f"{isolate.upper()} {plate.upper()}: Missing data for slice {slice_count}"
+                            f"{isolate.upper()} {plate.upper()} {time}hr: Missing data for slice {slice_count}"
                         )
                     slice_data.append([0, 0, 0, 0, 0, 0])
                 # once we've hit the next slice, calculate percentage and store the data
@@ -234,7 +234,7 @@ def csv_handler(plate, isolate, time, size):
         slice_count += 1
         if DEBUG:
             print(
-                f"{isolate.upper()} {plate.upper()}: Missing data for slice {slice_count}"
+                f"{isolate.upper()} {plate.upper()} {time}hr: Missing data for slice {slice_count} at {time}hr."
             )
         slice_data.append([0, 0, 0, 0, 0, 0])
     return slice_data
