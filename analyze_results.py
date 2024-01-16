@@ -172,9 +172,8 @@ def csv_handler(plate, isolate, time, size):
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
         slice_data = []
-        roi_count, roi_germinated, percent_germinated = 0, 0, 0
+        roi_count, roi_germinated = 0, 0
         area_total, perim_total, feret_total = 0, 0, 0
-        area_avg, perim_avg, feret_avg = 0, 0, 0
         slice_count = 1
         for row in csv_reader:
             # new debris filter
