@@ -19,7 +19,8 @@
 
 """Define treatment maps for fungicides in a 96-well plate."""
 
-
+# This is dumb, find a better way to handle older plate maps
+OLD_MAPS = False
 # Definitions of treatments
 CNTL = "Control"
 SHAM = "SHAM 100 ug/mL"
@@ -39,12 +40,23 @@ FTF3 = "Flutriafol 2500 ug/mL"
 MCB1 = "Myclobutanil 25 ug/mL"
 MCB2 = "Myclobutanil 250 ug/mL"
 MCB3 = "Myclobutanil 2500 ug/mL"
-QXF1 = "Quinoxyfen 0.01 ug/mL"
-QXF2 = "Quinoxyfen 0.1 ug/mL"
-QXF3 = "Quinoxyfen 1 ug/mL"
+MDS1 = "Mandestrobin 10 ug/mL"
+PYL1 = "Pyraclostrobin 10 ug/mL"
+if OLD_MAPS:
+    QXF1 = "Quinoxyfen 0.01 ug/mL"
+    QXF2 = "Quinoxyfen 0.1 ug/mL"
+    QXF3 = "Quinoxyfen 1 ug/mL"
+else:
+    QXF1 = "Quinoxyfen 0.001 ug/mL"
+    QXF2 = "Quinoxyfen 0.01 ug/mL"
+    QXF3 = "Quinoxyfen 0.1 ug/mL"
+    QXF4 = "Quinoxyfen 1 ug/mL"
+    QXF5 = "Quinoxyfen 10 ug/mL"
+    QXF6 = "Quinoxyfen 100 ug/mL"
 TEB1 = "Tebuconazole 25 ug/mL"
 TEB2 = "Tebuconazole 250 ug/mL"
 TEB3 = "Tebuconazole 2500 ug/mL"
+TFX1 = "Trifloxystrobin 10 ug/mL"
 
 
 # maps of treatment blocks
@@ -184,4 +196,15 @@ def get_treatments(plate, block):
             MCB2, CNTL, AZX1, DFC2, FTF1, FTF3, TEB2, FLU1, FLU3, BOS2, QXF1, QXF3,
             MCB2, CNTL, AZX1, DFC2, FTF1, FTF3, TEB2, FLU1, FLU3, BOS2, QXF1, QXF3,
         ]
+    elif plate == "plate7":
+        treatments = [
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+            CNTL, SHAM, AZX1, TFX1, MDS1, PYL1, QXF1, QXF2, QXF3, QXF4, QXF5, QXF6,
+    ]
     return treatments[block]
