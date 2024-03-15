@@ -199,16 +199,19 @@ def csv_handler(plate, isolate, time, size):
                     slice_data.append([0, 0, 0, 0, 0, 0])
                 # once we've hit the next slice, calculate percentage and store the data
                 slice_count += 1
-                slice_data.append(
-                    [
-                        roi_germinated,
-                        roi_count,
-                        roi_germinated / roi_count * 100,
-                        round(area_total / roi_count, 1),
-                        round(perim_total / roi_count, 1),
-                        round(feret_total / roi_count, 1),
-                    ]
-                )
+                if roi_count == 0:
+                    slice_data.append([0, 0, 0, 0, 0, 0])
+                else:
+                    slice_data.append(
+                        [
+                            roi_germinated,
+                            roi_count,
+                            roi_germinated / roi_count * 100,
+                            round(area_total / roi_count, 1),
+                            round(perim_total / roi_count, 1),
+                            round(feret_total / roi_count, 1),
+                        ]
+                    )
                 roi_count = 1
                 area_total = int(row["Area"])
                 perim_total = float(row["Perim."])
@@ -218,16 +221,19 @@ def csv_handler(plate, isolate, time, size):
                 else:
                     roi_germinated = 0
         # outside of the loop, calculate and store value for the last slice
-        slice_data.append(
-            [
-                roi_germinated,
-                roi_count,
-                roi_germinated / roi_count * 100,
-                round(area_total / roi_count, 1),
-                round(perim_total / roi_count, 1),
-                round(feret_total / roi_count, 1),
-            ]
-        )
+        if roi_count == 0:
+            slice_data.append([0, 0, 0, 0, 0, 0])
+        else:
+            slice_data.append(
+                [
+                    roi_germinated,
+                    roi_count,
+                    roi_germinated / roi_count * 100,
+                    round(area_total / roi_count, 1),
+                    round(perim_total / roi_count, 1),
+                    round(feret_total / roi_count, 1),
+                ]
+            )
     # the final slice(s) could also be empty for some reason
     while len(slice_data) < size:
         slice_count += 1
