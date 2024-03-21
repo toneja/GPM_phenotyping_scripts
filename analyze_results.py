@@ -140,7 +140,7 @@ def analyze_results(plate, isolate, size):
         if item[0] == "Control":
             germination_data.insert(0, germination_data.pop(i))
         elif item[0] == "SHAM 100 ug/mL":
-            germination_data.insert(4, germination_data.pop(i))
+            germination_data.insert(8, germination_data.pop(i))
         i += 1
 
     # Write the results to the output file
