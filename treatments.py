@@ -219,6 +219,7 @@ def get_treatments(plate, block):
             CNTL, PYL1, QXF4, QXF1, SHAM, MDS1, QXF3, AZX1, QXF2, QXF6, TFX1, QXF5,
         ]
     elif plate == "plate9":
+        treatments = [
             AZX1, PYL1, QXF2, QXF4, SHAM, QXF3, CNTL, TFX1, MDS1, QXF6, QXF5, QXF1,
             AZX1, PYL1, QXF2, QXF4, SHAM, QXF3, CNTL, TFX1, MDS1, QXF6, QXF5, QXF1,
             AZX1, PYL1, QXF2, QXF4, SHAM, QXF3, CNTL, TFX1, MDS1, QXF6, QXF5, QXF1,
@@ -227,7 +228,9 @@ def get_treatments(plate, block):
             AZX1, PYL1, QXF2, QXF4, SHAM, QXF3, CNTL, TFX1, MDS1, QXF6, QXF5, QXF1,
             AZX1, PYL1, QXF2, QXF4, SHAM, QXF3, CNTL, TFX1, MDS1, QXF6, QXF5, QXF1,
             AZX1, PYL1, QXF2, QXF4, SHAM, QXF3, CNTL, TFX1, MDS1, QXF6, QXF5, QXF1,
+        ]
     elif plate == "plate10":
+        treatments = [
             MDS1, QXF4, AZX1, QXF6, QXF1, SHAM, QXF3, CNTL, TFX1, PYL1, QXF2, QXF5,
             MDS1, QXF4, AZX1, QXF6, QXF1, SHAM, QXF3, CNTL, TFX1, PYL1, QXF2, QXF5,
             MDS1, QXF4, AZX1, QXF6, QXF1, SHAM, QXF3, CNTL, TFX1, PYL1, QXF2, QXF5,
@@ -236,7 +239,9 @@ def get_treatments(plate, block):
             MDS1, QXF4, AZX1, QXF6, QXF1, SHAM, QXF3, CNTL, TFX1, PYL1, QXF2, QXF5,
             MDS1, QXF4, AZX1, QXF6, QXF1, SHAM, QXF3, CNTL, TFX1, PYL1, QXF2, QXF5,
             MDS1, QXF4, AZX1, QXF6, QXF1, SHAM, QXF3, CNTL, TFX1, PYL1, QXF2, QXF5,
+        ]
     elif plate == "plate11":
+        treatments = [
             AZX1, TFX1, QXF5, PYL1, QXF6, QXF4, CNTL, QXF1, QXF2, SHAM, MDS1, QXF3,
             AZX1, TFX1, QXF5, PYL1, QXF6, QXF4, CNTL, QXF1, QXF2, SHAM, MDS1, QXF3,
             AZX1, TFX1, QXF5, PYL1, QXF6, QXF4, CNTL, QXF1, QXF2, SHAM, MDS1, QXF3,
@@ -245,7 +250,9 @@ def get_treatments(plate, block):
             AZX1, TFX1, QXF5, PYL1, QXF6, QXF4, CNTL, QXF1, QXF2, SHAM, MDS1, QXF3,
             AZX1, TFX1, QXF5, PYL1, QXF6, QXF4, CNTL, QXF1, QXF2, SHAM, MDS1, QXF3,
             AZX1, TFX1, QXF5, PYL1, QXF6, QXF4, CNTL, QXF1, QXF2, SHAM, MDS1, QXF3,
+        ]
     elif plate == "plate12":
+        treatments = [
             QXF4, CNTL, MDS1, SHAM, QXF5, QXF1, QXF3, QXF6, QXF2, PYL1, TFX1, AZX1,
             QXF4, CNTL, MDS1, SHAM, QXF5, QXF1, QXF3, QXF6, QXF2, PYL1, TFX1, AZX1,
             QXF4, CNTL, MDS1, SHAM, QXF5, QXF1, QXF3, QXF6, QXF2, PYL1, TFX1, AZX1,
@@ -254,4 +261,5 @@ def get_treatments(plate, block):
             QXF4, CNTL, MDS1, SHAM, QXF5, QXF1, QXF3, QXF6, QXF2, PYL1, TFX1, AZX1,
             QXF4, CNTL, MDS1, SHAM, QXF5, QXF1, QXF3, QXF6, QXF2, PYL1, TFX1, AZX1,
             QXF4, CNTL, MDS1, SHAM, QXF5, QXF1, QXF3, QXF6, QXF2, PYL1, TFX1, AZX1,
+        ]
     return treatments[block]
