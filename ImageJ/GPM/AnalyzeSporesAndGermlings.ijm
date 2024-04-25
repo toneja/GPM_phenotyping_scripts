@@ -1,9 +1,3 @@
-// Options
-var cropRadius = 600
-var thresholdCeiling = 240
-var thresholdMethod = "raw"
-var useBlur = true
-
 // Open image stack from arguments if available
 var closeWindow = false;
 if (lengthOf(getArgument()) > 0) {
@@ -12,36 +6,31 @@ if (lengthOf(getArgument()) > 0) {
 	closeWindow = true;
 }
 
-// Crop image stack to thresholdCeiling * 2 diameter circle in center of image
-r = cropRadius;
-x = (getWidth() / 2) - r;
-y = (getHeight() / 2) - r;
-setTool("oval");
-makeOval(x, y, r * 2, r * 2);
+// Crop image stack to 1000x1000 in center of image
+size = 1000;
+makeRectangle(getWidth()/2-size/2, getHeight()/2-size/2, size, size);
 run("Crop");
-// saveAs("tif", "GPM/images/" + getTitle());
 
 // Subtract background from image stack
 run("Subtract Background...", "rolling=10 light stack");
 
-// Set thresholds
-if (thresholdMethod == "raw") {
-	setThreshold(0, thresholdCeiling, "raw");
-} else {
-	setAutoThreshold("thresholdMethod stack");
-}
+// Enhance contrast for inconsistent images
+run("Enhance Contrast...", "saturated=0.35 process_all");
 
-// Blur image to reduce breaking up of germination tubes
-if (useBlur) {
-	run("Gaussian Blur...", "sigma=1 stack");
-}
+// Set thresholds
+setAutoThreshold("Default");
+// setThreshold(0, 240, "raw");
 
 // Generate a binary image from our image stack
-run("Convert to Mask", "method=thresholdMethod background=Light");
+run("Convert to Mask", "background=Light");
 
 // Remove some of the small speckles
 run("Despeckle", "stack");
-run("Fill Holes", "stack");
+
+// Erode background to reduce breaking up of germination tubes
+run("Dilate", "stack");
+
+// Save final manipulated image
 saveAs("tif", "GPM/images/" + getTitle());
 
 // Generate ROIs
