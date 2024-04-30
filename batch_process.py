@@ -67,7 +67,7 @@ def batch_process(image_folder):
             command = [
                 "./ImageJ.exe",
                 "-macro",
-                "GPM/AnalyzeSporesAndGermlings.ijm",
+                "GPM/BatchProcess.ijm",
                 current_folder,
             ]
 
@@ -77,12 +77,12 @@ def batch_process(image_folder):
                 print(f"Error executing the macro: {exception}")
 
     # Process the ImageJ results
-    for file in os.listdir("GPM/results"):
-        if file.startswith("Results_") and file.endswith("0hr.csv"):
-            analyze_results.main(f"ImageJ/GPM/results/{file}")
+    # for file in os.listdir("GPM/results"):
+    #     if file.startswith("Results_") and file.endswith("0hr.csv"):
+    #         analyze_results.main(f"ImageJ/GPM/results/{file}")
 
     # Compile the results into a workbook
-    compile_workbook.main()
+    # compile_workbook.main()
 
     # Calculate the elapsed time
     elapsed_time = time.time() - start_time
