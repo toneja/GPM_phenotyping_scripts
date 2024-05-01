@@ -24,6 +24,7 @@
 """
 
 
+import glob
 import os
 import subprocess
 import sys
@@ -48,18 +49,22 @@ def batch_process(image_folder):
 
         # Check if the current item is a directory
         if os.path.isdir(current_folder) and "plate" in current_folder:
-            # remove unnecessary extraneous files
-            for file in os.listdir(current_folder):
-                if not (file.endswith(".jpg")):
-                    os.remove(f"{current_folder}/{file}")
-
             # Check if the album has already been processed
-            if os.path.exists(f"GPM/images/{os.path.basename(current_folder)}.tif"):
-                if os.path.exists(
-                    f"GPM/results/Results_{os.path.basename(current_folder)}.csv"
-                ):
-                    print(f"Skipping folder: {current_folder}, already processed.")
-                    continue
+            if (
+                os.path.exists(f"GPM/images/{folder_name}")
+                and len(glob.glob(os.path.join(f"GPM/images/{folder_name}", "*.tif")))
+                == 96
+                and os.path.exists(f"GPM/results/{folder_name}")
+                and len(glob.glob(os.path.join(f"GPM/results/{folder_name}", "*.csv")))
+                == 96
+            ):
+                print(f"Skipping folder: {current_folder}, already processed.")
+                continue
+
+            # make output folders
+            os.makedirs(f"GPM/images/{folder_name}", exist_ok=True)
+            os.makedirs(f"GPM/results/{folder_name}", exist_ok=True)
+
             print(f"Processing folder: {current_folder}")
             processed += 1
 
@@ -75,6 +80,16 @@ def batch_process(image_folder):
                 subprocess.run(command, capture_output=True, text=True, check=True)
             except subprocess.CalledProcessError as exception:
                 print(f"Error executing the macro: {exception}")
+
+            # Relocate output files into their respective release folders
+            for file in os.listdir("GPM/images"):
+                if file.endswith(".tif"):
+                    os.rename(f"GPM/images/{file}", f"GPM/images/{folder_name}/{file}")
+            for file in os.listdir("GPM/results"):
+                if file.endswith(".csv"):
+                    os.rename(
+                        f"GPM/results/{file}", f"GPM/results/{folder_name}/{file}"
+                    )
 
     # Process the ImageJ results
     # for file in os.listdir("GPM/results"):

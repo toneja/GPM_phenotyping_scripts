@@ -6,7 +6,7 @@ list = getFileList(inputFolder);
 
 // Process each image file in the folder
 for (i = 0; i < list.length; i++) {
-    if (endsWith(list[i], ".tif") || endsWith(list[i], ".jpg")) {
+    if (endsWith(list[i], ".jpg")) {
         // Open the image
         open(inputFolder + "/" + list[i]);
         
@@ -17,3 +17,6 @@ for (i = 0; i < list.length; i++) {
         close();
     }
 }
+
+// Exit ImageJ
+run("Quit");
