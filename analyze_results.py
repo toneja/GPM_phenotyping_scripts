@@ -98,8 +98,15 @@ def is_spore(row):
 
 def analyze_results(plate, isolate, size):
     """Compare 0hr and 48hr results and calculate full results for the plate."""
-    _0hr_results = csv_handler(plate, isolate, 0, size)
-    _48hr_results = csv_handler(plate, isolate, 48, size)
+    results_path = f"ImageJ/GPM/results/{plate}_{isolate}"
+    _0hr_results = [
+        csv_handler(os.path.join(results_path + "_0hr", csv_file))
+        for csv_file in os.listdir(results_path + "_0hr")
+    ]
+    _48hr_results = [
+        csv_handler(os.path.join(results_path + "_48hr", csv_file))
+        for csv_file in os.listdir(results_path + "_48hr")
+    ]
     # Output data and file headers
     germination_data = []
     headers = [
@@ -122,13 +129,13 @@ def analyze_results(plate, isolate, size):
         germination_data.append(
             [
                 get_treatments(plate, block),
-                round(_0hr_results[block][2], 1),
-                round(_48hr_results[block][2], 1),
-                int(_48hr_results[block][0]),
-                int(_48hr_results[block][1]),
-                round(_48hr_results[block][3] - _0hr_results[block][3], 1),
-                round(_48hr_results[block][4] - _0hr_results[block][4], 1),
-                round(_48hr_results[block][5] - _0hr_results[block][5], 1),
+                round(_0hr_results[block][0][2], 1),
+                round(_48hr_results[block][0][2], 1),
+                int(_48hr_results[block][0][0]),
+                int(_48hr_results[block][0][1]),
+                round(_48hr_results[block][0][3] - _0hr_results[block][0][3], 1),
+                round(_48hr_results[block][0][4] - _0hr_results[block][0][4], 1),
+                round(_48hr_results[block][0][5] - _0hr_results[block][0][5], 1),
                 img_name,
             ]
         )
@@ -161,96 +168,49 @@ def analyze_results(plate, isolate, size):
 
 
 # handle csv datasets
-def csv_handler(plate, isolate, time, size):
+def csv_handler(input_file):
     """Read CSV file produced by ImageJ and analyze each ROI using logistic regression."""
     # open csv file
     with open(
-        f"ImageJ/GPM/results/Results_{plate}_{isolate}_{time}hr.csv",
+        input_file,
         "r",
         encoding="utf-8",
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
-        slice_data = []
+        image_data = []
         roi_count, roi_germinated = 0, 0
         area_total, perim_total, feret_total = 0, 0, 0
-        slice_count = 1
         for row in csv_reader:
             # new debris filter
             if not is_spore(row) and not is_germinated(row):
                 # skip bad ROIs
                 continue
-            # calculate totals for each slice
-            if int(row["Slice"]) == slice_count:
-                roi_count += 1
-                if is_germinated(row):
-                    roi_germinated += 1
-                area_total += int(row["Area"])
-                perim_total += float(row["Perim."])
-                feret_total += float(row["Feret"])
-            else:
-                # try to handle an empty slice, fill it with zeroes
-                while slice_count < int(row["Slice"]) - 1:
-                    slice_count += 1
-                    if DEBUG:
-                        print(
-                            f"{isolate.upper()} {plate.upper()} {time}hr: Missing data for slice {slice_count}"
-                        )
-                    slice_data.append([0, 0, 0, 0, 0, 0])
-                # once we've hit the next slice, calculate percentage and store the data
-                slice_count += 1
-                if roi_count == 0:
-                    slice_data.append([0, 0, 0, 0, 0, 0])
-                else:
-                    slice_data.append(
-                        [
-                            roi_germinated,
-                            roi_count,
-                            roi_germinated / roi_count * 100,
-                            round(area_total / roi_count, 1),
-                            round(perim_total / roi_count, 1),
-                            round(feret_total / roi_count, 1),
-                        ]
-                    )
-                roi_count = 1
-                area_total = int(row["Area"])
-                perim_total = float(row["Perim."])
-                feret_total = float(row["Feret"])
-                if is_germinated(row):
-                    roi_germinated = 1
-                else:
-                    roi_germinated = 0
-        # outside of the loop, calculate and store value for the last slice
-        if roi_count == 0:
-            slice_data.append([0, 0, 0, 0, 0, 0])
-        else:
-            slice_data.append(
-                [
-                    roi_germinated,
-                    roi_count,
-                    roi_germinated / roi_count * 100,
-                    round(area_total / roi_count, 1),
-                    round(perim_total / roi_count, 1),
-                    round(feret_total / roi_count, 1),
-                ]
-            )
-    # the final slice(s) could also be empty for some reason
-    while len(slice_data) < size:
-        slice_count += 1
-        if DEBUG:
-            print(
-                f"{isolate.upper()} {plate.upper()} {time}hr: Missing data for slice {slice_count} at {time}hr."
-            )
-        slice_data.append([0, 0, 0, 0, 0, 0])
-    return slice_data
+            roi_count += 1
+            if is_germinated(row):
+                roi_germinated += 1
+            area_total += int(row["Area"])
+            perim_total += float(row["Perim."])
+            feret_total += float(row["Feret"])
+        image_data.append(
+            [
+                roi_germinated,
+                roi_count,
+                roi_germinated / roi_count * 100,
+                round(area_total / roi_count, 1),
+                round(perim_total / roi_count, 1),
+                round(feret_total / roi_count, 1),
+            ]
+        )
+    return image_data
 
 
 def main(filename):
     """Execute the main objective."""
     global GERMINATION, SPORE
-    args = os.path.splitext(os.path.basename(filename))[0].split("_")
-    plate = args[1]
-    isolate = args[2]
+    args = os.path.basename(filename).split("_")
+    plate = args[0]
+    isolate = args[1]
     # Default is 96 wells
     size = 8 * 12
 
@@ -264,4 +224,4 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         main(sys.argv[1])
     else:
-        sys.exit(f"Usage: {sys.argv[0]} [FILE]")
+        sys.exit(f"Usage: {sys.argv[0]} [FOLDER]")

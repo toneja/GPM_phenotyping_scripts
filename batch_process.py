@@ -92,12 +92,12 @@ def batch_process(image_folder):
                     )
 
     # Process the ImageJ results
-    # for file in os.listdir("GPM/results"):
-    #     if file.startswith("Results_") and file.endswith("0hr.csv"):
-    #         analyze_results.main(f"ImageJ/GPM/results/{file}")
+    for folder in os.listdir("GPM/results"):
+        if folder.endswith("0hr"):
+            analyze_results.main(f"ImageJ/GPM/results/{folder}")
 
     # Compile the results into a workbook
-    # compile_workbook.main()
+    compile_workbook.main()
 
     # Calculate the elapsed time
     elapsed_time = time.time() - start_time
