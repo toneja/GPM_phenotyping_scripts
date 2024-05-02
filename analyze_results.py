@@ -125,6 +125,14 @@ def analyze_results(plate, isolate, size):
         else:
             img_name = f"Tile00000{block + 1}.jpg"
 
+        # Check for missing image data - neebs inprovemint
+        if not os.path.exists(f"{results_path}_0hr/{img_name.replace('.jpg', '.csv')}"):
+            _0hr_results.insert(block, [0, 0, 0, 0, 0, 0])
+            img_name += " - 0hr image empty/unusable"
+        if not os.path.exists(f"{results_path}_48hr/{img_name.replace('.jpg', '.csv')}"):
+            _48hr_results.insert(block, [0, 0, 0, 0, 0, 0])
+            img_name += " - 48hr image empty/unusable"
+
         germination_data.append(
             [
                 get_treatments(plate, block),
@@ -191,16 +199,20 @@ def csv_handler(input_file):
             area_total += int(row["Area"])
             perim_total += float(row["Perim."])
             feret_total += float(row["Feret"])
-        image_data.extend(
-            [
-                roi_germinated,
-                roi_count,
-                roi_germinated / roi_count * 100,
-                round(area_total / roi_count, 1),
-                round(perim_total / roi_count, 1),
-                round(feret_total / roi_count, 1),
-            ]
-        )
+        # Handle empty images
+        if roi_count == 0:
+            image_data.extend([0, 0, 0, 0, 0, 0])
+        else:
+            image_data.extend(
+                [
+                    roi_germinated,
+                    roi_count,
+                    roi_germinated / roi_count * 100,
+                    round(area_total / roi_count, 1),
+                    round(perim_total / roi_count, 1),
+                    round(feret_total / roi_count, 1),
+                ]
+            )
     return image_data
 
 
