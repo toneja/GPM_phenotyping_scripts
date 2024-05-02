@@ -84,10 +84,10 @@ def batch_process(image_folder):
             # Relocate output files into their respective release folders
             for file in os.listdir("GPM/images"):
                 if file.endswith(".tif"):
-                    os.rename(f"GPM/images/{file}", f"GPM/images/{folder_name}/{file}")
+                    os.replace(f"GPM/images/{file}", f"GPM/images/{folder_name}/{file}")
             for file in os.listdir("GPM/results"):
                 if file.endswith(".csv"):
-                    os.rename(
+                    os.replace(
                         f"GPM/results/{file}", f"GPM/results/{folder_name}/{file}"
                     )
 
