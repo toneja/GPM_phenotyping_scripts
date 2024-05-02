@@ -33,7 +33,6 @@ from treatments import get_treatments
 
 # globals
 GERMINATION, SPORE = "", ""
-DEBUG = True
 
 
 def setup_regression(model):
@@ -129,13 +128,13 @@ def analyze_results(plate, isolate, size):
         germination_data.append(
             [
                 get_treatments(plate, block),
-                round(_0hr_results[block][0][2], 1),
-                round(_48hr_results[block][0][2], 1),
-                int(_48hr_results[block][0][0]),
-                int(_48hr_results[block][0][1]),
-                round(_48hr_results[block][0][3] - _0hr_results[block][0][3], 1),
-                round(_48hr_results[block][0][4] - _0hr_results[block][0][4], 1),
-                round(_48hr_results[block][0][5] - _0hr_results[block][0][5], 1),
+                round(_0hr_results[block][2], 1),
+                round(_48hr_results[block][2], 1),
+                int(_48hr_results[block][0]),
+                int(_48hr_results[block][1]),
+                round(_48hr_results[block][3] - _0hr_results[block][3], 1),
+                round(_48hr_results[block][4] - _0hr_results[block][4], 1),
+                round(_48hr_results[block][5] - _0hr_results[block][5], 1),
                 img_name,
             ]
         )
@@ -192,7 +191,7 @@ def csv_handler(input_file):
             area_total += int(row["Area"])
             perim_total += float(row["Perim."])
             feret_total += float(row["Feret"])
-        image_data.append(
+        image_data.extend(
             [
                 roi_germinated,
                 roi_count,
