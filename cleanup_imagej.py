@@ -20,6 +20,7 @@
 """This script removes the files created by AnalyzeSporesAndGermlings.ijm."""
 
 import os
+import shutil
 
 
 def cleanup_imagej():
@@ -27,18 +28,17 @@ def cleanup_imagej():
     print("Cleaning up ImageJ files...")
     os.chdir(os.path.dirname(__file__))
     imagej_path = "ImageJ/GPM"
-    removed = 0
-    for file in os.listdir(f"{imagej_path}/images"):
-        if file.endswith(".tif"):
-            os.remove(f"{imagej_path}/images/{file}")
-            removed += 1
-    for file in os.listdir(f"{imagej_path}/results"):
-        if file.endswith(".csv"):
-            os.remove(f"{imagej_path}/results/{file}")
-            removed += 1
-    print(f"Cleanup complete. Deleted {removed} files.")
+    removed_folders = 0
+    for folder in "images", "results":
+        for plate in os.listdir(f"{imagej_path}/{folder}"):
+            current_folder = os.path.join(f"{imagej_path}/{folder}", plate)
+            if os.path.isdir(current_folder):
+                print(f"Removing: {current_folder}.")
+                shutil.rmtree(current_folder)
+                removed_folders += 1
+    print("Cleanup complete.")
+    print(f"Deleted {removed_folders} Release folders.")
     input("Press ENTER to exit.\n")
-
 
 if __name__ == "__main__":
     cleanup_imagej()
