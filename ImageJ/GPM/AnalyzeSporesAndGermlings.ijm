@@ -1,3 +1,6 @@
+// Enhance contrast for inconsistent images
+run("Enhance Contrast...", "saturated=0.35 equalize");
+
 // Crop image to 1000x1000 in center of image
 size = 1000;
 makeRectangle(getWidth()/2-size/2, getHeight()/2-size/2, size, size);
@@ -6,21 +9,15 @@ run("Crop");
 // Subtract background from image
 run("Subtract Background...", "rolling=10 light");
 
-// Enhance contrast for inconsistent images
-run("Enhance Contrast...", "saturated=0.35 process_all");
-
 // Set thresholds
 setAutoThreshold("Default");
 // setThreshold(0, 240, "raw");
 
 // Generate a binary image from our image
-run("Convert to Mask", "background=Light");
+run("Convert to Mask", "method=Default background=Light");
 
 // Remove some of the small speckles
 run("Despeckle");
-
-// Erode background to reduce breaking up of germination tubes
-run("Dilate");
 
 // Save final manipulated image
 saveAs("tif", "GPM/images/" + getTitle());
