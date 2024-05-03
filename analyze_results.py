@@ -2,7 +2,7 @@
 #
 # This file is part of the GPM phenotyping scripts.
 #
-# Copyright (c) 2023 Jason Toney
+# Copyright (c) 2024 Jason Toney
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -99,12 +99,12 @@ def analyze_results(plate, isolate, size):
     """Compare 0hr and 48hr results and calculate full results for the plate."""
     results_path = f"ImageJ/GPM/results/{plate}_{isolate}"
     _0hr_results = [
-        csv_handler(os.path.join(results_path + "_0hr", csv_file))
-        for csv_file in os.listdir(results_path + "_0hr")
+        csv_handler(os.path.join(f"{results_path}_0hr", csv_file))
+        for csv_file in os.listdir(f"{results_path}_0hr")
     ]
     _48hr_results = [
-        csv_handler(os.path.join(results_path + "_48hr", csv_file))
-        for csv_file in os.listdir(results_path + "_48hr")
+        csv_handler(os.path.join(f"{results_path}_48hr", csv_file))
+        for csv_file in os.listdir(f"{results_path}_48hr")
     ]
     # Output data and file headers
     germination_data = []
@@ -129,7 +129,9 @@ def analyze_results(plate, isolate, size):
         if not os.path.exists(f"{results_path}_0hr/{img_name.replace('.jpg', '.csv')}"):
             _0hr_results.insert(block, [0, 0, 0, 0, 0, 0])
             img_name += " - 0hr image empty/unusable"
-        if not os.path.exists(f"{results_path}_48hr/{img_name.replace('.jpg', '.csv')}"):
+        if not os.path.exists(
+            f"{results_path}_48hr/{img_name.replace('.jpg', '.csv')}"
+        ):
             _48hr_results.insert(block, [0, 0, 0, 0, 0, 0])
             img_name += " - 48hr image empty/unusable"
 

@@ -2,7 +2,7 @@
 #
 # This file is part of the GPM phenotyping scripts.
 #
-# Copyright (c) 2023 Jason Toney
+# Copyright (c) 2024 Jason Toney
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ def cleanup_imagej():
     print("Cleanup complete.")
     print(f"Deleted {removed_folders} Release folders.")
     input("Press ENTER to exit.\n")
+
 
 if __name__ == "__main__":
     cleanup_imagej()
