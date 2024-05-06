@@ -37,7 +37,7 @@ def cleanup_imagej():
                 shutil.rmtree(current_folder)
                 removed_folders += 1
     print("Cleanup complete.")
-    print(f"Deleted {removed_folders} Release folders.")
+    print(f"Deleted {removed_folders} plate folders.")
     input("Press ENTER to exit.\n")
 
 
