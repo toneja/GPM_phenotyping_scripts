@@ -19,6 +19,9 @@ run("Convert to Mask", "method=Default background=Light");
 // Remove some of the small speckles
 run("Despeckle");
 
+// Try to fill in some of the gaps
+run("Fill Holes");
+
 // Save final manipulated image
 saveAs("tif", "GPM/images/" + getTitle());
 
