@@ -24,7 +24,6 @@
 """
 
 
-import glob
 import os
 import subprocess
 import sys
@@ -50,13 +49,8 @@ def batch_process(image_folder):
         # Check if the current item is a directory
         if os.path.isdir(current_folder) and "plate" in current_folder:
             # Check if the album has already been processed
-            if (
-                os.path.exists(f"GPM/images/{folder_name}")
-                and len(glob.glob(os.path.join(f"GPM/images/{folder_name}", "*.tif")))
-                == 96
-                and os.path.exists(f"GPM/results/{folder_name}")
-                and len(glob.glob(os.path.join(f"GPM/results/{folder_name}", "*.csv")))
-                == 96
+            if os.path.exists(f"GPM/images/{folder_name}") and os.path.exists(
+                f"GPM/results/{folder_name}"
             ):
                 print(f"Skipping folder: {current_folder}, already processed.")
                 continue
