@@ -28,16 +28,20 @@ def cleanup_imagej():
     print("Cleaning up ImageJ files...")
     os.chdir(os.path.dirname(__file__))
     imagej_path = "ImageJ/GPM"
-    removed_folders = 0
+    removed_files, removed_folders = 0, 0
     for folder in "images", "results":
-        for plate in os.listdir(f"{imagej_path}/{folder}"):
-            current_folder = os.path.join(f"{imagej_path}/{folder}", plate)
-            if os.path.isdir(current_folder):
-                print(f"Removing: {current_folder}.")
-                shutil.rmtree(current_folder)
+        for obj in os.listdir(f"{imagej_path}/{folder}"):
+            current_obj = os.path.join(f"{imagej_path}/{folder}", obj)
+            if os.path.isdir(current_obj):
+                print(f"Removing: {current_obj}.")
+                shutil.rmtree(current_obj)
                 removed_folders += 1
+            elif os.path.isfile(current_obj):
+                os.remove(current_obj)
+                removed_files += 1
     print("Cleanup complete.")
-    print(f"Deleted {removed_folders} plate folders.")
+    print(f"Deleted {removed_files} files.")
+    print(f"Deleted {removed_folders} folders.")
     input("Press ENTER to exit.\n")
 
 
