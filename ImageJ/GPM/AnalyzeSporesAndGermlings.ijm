@@ -1,5 +1,5 @@
 // Enhance contrast for inconsistent images
-run("Enhance Contrast...", "saturated=0.35 equalize");
+run("Enhance Contrast...", "saturated=0.35 normalize");
 
 // Crop image to 1000x1000 in center of image
 size = 1000;
@@ -10,11 +10,11 @@ run("Crop");
 run("Subtract Background...", "rolling=10 light");
 
 // Set thresholds
-setAutoThreshold("Default");
+setAutoThreshold("MaxEntropy");
 // setThreshold(0, 240, "raw");
 
 // Generate a binary image from our image
-run("Convert to Mask", "method=Default background=Light");
+run("Convert to Mask", "background=Light");
 
 // Remove some of the small speckles
 run("Despeckle");
