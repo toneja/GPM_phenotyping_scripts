@@ -27,6 +27,6 @@ saveAs("tif", "GPM/images/" + getTitle());
 
 // Generate ROIs
 run("Set Measurements...", "area centroid perimeter fit shape feret's redirect=None decimal=3");
-run("Analyze Particles...", "size=60-600 circularity=0.00-1.00 show=Overlay exclude include add");
+run("Analyze Particles...", "size=50-500 circularity=0.00-1.00 show=Overlay exclude include add");
 roiManager("Show None");
 saveAs("Results", "GPM/results/" + File.getNameWithoutExtension(getTitle()) + ".csv");
