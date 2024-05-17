@@ -24,7 +24,7 @@ import shutil
 
 sample_count = 18
 index = 1
-for folder in os.listdir("ImageJ/GPM/images"):
+for folder in os.listdir("../ImageJ/GPM/images"):
     if "48" in folder:
         used = []
         while len(used) < sample_count:
@@ -39,6 +39,6 @@ for folder in os.listdir("ImageJ/GPM/images"):
                     img_name = f"Tile0000{i}.tif"
                 if not os.path.exists(f"MODEL/{index}.tif"):
                     shutil.copy(
-                        f"ImageJ/GPM/images/{folder}/{img_name}", f"MODEL/{index}.tif"
+                        f"../ImageJ/GPM/images/{folder}/{img_name}", f"images/{index}.tif"
                     )
                 index += 1
