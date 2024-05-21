@@ -74,7 +74,7 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
 
     # Use stepwise feature selection to find the best set of features
     logreg = LogisticRegression(solver="liblinear", multi_class="ovr")
-    sfs = SequentialFeatureSelector(logreg, n_features_to_select=None)
+    sfs = SequentialFeatureSelector(logreg, n_features_to_select="auto")
     sfs.fit(train_x, train_y)
     train_x_sfs = sfs.transform(train_x)
     test_x_sfs = sfs.transform(test_x)
