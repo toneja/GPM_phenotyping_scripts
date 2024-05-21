@@ -39,9 +39,11 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
     """Evaluate predictive model using logistic regression with feature selection."""
     # Load training dataset from CSV file
     train_dataset = pd.read_csv(train_csv_filename)
+    train_dataset = train_dataset.drop(columns=["ID"])
 
     # Load testing dataset from CSV file
     test_dataset = pd.read_csv(test_csv_filename)
+    test_dataset = test_dataset.drop(columns=["ID"])
 
     # Prepare input features and output label for training set
     train_filename = os.path.splitext(os.path.basename(train_csv_filename))[0]
