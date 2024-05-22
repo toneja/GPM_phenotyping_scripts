@@ -57,7 +57,7 @@ def setup_regression(model):
     _x = dataset[vals]
     _y = dataset[model]
 
-    regression = linear_model.LogisticRegression(solver="liblinear", multi_class="ovr")
+    regression = linear_model.LogisticRegression(solver="liblinear")
     regression.fit(_x.values, _y)
 
     return regression
@@ -76,7 +76,7 @@ def is_germinated(row):
             ]
         ]
     )
-    return float(prediction[0][1]) >= 0.97
+    return float(prediction[0][1]) >= 0.98
 
 
 def is_spore(row):
