@@ -40,11 +40,11 @@ def setup_regression(model):
     dataset = pandas.read_csv(f"models/{model}_training_data.csv")
     if model == "germination":
         vals = [
+            "Perim.",
+            "Minor",
             "Circ.",
             "MinFeret",
             "AR",
-            "Round",
-            "Solidity",
         ]
     elif model == "spore":
         vals = [
@@ -68,11 +68,11 @@ def is_germinated(row):
     prediction = GERMINATION.predict_proba(
         [
             [
+                float(row["Perim."]),
+                float(row["Minor"]),
                 float(row["Circ."]),
                 float(row["MinFeret"]),
                 float(row["AR"]),
-                float(row["Round"]),
-                float(row["Solidity"]),
             ]
         ]
     )
