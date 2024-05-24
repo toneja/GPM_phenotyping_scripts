@@ -39,6 +39,7 @@ for folder in os.listdir("../ImageJ/GPM/images"):
                     img_name = f"Tile0000{i}.tif"
                 if not os.path.exists(f"images/{index}.tif"):
                     shutil.copy(
-                        f"../ImageJ/GPM/images/{folder}/{img_name}", f"images/{index}.tif"
+                        f"../ImageJ/GPM/images/{folder}/{img_name}",
+                        f"images/{index}.tif",
                     )
                 index += 1
