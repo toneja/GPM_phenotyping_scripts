@@ -2,7 +2,7 @@
 #
 # This file is part of the GPM phenotyping scripts.
 #
-# Copyright (c) 2023 Jason Toney
+# Copyright (c) 2024 Jason Toney
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,8 +30,16 @@ import os
 import sys
 import pandas as pd
 import warnings
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
+from sklearn.metrics import (
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    roc_curve,
+    roc_auc_score,
+)
 from sklearn.feature_selection import SequentialFeatureSelector
 
 
@@ -115,6 +123,27 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
     # Print the results
     print(f"Results [{train_csv_filename} - {test_csv_filename}]:")
     print(results_df.to_string(index=False))
+
+    # Predict probabilities for curve
+    y_prob = logreg.predict_proba(test_x_sfs)[:, 1]
+
+    # Calculate the ROC curve
+    fpr, tpr, thresholds = roc_curve(test_y, y_prob)
+
+    # Calculate the AUC
+    auc = roc_auc_score(test_y, y_prob)
+
+    # Plot the ROC curve
+    plt.figure()
+    plt.plot(fpr, tpr, color="blue", lw=2, label="ROC curve (area = %0.2f)" % auc)
+    plt.plot([0, 1], [0, 1], color="grey", lw=2, linestyle="--")
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("Receiver Operating Characteristic")
+    plt.legend(loc="lower right")
+    plt.show()
 
 
 if __name__ == "__main__":
