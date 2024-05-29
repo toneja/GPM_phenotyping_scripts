@@ -143,7 +143,7 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
     plt.ylabel("True Positive Rate (Sensitivity)")
     plt.title(f"{train_output_label.capitalize()} Model")
     plt.legend(loc="lower right")
-    plt.show()
+    plt.savefig(f"{train_output_label}_model.png", dpi=300, bbox_inches="tight")
 
 
 if __name__ == "__main__":
