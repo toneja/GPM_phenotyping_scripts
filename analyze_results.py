@@ -40,19 +40,19 @@ def setup_regression(model):
     dataset = pandas.read_csv(f"models/{model}_training_data.csv")
     if model == "germination":
         vals = [
-            "Perim.",
             "Minor",
             "Circ.",
             "MinFeret",
-            "AR",
+            "Round",
+            "Solidity",
         ]
     elif model == "spore":
         vals = [
-            "Area",
-            "Perim.",
+            "Minor",
             "Circ.",
-            "Feret",
             "AR",
+            "Round",
+            "Solidity",
         ]
     _x = dataset[vals]
     _y = dataset[model]
@@ -68,11 +68,11 @@ def is_germinated(row):
     prediction = GERMINATION.predict_proba(
         [
             [
-                float(row["Perim."]),
                 float(row["Minor"]),
                 float(row["Circ."]),
                 float(row["MinFeret"]),
-                float(row["AR"]),
+                float(row["Round"]),
+                float(row["Solidity"]),
             ]
         ]
     )
@@ -84,15 +84,15 @@ def is_spore(row):
     prediction = SPORE.predict_proba(
         [
             [
-                int(row["Area"]),
-                float(row["Perim."]),
+                float(row["Minor"]),
                 float(row["Circ."]),
-                float(row["Feret"]),
                 float(row["AR"]),
+                float(row["Round"]),
+                float(row["Solidity"]),
             ]
         ]
     )
-    return float(prediction[0][1]) >= 0.92
+    return float(prediction[0][1]) >= 0.95
 
 
 def analyze_results(plate, isolate, size):
