@@ -73,6 +73,7 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
             "Precision",
             "Recall",
             "Specificity",
+            "Sensitivity",
             "F1-score",
         ]
     )
@@ -109,6 +110,9 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
     # Calculate specificity
     specificity = tn / (tn + fp)
 
+    # Calculate sensitivity
+    sensitivity = tp / (tp + fn)
+
     # Store the results in the DataFrame
     selected_features = ", ".join(train_x.columns[sfs.get_support()])
     results_df.loc[0] = [
@@ -117,6 +121,7 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
         precision,
         recall,
         specificity,
+        sensitivity,
         f1,
     ]
 
