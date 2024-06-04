@@ -76,7 +76,7 @@ def is_germinated(row):
             ]
         ]
     )
-    return float(prediction[0][1]) >= 0.98
+    return float(prediction[0][1]) >= 0.95
 
 
 def is_spore(row):
@@ -189,11 +189,13 @@ def csv_handler(input_file):
         area_total, perim_total, feret_total = 0, 0, 0
         for row in csv_reader:
             # new debris filter
-            if not is_spore(row) and not is_germinated(row):
-                # skip bad ROIs
-                continue
+            if not is_spore(row):
+                if not is_germinated(row):
+                    # skip bad ROIs
+                    continue
+                else:
+                    roi_germinated += 1
             roi_count += 1
-            roi_germinated += is_germinated(row)
             area_total += int(row["Area"])
             perim_total += float(row["Perim."])
             feret_total += float(row["Feret"])
