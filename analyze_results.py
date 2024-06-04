@@ -97,14 +97,14 @@ def is_spore(row):
 
 def analyze_results(plate, isolate, size):
     """Compare 0hr and 48hr results and calculate full results for the plate."""
-    results_path = f"ImageJ/GPM/results/{plate}_{isolate}"
+    results_path = f"ImageJ/GPM/results/{plate}_{isolate}_"
     _0hr_results = [
-        csv_handler(os.path.join(f"{results_path}_0hr", csv_file))
-        for csv_file in os.listdir(f"{results_path}_0hr")
+        csv_handler(os.path.join(f"{results_path}0hr", csv_file))
+        for csv_file in os.listdir(f"{results_path}0hr")
     ]
     _48hr_results = [
-        csv_handler(os.path.join(f"{results_path}_48hr", csv_file))
-        for csv_file in os.listdir(f"{results_path}_48hr")
+        csv_handler(os.path.join(f"{results_path}48hr", csv_file))
+        for csv_file in os.listdir(f"{results_path}48hr")
     ]
     # Output data and file headers
     germination_data = []
@@ -126,12 +126,10 @@ def analyze_results(plate, isolate, size):
             img_name = f"Tile00000{block + 1}.jpg"
 
         # Check for missing image data - neebs inprovemint
-        if not os.path.exists(f"{results_path}_0hr/{img_name.replace('.jpg', '.csv')}"):
+        if not os.path.exists(f"{results_path}0hr/{img_name.replace('.jpg', '.csv')}"):
             _0hr_results.insert(block, [0, 0, 0, 0, 0, 0])
             img_name += " - 0hr image empty/unusable"
-        if not os.path.exists(
-            f"{results_path}_48hr/{img_name.replace('.jpg', '.csv')}"
-        ):
+        if not os.path.exists(f"{results_path}48hr/{img_name.replace('.jpg', '.csv')}"):
             _48hr_results.insert(block, [0, 0, 0, 0, 0, 0])
             img_name += " - 48hr image empty/unusable"
 
@@ -155,7 +153,7 @@ def analyze_results(plate, isolate, size):
     for item in germination_data:
         if item[0] == "Control":
             germination_data.insert(0, germination_data.pop(i))
-        elif item[0] == "SHAM 100 ug/mL":
+        elif item[0] == "SHAM 100 μg/mL":
             germination_data.insert(8, germination_data.pop(i))
         i += 1
 
@@ -187,7 +185,6 @@ def csv_handler(input_file):
     ) as csv_file:
         # read csv as a dict so header is skipped and value lookup is simpler
         csv_reader = csv.DictReader(csv_file, delimiter=",")
-        image_data = []
         roi_count, roi_germinated = 0, 0
         area_total, perim_total, feret_total = 0, 0, 0
         for row in csv_reader:
@@ -196,25 +193,22 @@ def csv_handler(input_file):
                 # skip bad ROIs
                 continue
             roi_count += 1
-            if is_germinated(row):
-                roi_germinated += 1
+            roi_germinated += is_germinated(row)
             area_total += int(row["Area"])
             perim_total += float(row["Perim."])
             feret_total += float(row["Feret"])
         # Handle empty images
         if roi_count == 0:
-            image_data.extend([0, 0, 0, 0, 0, 0])
+            image_data = [0] * 6
         else:
-            image_data.extend(
-                [
-                    roi_germinated,
-                    roi_count,
-                    roi_germinated / roi_count * 100,
-                    round(area_total / roi_count, 1),
-                    round(perim_total / roi_count, 1),
-                    round(feret_total / roi_count, 1),
-                ]
-            )
+            image_data = [
+                roi_germinated,
+                roi_count,
+                roi_germinated / roi_count * 100,
+                round(area_total / roi_count, 1),
+                round(perim_total / roi_count, 1),
+                round(feret_total / roi_count, 1),
+            ]
     return image_data
 
 

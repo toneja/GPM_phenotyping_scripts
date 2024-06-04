@@ -97,7 +97,7 @@ def batch_process(image_folder):
     elapsed_time = time.time() - start_time
     # Print elapsed time in H:M:S format
     print(f"\nElapsed time: {time.strftime('%H:%M:%S', time.gmtime(elapsed_time))}")
-    print(f"Albums processed: {processed}")
+    print(f"Assay runs processed: {processed // 2}")
     input("Batch processing complete. Press ENTER.\n")
 
 
