@@ -78,11 +78,6 @@ def evaluate_predictive_model(train_csv_filename, test_csv_filename):
         ]
     )
 
-    # ignore some annoying warnings from the code below
-    warnings.filterwarnings(
-        "ignore", category=FutureWarning, module="sklearn.feature_selection"
-    )
-
     # Use stepwise feature selection to find the best set of features
     logreg = LogisticRegression(solver="liblinear")
     sfs = SequentialFeatureSelector(logreg, n_features_to_select="auto")
