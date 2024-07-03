@@ -155,6 +155,8 @@ def analyze_results(plate, isolate, size):
             germination_data.insert(0, germination_data.pop(i))
         elif item[0] == "SHAM 100 μg/mL":
             germination_data.insert(8, germination_data.pop(i))
+        elif item[0] == "Trifloxystrobin 10 μg/mL":
+            germination_data.insert(40, germination_data.pop(i))
         i += 1
 
     # Write the results to the output file
