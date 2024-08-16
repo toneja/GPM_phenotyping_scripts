@@ -32,7 +32,7 @@ from tabulate import tabulate
 from treatments import get_treatments
 
 # globals
-GERMINATION, SPORE = "", ""
+GERMINATION, CONIDIUM = "", ""
 
 
 def setup_regression(model):
@@ -46,7 +46,7 @@ def setup_regression(model):
             "Round",
             "Solidity",
         ]
-    elif model == "spore":
+    elif model == "conidium":
         vals = [
             "Minor",
             "Circ.",
@@ -64,7 +64,7 @@ def setup_regression(model):
 
 
 def is_germinated(row):
-    """Returns whether or not the ROI is determined to be a germinated spore."""
+    """Returns whether or not the ROI is determined to be a germinated conidium."""
     prediction = GERMINATION.predict_proba(
         [
             [
@@ -79,9 +79,9 @@ def is_germinated(row):
     return float(prediction[0][1]) >= 0.95
 
 
-def is_spore(row):
-    """Returns whether or not the ROI is determined to be an ungerminated spore."""
-    prediction = SPORE.predict_proba(
+def is_conidium(row):
+    """Returns whether or not the ROI is determined to be an ungerminated conidium."""
+    prediction = CONIDIUM.predict_proba(
         [
             [
                 float(row["Minor"]),
@@ -191,7 +191,7 @@ def csv_handler(input_file):
         area_total, perim_total, feret_total = 0, 0, 0
         for row in csv_reader:
             # new debris filter
-            if not is_spore(row):
+            if not is_conidium(row):
                 if not is_germinated(row):
                     # skip bad ROIs
                     continue
@@ -218,7 +218,7 @@ def csv_handler(input_file):
 
 def main(filename):
     """Execute the main objective."""
-    global GERMINATION, SPORE
+    global GERMINATION, CONIDIUM
     args = os.path.basename(filename).split("_")
     plate = args[0]
     isolate = args[1]
@@ -227,7 +227,7 @@ def main(filename):
 
     os.chdir(os.path.dirname(__file__))
     GERMINATION = setup_regression("germination")
-    SPORE = setup_regression("spore")
+    CONIDIUM = setup_regression("conidium")
     analyze_results(plate, isolate, size)
 
 
