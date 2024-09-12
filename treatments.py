@@ -328,4 +328,26 @@ def get_treatments(plate, block):
             QXF1, QXF3, QXF5, AZX1, QXF6, TFX1, PYL1, MDS1, CNTL, SHAM, QXF4, QXF2,
             QXF1, QXF3, QXF5, AZX1, QXF6, TFX1, PYL1, MDS1, CNTL, SHAM, QXF4, QXF2,
         ]
+    elif plate == "plateQOIsOnly1":
+        treatments = [
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
+        ]
+    elif plate == "plateQuinoxyfenOnly1":
+        treatments = [
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+            QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+        ]
     return treatments[block]
