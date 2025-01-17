@@ -32,67 +32,52 @@ from tabulate import tabulate
 from treatments import get_treatments
 
 # globals
-GERMINATION, CONIDIUM = "", ""
+REGR = ""
 
 
-def setup_regression(model):
-    """Setup the logistic regressions used to determine ROI identity."""
-    dataset = pandas.read_csv(f"models/{model}_training_data.csv")
-    if model == "germination":
-        vals = [
-            "Minor",
-            "Circ.",
-            "MinFeret",
-            "Round",
-            "Solidity",
-        ]
-    elif model == "conidium":
-        vals = [
-            "Minor",
-            "Circ.",
-            "AR",
-            "Round",
-            "Solidity",
-        ]
+def setup_regression():
+    """Setup the logistic regression used to determine ROI identity."""
+    dataset = pandas.read_csv(f"models/full_training_data.csv")
+    vals = [
+        "Area",
+        "Perim.",
+        "Major",
+        "Minor",
+        "Circ.",
+        "Feret",
+        "MinFeret",
+        "AR",
+        "Round",
+        "Solidity",
+    ]
     _x = dataset[vals]
-    _y = dataset[model]
+    _y = dataset["class"]
 
-    regression = linear_model.LogisticRegression(solver="liblinear")
+    regression = linear_model.LogisticRegression(solver="saga", max_iter=1000)
     regression.fit(_x.values, _y)
 
     return regression
 
 
-def is_germinated(row):
-    """Returns whether or not the ROI is determined to be a germinated conidium."""
-    prediction = GERMINATION.predict_proba(
+def identify_roi(row):
+    """Returns the ROI's predicted identity."""
+    prediction = REGR.predict(
         [
             [
+                int(row["Area"]),
+                float(row["Perim."]),
+                float(row["Major"]),
                 float(row["Minor"]),
                 float(row["Circ."]),
+                float(row["Feret"]),
                 float(row["MinFeret"]),
-                float(row["Round"]),
-                float(row["Solidity"]),
-            ]
-        ]
-    )
-    return float(prediction[0][1]) >= 0.95
-
-
-def is_conidium(row):
-    """Returns whether or not the ROI is determined to be an ungerminated conidium."""
-    prediction = CONIDIUM.predict_proba(
-        [
-            [
-                float(row["Minor"]),
-                float(row["Circ."]),
                 float(row["AR"]),
                 float(row["Round"]),
                 float(row["Solidity"]),
             ]
         ]
     )
-    return float(prediction[0][1]) >= 0.95
+    return float(prediction)
 
 
 def analyze_results(plate, isolate, size):
@@ -191,12 +176,12 @@ def csv_handler(input_file):
         area_total, perim_total, feret_total = 0, 0, 0
         for row in csv_reader:
             # new debris filter
-            if not is_conidium(row):
-                if not is_germinated(row):
-                    # skip bad ROIs
-                    continue
-                else:
-                    roi_germinated += 1
+            _id = identify_roi(row)
+            if _id == -1:
+                # skip bad ROIs
+                continue
+            elif _id == 1:
+                roi_germinated += 1
             roi_count += 1
             area_total += int(row["Area"])
             perim_total += float(row["Perim."])
@@ -218,7 +203,7 @@ def csv_handler(input_file):
 
 def main(filename):
     """Execute the main objective."""
-    global GERMINATION, CONIDIUM
+    global REGR
     args = os.path.basename(filename).split("_")
     plate = args[0]
     isolate = args[1]
@@ -226,8 +211,7 @@ def main(filename):
     size = 8 * 12
 
     os.chdir(os.path.dirname(__file__))
-    GERMINATION = setup_regression("germination")
-    CONIDIUM = setup_regression("conidium")
+    REGR = setup_regression()
     analyze_results(plate, isolate, size)
 
 
