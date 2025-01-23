@@ -87,7 +87,7 @@ def batch_process(image_folder):
 
     # Process the ImageJ results
     for folder in os.listdir("GPM/results"):
-        if folder.endswith("0hr"):
+        if folder.endswith("48hr"):
             analyze_results.main(f"ImageJ/GPM/results/{folder}")
 
     # Compile the results into a workbook

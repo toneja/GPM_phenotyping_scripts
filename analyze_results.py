@@ -80,17 +80,26 @@ def identify_roi(row):
     return float(prediction)
 
 
-def analyze_results(plate, isolate, size):
+def analyze_results(plate, isolate):
     """Compare 0hr and 48hr results and calculate full results for the plate."""
     results_path = f"ImageJ/GPM/results/{plate}_{isolate}_"
-    _0hr_results = [
-        csv_handler(os.path.join(f"{results_path}0hr", csv_file))
-        for csv_file in os.listdir(f"{results_path}0hr")
-    ]
+    _0hr_results = []
+    if os.path.exists(f"{results_path}0hr"):
+        _0hr_results = [
+            csv_handler(os.path.join(f"{results_path}0hr", csv_file))
+            for csv_file in os.listdir(f"{results_path}0hr")
+        ]
+    _0hr_size = len(_0hr_results)
     _48hr_results = [
         csv_handler(os.path.join(f"{results_path}48hr", csv_file))
         for csv_file in os.listdir(f"{results_path}48hr")
     ]
+    _48hr_size = len(_48hr_results)
+    # this is only necessary for 96-well plates, 24-well plates don't use T0
+    if _0hr_size > 0 and (_0hr_size != _48hr_size):
+        sys.exit(
+            "ERROR: 0hr and 48hr results folders do not have the same number of images."
+        )
     # Output data and file headers
     germination_data = []
     headers = [
@@ -104,7 +113,7 @@ def analyze_results(plate, isolate, size):
         "Feret change",
         "Image",
     ]
-    for block in range(size):
+    for block in range(_48hr_size):
         if (block + 1) > 9:
             img_name = f"Tile0000{block + 1}.jpg"
         else:
@@ -113,7 +122,8 @@ def analyze_results(plate, isolate, size):
         # Check for missing image data - neebs inprovemint
         if not os.path.exists(f"{results_path}0hr/{img_name.replace('.jpg', '.csv')}"):
             _0hr_results.insert(block, [0, 0, 0, 0, 0, 0])
-            img_name += " - 0hr image empty/unusable"
+            if _48hr_size == 96:
+                img_name += " - 0hr image empty/unusable"
         if not os.path.exists(f"{results_path}48hr/{img_name.replace('.jpg', '.csv')}"):
             _48hr_results.insert(block, [0, 0, 0, 0, 0, 0])
             img_name += " - 48hr image empty/unusable"
@@ -131,6 +141,14 @@ def analyze_results(plate, isolate, size):
                 img_name,
             ]
         )
+
+    # 24-well UV-C assay does not require as much information
+    if _48hr_size == 24:
+        locs = [7, 6, 5, 1]
+        for loc in locs:
+            headers.remove(headers[loc])
+            for data in germination_data:
+                data.remove(data[loc])
 
     # Sort the data by treatment with the controls and SHAM at the top
     germination_data.sort()
@@ -207,12 +225,10 @@ def main(filename):
     args = os.path.basename(filename).split("_")
     plate = args[0]
     isolate = args[1]
-    # Default is 96 wells
-    size = 8 * 12
 
     os.chdir(os.path.dirname(__file__))
     REGR = setup_regression()
-    analyze_results(plate, isolate, size)
+    analyze_results(plate, isolate)
 
 
 if __name__ == "__main__":
