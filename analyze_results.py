@@ -53,7 +53,7 @@ def setup_regression():
     _x = dataset[vals]
     _y = dataset["class"]
 
-    regression = linear_model.LogisticRegression(solver="saga", max_iter=1000)
+    regression = linear_model.LogisticRegression(solver="newton-cg", max_iter=1000)
     regression.fit(_x.values, _y)
 
     return regression
