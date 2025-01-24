@@ -21,7 +21,7 @@
 
 # This is dumb, find a better way to handle older plate maps
 OLD_MAPS = False
-# Definitions of treatments
+# Definitions of fungicide treatments
 CNTL = "Control"
 SHAM = "SHAM 100 μg/mL"
 AZX1 = "Azoxystrobin 10 μg/mL"
@@ -57,6 +57,12 @@ TEB1 = "Tebuconazole 25 μg/mL"
 TEB2 = "Tebuconazole 250 μg/mL"
 TEB3 = "Tebuconazole 2500 μg/mL"
 TFX1 = "Trifloxystrobin 10 μg/mL"
+# Definitions of UV-C treatments
+UVC1 = "Speed 1.5"
+UVC2 = "Speed 2"
+UVC3 = "Speed 3"
+UVC4 = "Speed 5"
+UVC5 = "Speed 9"
 
 
 # maps of treatment blocks
@@ -349,5 +355,40 @@ def get_treatments(plate, block):
             QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
             QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
             QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
+        ]
+    elif plate == "plateUVC1":
+        treatments = [
+            UVC2, UVC1, UVC4, CNTL, UVC5, UVC3,
+            UVC5, UVC3, UVC1, CNTL, UVC4, UVC2,
+            UVC3, UVC2, CNTL, UVC1, UVC4, UVC5,
+            UVC4, CNTL, UVC2, UVC5, UVC3, UVC1,
+        ]
+    elif plate == "plateUVC2":
+        treatments = [
+            CNTL, UVC1, UVC5, UVC4, UVC2, UVC3,
+            UVC2, UVC3, UVC1, UVC4, UVC5, CNTL,
+            UVC3, CNTL, UVC4, UVC1, UVC5, UVC2,
+            UVC5, UVC4, CNTL, UVC2, UVC3, UVC1,
+        ]
+    elif plate == "plateUVC3":
+        treatments = [
+            UVC2, CNTL, UVC1, UVC3, UVC4, UVC5,
+            UVC4, UVC5, CNTL, UVC3, UVC1, UVC2,
+            UVC5, UVC2, UVC3, CNTL, UVC1, UVC4,
+            UVC1, UVC3, UVC2, UVC4, UVC5, CNTL,
+        ]
+    elif plate == "plateUVC4":
+        treatments = [
+            UVC1, UVC2, CNTL, UVC4, UVC3, UVC5,
+            UVC3, UVC5, UVC2, UVC4, CNTL, UVC1,
+            UVC5, UVC1, UVC4, UVC2, CNTL, UVC3,
+            CNTL, UVC4, UVC1, UVC3, UVC5, UVC2,
+        ]
+    elif plate == "plateUVC5":
+        treatments = [
+            UVC3, UVC1, UVC4, CNTL, UVC2, UVC5,
+            UVC2, UVC5, UVC1, CNTL, UVC4, UVC3,
+            UVC5, UVC3, CNTL, UVC1, UVC4, UVC2,
+            UVC4, CNTL, UVC3, UVC2, UVC5, UVC1,
         ]
     return treatments[block]
