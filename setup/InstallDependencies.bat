@@ -6,13 +6,11 @@ if %errorlevel% neq 0 (
     pause
     exit /b
 )
-pip3.exe install matplotlib
 pip3.exe install openpyxl
 pip3.exe install pandas
 pip3.exe install scikit-learn
 pip3.exe install sklearn
 pip3.exe install tabulate
-pip3.exe install tqdm
 
 REM Set the download URL and destination file
 set downloadURL=https://wsr.imagej.net/distros/win/ij153-win-java8.zip
