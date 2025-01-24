@@ -1,7 +1,7 @@
 # GPM phenotyping scripts
 This project is composed of Python scripts and ImageJ macros for use with
-the high throughput *Erysiphe necator* fungicide efficacy assay developed
-by Alexander Wong and Jason Toney.
+the high throughput *Erysiphe necator* fungicide and UV-C efficacy assays
+developed by Alexander Wong, Eliza Allen, and Jason Toney.
 
 ## License
 This project is licensed under the GNU General Public License v3.0.
@@ -15,7 +15,7 @@ For more details, please see the LICENSE file.
     Mac: Untested/Unsupported
 
 ## Usage
-1) Place 0hr and 48hr image albums into the "ECHO Images" directory.
+1) Place image albums into the "ECHO Images" directory.
 2) Run batch_process.py to process the image albums. The results will be\
     compiled into an Excel workbook named GPMFungicideAssay_Workbook.xlsx\
     found in this directory. The results of the analysis will also be\
