@@ -63,24 +63,20 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
     y_pred = model.predict(X_test)
     y_pred_proba = model.predict_proba(X_test)
 
-    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
     print(
-        "Precision:",
-        precision_score(y_test, y_pred, average="weighted", labels=np.unique(y_pred)),
+        f"Precision: {precision_score(y_test, y_pred, average='weighted', labels=np.unique(y_pred))}"
     )
     print(
-        "Recall:",
-        recall_score(y_test, y_pred, average="weighted", labels=np.unique(y_pred)),
+        f"Recall: {recall_score(y_test, y_pred, average='weighted', labels=np.unique(y_pred))}"
     )
     print(
-        "F1 Score:",
-        f1_score(y_test, y_pred, average="weighted", labels=np.unique(y_pred)),
+        f"F1 Score: {f1_score(y_test, y_pred, average='weighted', labels=np.unique(y_pred))}"
     )
-    print("ROC AUC Score:", roc_auc_score(y_test, y_pred_proba, multi_class="ovr"))
-    print("Log Loss:", log_loss(y_test, y_pred_proba))
+    print(f"ROC AUC Score: {roc_auc_score(y_test, y_pred_proba, multi_class='ovr')}")
+    print(f"Log Loss: {log_loss(y_test, y_pred_proba)}")
     print(
-        "Confusion Matrix:\n",
-        confusion_matrix(y_test, y_pred, labels=np.unique(y_pred)),
+        f"Confusion Matrix:\n{confusion_matrix(y_test, y_pred, labels=np.unique(y_pred))}"
     )
     print("Classification Report:")
     print(classification_report(y_test, y_pred, labels=np.unique(y_pred)))
