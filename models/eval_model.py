@@ -46,11 +46,13 @@ from sklearn.metrics import (
 
 def preprocess_data(df, target_column):
     """docstring goes here."""
+    test_size = 0.3
+    random_state = 42
     X = df.drop(columns=[target_column])
     y = df[target_column]
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=42, stratify=y
+        X, y, test_size=test_size, random_state=random_state, stratify=y
     )
 
     return X_train, X_test, y_train, y_test
@@ -64,18 +66,20 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
     y_pred = model.predict(X_test)
     y_pred_proba = model.predict_proba(X_test)
 
-    print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
-    print(
-        f"Precision: {precision_score(y_test, y_pred, average='weighted', labels=np.unique(y_pred))}"
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy}")
+    precision = precision_score(
+        y_test, y_pred, average="weighted", labels=np.unique(y_pred)
     )
-    print(
-        f"Recall: {recall_score(y_test, y_pred, average='weighted', labels=np.unique(y_pred))}"
-    )
-    print(
-        f"F1 Score: {f1_score(y_test, y_pred, average='weighted', labels=np.unique(y_pred))}"
-    )
-    print(f"ROC AUC Score: {roc_auc_score(y_test, y_pred_proba, multi_class='ovr')}")
-    print(f"Log Loss: {log_loss(y_test, y_pred_proba)}")
+    print(f"Precision: {precision}")
+    recall = recall_score(y_test, y_pred, average="weighted", labels=np.unique(y_pred))
+    print(f"Recall: {recall}")
+    f1 = f1_score(y_test, y_pred, average="weighted", labels=np.unique(y_pred))
+    print(f"F1 Score: {f1}")
+    auc = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    print(f"ROC AUC Score: {auc}")
+    lloss = log_loss(y_test, y_pred_proba)
+    print(f"Log Loss: {lloss}")
     print(
         f"Confusion Matrix:\n{confusion_matrix(y_test, y_pred, labels=np.unique(y_pred))}"
     )
