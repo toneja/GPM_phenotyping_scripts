@@ -37,7 +37,7 @@ REGR = ""
 
 def setup_regression():
     """Setup the logistic regression used to determine ROI identity."""
-    dataset = pandas.read_csv(f"models/full_training_data.csv")
+    dataset = pandas.read_csv(f"models/model_training_data.csv")
     vals = [
         "Area",
         "Perim.",

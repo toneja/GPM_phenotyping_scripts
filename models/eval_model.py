@@ -26,6 +26,7 @@ Read a multiclass training dataset from a CSV file and perform logistic regressi
 Evaluate the model's accuracy in predicting the output label and print the evaluation metrics.
 """
 
+import os
 import sys
 import pandas as pd
 import numpy as np
@@ -86,10 +87,12 @@ def main(file):
     df = pd.read_csv(file)
     X_train, X_test, y_train, y_test = preprocess_data(df, "class")
     evaluate_predictive_model(X_train, X_test, y_train, y_test)
+    input("Model evaluation complete. Press ENTER to close.\n")
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         main(sys.argv[1])
     else:
-        sys.exit(f"Usage: {sys.argv[0]} [FILE]")
+        os.chdir(os.path.dirname(__file__))
+        main("model_training_data.csv")
