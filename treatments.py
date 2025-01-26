@@ -357,6 +357,7 @@ def get_treatments(plate, block):
             QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
         ]
     elif plate == "plateUVC1":
+        # B, A, D, E, F, C
         treatments = [
             UVC2, UVC1, UVC4, CNTL, UVC5, UVC3,
             UVC5, UVC3, UVC1, CNTL, UVC4, UVC2,
@@ -364,6 +365,7 @@ def get_treatments(plate, block):
             UVC4, CNTL, UVC2, UVC5, UVC3, UVC1,
         ]
     elif plate == "plateUVC2":
+        # F, D, B, E, A, C
         treatments = [
             CNTL, UVC1, UVC5, UVC4, UVC2, UVC3,
             UVC2, UVC3, UVC1, UVC4, UVC5, CNTL,
@@ -371,6 +373,7 @@ def get_treatments(plate, block):
             UVC5, UVC4, CNTL, UVC2, UVC3, UVC1,
         ]
     elif plate == "plateUVC3":
+        # C, E, A, B, F, D
         treatments = [
             UVC2, CNTL, UVC1, UVC3, UVC4, UVC5,
             UVC4, UVC5, CNTL, UVC3, UVC1, UVC2,
@@ -378,6 +381,7 @@ def get_treatments(plate, block):
             UVC1, UVC3, UVC2, UVC4, UVC5, CNTL,
         ]
     elif plate == "plateUVC4":
+        # D, E, B, A, C, F
         treatments = [
             UVC1, UVC2, CNTL, UVC4, UVC3, UVC5,
             UVC3, UVC5, UVC2, UVC4, CNTL, UVC1,
@@ -385,6 +389,7 @@ def get_treatments(plate, block):
             CNTL, UVC4, UVC1, UVC3, UVC5, UVC2,
         ]
     elif plate == "plateUVC5":
+        # B, E, D, F, A, C
         treatments = [
             UVC3, UVC1, UVC4, CNTL, UVC2, UVC5,
             UVC2, UVC5, UVC1, CNTL, UVC4, UVC3,
