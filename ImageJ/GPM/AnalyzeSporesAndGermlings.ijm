@@ -1,10 +1,16 @@
+// UVC plates do not need images cropped
+assayType = getArgument();
+
 // Enhance contrast for inconsistent images
 run("Enhance Contrast...", "saturated=0.35 normalize");
 
 // Crop image to 1000x1000 in center of image
-size = 1000;
-makeRectangle(getWidth()/2-size/2, getHeight()/2-size/2, size, size);
-run("Crop");
+// Only crop images for fungicide assay
+if (assayType == "fungicide") {
+    size = 1000;
+    makeRectangle(getWidth()/2-size/2, getHeight()/2-size/2, size, size);
+    run("Crop");
+}
 
 // Subtract background from image
 run("Subtract Background...", "rolling=10 light");
