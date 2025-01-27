@@ -356,6 +356,8 @@ def get_treatments(plate, block):
             QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
             QXF4, QXF2, QXF4, QXF1, QXF3, QXF2, CNTL, SHAM, QXF3, CNTL, QXF1, SHAM,
         ]
+    elif plate == "plateUVCControl":
+        treatments = [ CNTL ]
     elif plate == "plateUVC1":
         # B, A, D, E, F, C
         treatments = [
