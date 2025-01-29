@@ -114,11 +114,7 @@ def analyze_results(plate, isolate):
         "Image",
     ]
     for block in range(_48hr_size):
-        if (block + 1) > 9:
-            img_name = f"Tile0000{block + 1}.jpg"
-        else:
-            img_name = f"Tile00000{block + 1}.jpg"
-
+        img_name = _48hr_results[block][6]
         # Check for missing image data - neebs inprovemint
         if not os.path.exists(f"{results_path}0hr/{img_name.replace('.jpg', '.csv')}"):
             _0hr_results.insert(block, [0, 0, 0, 0, 0, 0])
@@ -216,6 +212,7 @@ def csv_handler(input_file):
                 round(perim_total / roi_count, 1),
                 round(feret_total / roi_count, 1),
             ]
+        image_data.extend([os.path.basename(input_file).replace(".csv", ".jpg")])
     return image_data
 
 
