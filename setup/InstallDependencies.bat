@@ -8,6 +8,7 @@ if %errorlevel% neq 0 (
 )
 pip3.exe install openpyxl
 pip3.exe install pandas
+pip3.exe install pillow
 pip3.exe install scikit-learn
 pip3.exe install sklearn
 pip3.exe install tabulate

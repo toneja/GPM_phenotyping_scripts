@@ -28,6 +28,7 @@ import os
 import subprocess
 import sys
 import time
+from PIL import Image
 
 import analyze_results
 import compile_workbook
@@ -61,6 +62,15 @@ def batch_process(image_folder):
 
             print(f"Processing folder: {current_folder}")
             processed += 1
+
+            # Convert any tif files to jpg; req for ImageJ
+            for file in os.listdir(current_folder):
+                file = os.path.join(current_folder, file)
+                if file.endswith(".tif"):
+                    with Image.open(file) as tif_file:
+                        tif_file.convert("RGB").save(
+                            file.replace(".tif", ".jpg"), "JPEG"
+                        )
 
             # Execute the ImageJ macro for the current folder
             command = [
