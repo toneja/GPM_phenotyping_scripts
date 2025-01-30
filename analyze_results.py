@@ -31,13 +31,10 @@ from sklearn import linear_model
 from tabulate import tabulate
 from treatments import get_treatments
 
-# globals
-REGR = ""
-
 
 def setup_regression():
     """Setup the logistic regression used to determine ROI identity."""
-    dataset = pandas.read_csv(f"models/model_training_data.csv")
+    dataset = pandas.read_csv("models/model_training_data.csv")
     vals = [
         "Area",
         "Perim.",
@@ -59,9 +56,9 @@ def setup_regression():
     return regression
 
 
-def identify_roi(row):
+def identify_roi(row, model):
     """Returns the ROI's predicted identity."""
-    prediction = REGR.predict(
+    prediction = model.predict(
         [
             [
                 int(row["Area"]),
@@ -82,16 +79,18 @@ def identify_roi(row):
 
 def analyze_results(plate, isolate):
     """Compare 0hr and 48hr results and calculate full results for the plate."""
+    # load the logistic model used for image classification
+    model = setup_regression()
     results_path = f"ImageJ/GPM/results/{plate}_{isolate}_"
     _0hr_results = []
     if os.path.exists(f"{results_path}0hr"):
         _0hr_results = [
-            csv_handler(os.path.join(f"{results_path}0hr", csv_file))
+            csv_handler(os.path.join(f"{results_path}0hr", csv_file), model)
             for csv_file in os.listdir(f"{results_path}0hr")
         ]
     _0hr_size = len(_0hr_results)
     _48hr_results = [
-        csv_handler(os.path.join(f"{results_path}48hr", csv_file))
+        csv_handler(os.path.join(f"{results_path}48hr", csv_file), model)
         for csv_file in os.listdir(f"{results_path}48hr")
     ]
     _48hr_size = len(_48hr_results)
@@ -176,7 +175,7 @@ def analyze_results(plate, isolate):
 
 
 # handle csv datasets
-def csv_handler(input_file):
+def csv_handler(input_file, model):
     """Read CSV file produced by ImageJ and analyze each ROI using logistic regression."""
     # open csv file
     with open(
@@ -190,12 +189,11 @@ def csv_handler(input_file):
         area_total, perim_total, feret_total = 0, 0, 0
         for row in csv_reader:
             # new debris filter
-            _id = identify_roi(row)
+            _id = identify_roi(row, model)
             if _id == -1:
                 # skip bad ROIs
                 continue
-            elif _id == 1:
-                roi_germinated += 1
+            roi_germinated += _id
             roi_count += 1
             area_total += int(row["Area"])
             perim_total += float(row["Perim."])
@@ -218,13 +216,11 @@ def csv_handler(input_file):
 
 def main(filename):
     """Execute the main objective."""
-    global REGR
     args = os.path.basename(filename).split("_")
     plate = args[0]
     isolate = args[1]
 
     os.chdir(os.path.dirname(__file__))
-    REGR = setup_regression()
     analyze_results(plate, isolate)
 
 
