@@ -94,11 +94,6 @@ def analyze_results(plate, isolate):
         for csv_file in os.listdir(f"{results_path}48hr")
     ]
     _48hr_size = len(_48hr_results)
-    # this is only necessary for 96-well plates, 24-well plates don't use T0
-    if _0hr_size > 0 and (_0hr_size != _48hr_size):
-        sys.exit(
-            "ERROR: 0hr and 48hr results folders do not have the same number of images."
-        )
     # Output data and file headers
     germination_data = []
     headers = [
