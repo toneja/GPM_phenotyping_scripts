@@ -14,6 +14,10 @@ For more details, please see the LICENSE file.
     Linux: Untested/Unsupported\
     Mac: Untested/Unsupported
 
+## Updates (without using git)
+1) Run setup/update.py to automatically download and install the latest
+    version of this repository in a non-git environment.
+
 ## Usage
 1) Place image albums into the "ECHO Images" directory.
 2) Run batch_process.py to process the image albums. The results will be\
