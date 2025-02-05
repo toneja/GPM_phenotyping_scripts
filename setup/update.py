@@ -22,7 +22,6 @@
 import io
 import os
 import requests
-import subprocess
 import zipfile
 
 
@@ -36,15 +35,6 @@ def main():
     print("Extracting update files...")
     with zipfile.ZipFile(io.BytesIO(archive.content)) as zip_arc:
         zip_arc.extractall("../..")
-    # Run the setup batch file in case of updated dependencies
-    print("Updating dependencies...")
-    subprocess.run(
-        ["InstallDependencies.bat"],
-        shell=True,
-        check=True,
-        text=True,
-        capture_output=False,
-    )
     input("File update complete. Press ENTER to close.")
 
 
