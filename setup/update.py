@@ -30,7 +30,11 @@ def main():
     # Download the zip file
     URL = "https://github.com/toneja/GPM_phenotyping_scripts/archive/refs/heads/revolution.zip"
     print(f"Downloading update package from {URL}")
-    archive = requests.get(URL, timeout=5)
+    try:
+        with requests.get(URL, timeout=5) as archive:
+            archive.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        raise SystemExit(e)
     # Unpack the zip file
     print("Extracting update files...")
     with zipfile.ZipFile(io.BytesIO(archive.content)) as zip_arc:
