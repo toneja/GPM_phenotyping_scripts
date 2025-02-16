@@ -82,18 +82,31 @@ def analyze_results(plate, isolate):
     # load the logistic model used for image classification
     model = setup_regression()
     results_path = f"ImageJ/GPM/results/{plate}_{isolate}_"
-    _0hr_results = []
+    images_path = f"ImageJ/GPM/images/{plate}_{isolate}_"
+    _48hr_results = [
+        csv_handler(os.path.join(f"{results_path}48hr", csv_file), model)
+        for csv_file in os.listdir(f"{results_path}48hr")
+    ]
+    i = 0
+    for file in os.listdir(f"{images_path}48hr"):
+        if not os.path.exists(f"{results_path}48hr/{file.replace('.tif', '.csv')}"):
+            _48hr_results.insert(
+                i, [0, 0, 0, 0, 0, 0, f"{file.replace('.tif', '.jpg')} - BAD IMAGE"]
+            )
+        i += 1
+    _48hr_size = len(_48hr_results)
     if os.path.exists(f"{results_path}0hr"):
         _0hr_results = [
             csv_handler(os.path.join(f"{results_path}0hr", csv_file), model)
             for csv_file in os.listdir(f"{results_path}0hr")
         ]
-    _0hr_size = len(_0hr_results)
-    _48hr_results = [
-        csv_handler(os.path.join(f"{results_path}48hr", csv_file), model)
-        for csv_file in os.listdir(f"{results_path}48hr")
-    ]
-    _48hr_size = len(_48hr_results)
+        i = 0
+        for file in os.listdir(f"{images_path}0hr"):
+            if not os.path.exists(f"{results_path}0hr/{file.replace('.tif', '.csv')}"):
+                _0hr_results.insert(i, [0, 0, 0, 0, 0, 0, file.replace(".tif", ".jpg")])
+            i += 1
+    else:
+        _0hr_results = [[0, 0, 0, 0, 0, 0, "NA"]] * _48hr_size
     # Output data and file headers
     germination_data = []
     headers = [
@@ -108,16 +121,6 @@ def analyze_results(plate, isolate):
         "Image",
     ]
     for block in range(_48hr_size):
-        img_name = _48hr_results[block][6]
-        # Check for missing image data - neebs inprovemint
-        if not os.path.exists(f"{results_path}0hr/{img_name.replace('.jpg', '.csv')}"):
-            _0hr_results.insert(block, [0, 0, 0, 0, 0, 0])
-            if _48hr_size == 96:
-                img_name += " - 0hr image empty/unusable"
-        if not os.path.exists(f"{results_path}48hr/{img_name.replace('.jpg', '.csv')}"):
-            _48hr_results.insert(block, [0, 0, 0, 0, 0, 0])
-            img_name += " - 48hr image empty/unusable"
-
         germination_data.append(
             [
                 get_treatments(plate, block),
@@ -128,7 +131,7 @@ def analyze_results(plate, isolate):
                 round(_48hr_results[block][3] - _0hr_results[block][3], 1),
                 round(_48hr_results[block][4] - _0hr_results[block][4], 1),
                 round(_48hr_results[block][5] - _0hr_results[block][5], 1),
-                img_name,
+                _48hr_results[block][6],
             ]
         )
 
