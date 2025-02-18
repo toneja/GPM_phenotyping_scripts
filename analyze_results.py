@@ -168,6 +168,7 @@ def analyze_results(plate, isolate):
             csv_writer.writerow(row)
 
     # Print a table of the results for the user
+    print("=" * os.get_terminal_size()[0])
     print(f"* Results for isolate {isolate.upper()} from {plate.upper()}")
     print(tabulate(germination_data, headers=headers))
 
