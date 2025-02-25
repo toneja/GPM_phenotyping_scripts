@@ -74,7 +74,7 @@ def identify_roi(row, model):
             ]
         ]
     )
-    return float(prediction)
+    return int(prediction[0])
 
 
 def analyze_results(plate, isolate):
