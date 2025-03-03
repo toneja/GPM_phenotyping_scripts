@@ -42,13 +42,16 @@ from sklearn.metrics import (
     log_loss,
     confusion_matrix,
 )
+from select_features import select_features
 
 
 def preprocess_data(df, target_column):
     """docstring goes here."""
     test_size = 0.3
     random_state = 42
-    X = df.drop(columns=[target_column])
+    X = df.drop(
+        columns=["X", "Y", "Angle", "FeretX", "FeretY", "FeretAngle", target_column]
+    )
     y = df[target_column]
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -90,7 +93,13 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
 def main(file):
     df = pd.read_csv(file)
     X_train, X_test, y_train, y_test = preprocess_data(df, "class")
-    evaluate_predictive_model(X_train, X_test, y_train, y_test)
+    selected_features = select_features(file)
+    evaluate_predictive_model(
+        X_train.iloc[:, selected_features],
+        X_test.iloc[:, selected_features],
+        y_train,
+        y_test,
+    )
     input("Model evaluation complete. Press ENTER to close.\n")
 
 
