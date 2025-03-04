@@ -77,7 +77,8 @@ def plot_roc_curve(y_test, y_pred_proba, model_classes):
     plt.ylabel("True Positive Rate")
     plt.title("ROC Curve")
     plt.legend()
-    plt.show()
+    plt.savefig("ROC_Curve.png", dpi=300, bbox_inches="tight")
+    print("ROC Curve chart saved to ROC_Curve.png")
 
 
 def evaluate_predictive_model(X_train, X_test, y_train, y_test):

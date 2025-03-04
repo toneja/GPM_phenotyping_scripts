@@ -1,4 +1,7 @@
+*.7z
+*.png
 *.xlsx
+*.zip
 __pycache__/
 ECHO Images/
 results/
