@@ -34,7 +34,7 @@ def select_features(file):
     y = df["class"]
     model = LogisticRegression(solver="newton-cg", max_iter=1000)
     sfs = SequentialFeatureSelector(
-        model, n_features_to_select="auto", direction="forward"
+        model, n_features_to_select="auto", direction="forward", n_jobs=-1
     )
     sfs.fit(X, y)
     print(f"Selected features: {', '.join(X.columns[sfs.get_support()])}")
