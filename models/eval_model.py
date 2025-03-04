@@ -28,6 +28,7 @@ Evaluate the model's accuracy in predicting the output label and print the evalu
 
 import os
 import sys
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -39,6 +40,8 @@ from sklearn.metrics import (
     recall_score,
     f1_score,
     roc_auc_score,
+    roc_curve,
+    auc,
     log_loss,
     confusion_matrix,
 )
@@ -59,6 +62,22 @@ def preprocess_data(df, target_column):
     )
 
     return X_train, X_test, y_train, y_test
+
+
+def plot_roc_curve(y_test, y_pred_proba, model_classes):
+    """docstring goes here."""
+    classes = ["Debris", "Ungerminated", "Germinated"]
+    plt.figure()
+    for i, label in enumerate(model_classes):
+        fpr, tpr, _ = roc_curve(y_test == label, y_pred_proba[:, i])
+        roc_auc = auc(fpr, tpr)
+        plt.plot(fpr, tpr, label=f"({label}) {classes[i]} = {roc_auc:.5f}")
+        plt.plot([0, 1], [0, 1], "k--")
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("ROC Curve")
+    plt.legend()
+    plt.show()
 
 
 def evaluate_predictive_model(X_train, X_test, y_train, y_test):
@@ -88,6 +107,8 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
     )
     print("Classification Report:")
     print(classification_report(y_test, y_pred, labels=np.unique(y_pred)))
+
+    plot_roc_curve(y_test, y_pred_proba, model.classes_)
 
 
 def main(file):
