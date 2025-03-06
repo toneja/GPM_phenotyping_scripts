@@ -31,6 +31,7 @@ import time
 from PIL import Image
 
 import analyze_results
+import calculate_ed50
 import compile_workbook
 
 
@@ -102,6 +103,11 @@ def batch_process(image_folder):
 
     # Compile the results into a workbook
     compile_workbook.main()
+
+    # Generate Dose-Response curves
+    for file in os.listdir("results"):
+        if file.endswith(".csv") and "Control" not in file:
+            calculate_ed50.main(file)
 
     # Calculate the elapsed time
     elapsed_time = time.time() - start_time
