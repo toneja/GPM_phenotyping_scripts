@@ -83,7 +83,7 @@ def plot_roc_curve(y_test, y_pred_proba, model_classes):
 
 def evaluate_predictive_model(X_train, X_test, y_train, y_test):
     """docstring goes here."""
-    model = LogisticRegression(solver="newton-cg", max_iter=1000)
+    model = LogisticRegression(solver="newton-cg", max_iter=1000, n_jobs=-1)
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
