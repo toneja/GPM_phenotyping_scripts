@@ -1,5 +1,4 @@
 *.7z
-*.png
 *.xlsx
 *.zip
 __pycache__/
