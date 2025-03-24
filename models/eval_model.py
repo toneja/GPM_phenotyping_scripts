@@ -103,9 +103,18 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
     print(f"ROC AUC Score: {auc}")
     lloss = log_loss(y_test, y_pred_proba)
     print(f"Log Loss: {lloss}")
-    print(
-        f"Confusion Matrix:\n{confusion_matrix(y_test, y_pred, labels=np.unique(y_pred))}"
-    )
+    conf_matrix = confusion_matrix(y_test, y_pred, labels=np.unique(y_pred))
+    sensitivity = []
+    specificity = []
+    for i in range(conf_matrix.shape[0]):
+        tp = conf_matrix[i, i]
+        fn = sum(conf_matrix[i, :]) - tp
+        fp = sum(conf_matrix[:, i]) - tp
+        tn = conf_matrix.sum() - (tp + fn + fp)
+        sensitivity.append(tp / (tp + fn))
+        specificity.append(tn / (tn + fp))
+    print(f"Sensitivity: -1: {sensitivity[0]}, 0: {sensitivity[1]}, 1: {sensitivity[2]}")
+    print(f"Specificity: -1: {specificity[0]}, 0: {specificity[1]}, 1: {specificity[2]}")
     print("Classification Report:")
     print(classification_report(y_test, y_pred, labels=np.unique(y_pred)))
 
