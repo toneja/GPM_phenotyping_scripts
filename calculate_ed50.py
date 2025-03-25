@@ -39,6 +39,12 @@ def calculate_ed50(csv_file):
     args = os.path.splitext(csv_file)[0].split("_")
     plate = args[1].upper()
     isolate = args[2].upper()
+    if "UVC" in plate:
+        treatment = "UV-C"
+        units = "J/m$^2$"
+    else:
+        treatment = "Quinoxyfen"
+        units = "μg/mL"
     # Load the data
     data = pd.read_csv(csv_file)
     data = data[data["Treatment"].str.contains("Quinoxyfen|Speed", na=False)]
@@ -63,19 +69,15 @@ def calculate_ed50(csv_file):
     plt.figure()
     plt.scatter(concentrations, germination_rates, label="Data")
     plt.plot(x_vals, y_vals, label="Fitted Curve", color="red")
-    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50:.4f}")
+    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50:.4f} {units}")
     plt.xscale("log")
-    if "UVC" in plate:
-        x_label = "UV-C Concentration (J/m$^2$)"
-    else:
-        x_label = "Quinoxyfen Concentration (μg/mL)"
-    plt.xlabel(x_label)
+    plt.xlabel(f"{treatment} Concentration {units}")
     plt.ylabel("Germination Rate (%)")
     plt.legend()
-    plt.title(f"Dose-Response Curve: {isolate} - {plate}")
+    plt.title(f"{treatment} Dose-Response Curve: {isolate} - {plate}")
     plt.savefig(f"ED50_{isolate}_{plate}.png")
     plt.close()
-    print(f"Estimated ED50: {isolate}, {plate}: {ed50:.4f}")
+    print(f"Estimated {treatment} ED50: {isolate}, {plate}: {ed50:.4f} {units}")
 
 
 def main(csv_file):
