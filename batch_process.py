@@ -32,6 +32,7 @@ from PIL import Image
 
 import analyze_results
 import calculate_ed50
+import check_results
 import compile_workbook
 
 
@@ -108,6 +109,9 @@ def batch_process(image_folder):
     for file in os.listdir("results"):
         if file.endswith(".csv") and "Control" not in file:
             calculate_ed50.main(file)
+
+    # Check the results for insufficient germination and spore deposition
+    check_results.main()
 
     # Calculate the elapsed time
     elapsed_time = time.time() - start_time
