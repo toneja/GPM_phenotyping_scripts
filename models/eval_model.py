@@ -113,8 +113,12 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
         tn = conf_matrix.sum() - (tp + fn + fp)
         sensitivity.append(tp / (tp + fn))
         specificity.append(tn / (tn + fp))
-    print(f"Sensitivity: -1: {sensitivity[0]}, 0: {sensitivity[1]}, 1: {sensitivity[2]}")
-    print(f"Specificity: -1: {specificity[0]}, 0: {specificity[1]}, 1: {specificity[2]}")
+    print(
+        f"Sensitivity: -1: {sensitivity[0]}, 0: {sensitivity[1]}, 1: {sensitivity[2]}"
+    )
+    print(
+        f"Specificity: -1: {specificity[0]}, 0: {specificity[1]}, 1: {specificity[2]}"
+    )
     print("Classification Report:")
     print(classification_report(y_test, y_pred, labels=np.unique(y_pred)))
 

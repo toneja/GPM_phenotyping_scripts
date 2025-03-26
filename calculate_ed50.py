@@ -64,7 +64,9 @@ def calculate_ed50(csv_file):
     )
     ed50 = np.exp(popt[2])
     # Plot the DRC
-    x_vals = np.logspace(np.log10(min(concentrations)), np.log10(max(concentrations)), 100)
+    x_vals = np.logspace(
+        np.log10(min(concentrations)), np.log10(max(concentrations)), 100
+    )
     y_vals = logistic_4pl(x_vals, *popt)
     plt.figure()
     plt.scatter(concentrations, germination_rates, label="Data")
