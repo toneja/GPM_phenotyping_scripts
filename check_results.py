@@ -17,11 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""This script checks the results for proper germination and spore deposition."""
+
+
 import csv
 import os
 
 
 def main():
+    """Check the results and make sure the data is usable."""
     os.chdir(os.path.dirname(__file__))
     for file in os.listdir("results"):
         if file.endswith(".csv"):
@@ -42,12 +46,14 @@ def main():
                     if i % block_size == 0:
                         germination_avg = round(germination / block_size, 2)
                         spore_avg = round(spores / block_size, 2)
+                        # Control/SHAM wells must have at least 50% germination
                         if germination_avg < 50 and treatment == (
                             "Control" or "SHAM 100 μg/mL"
                         ):
                             print(
                                 f"{isolate}: {plate}: {treatment}: Poor germination: {germination_avg}%"
                             )
+                        # Each treatment must average at least 10 spores per well
                         if spore_avg < 10:
                             print(
                                 f"{isolate}: {plate}: {treatment}: Poor spore deposition: {spore_avg}"
