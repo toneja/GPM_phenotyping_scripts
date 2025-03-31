@@ -67,11 +67,19 @@ def preprocess_data(df, target_column):
 def plot_roc_curve(y_test, y_pred_proba, model_classes):
     """docstring goes here."""
     classes = ["Debris", "Ungerminated", "Germinated"]
+    line_styles = ["-", "--", "-."]
+    gray_shades = ["0.2", "0.5", "0.8"]
     plt.figure()
     for i, label in enumerate(model_classes):
         fpr, tpr, _ = roc_curve(y_test == label, y_pred_proba[:, i])
         roc_auc = auc(fpr, tpr)
-        plt.plot(fpr, tpr, label=f"({label}) {classes[i]} = {roc_auc:.5f}")
+        plt.plot(
+            fpr,
+            tpr,
+            linestyle=line_styles[i],
+            color=gray_shades[i],
+            label=f"({label}) {classes[i]} = {roc_auc:.5f}",
+        )
         plt.plot([0, 1], [0, 1], "k--")
     plt.xlabel("False Positive Rate (1 - Specificity)")
     plt.ylabel("True Positive Rate (Sensitivity)")
