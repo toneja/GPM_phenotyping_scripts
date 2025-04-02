@@ -102,6 +102,9 @@ def batch_process(image_folder):
         if folder.endswith("48hr"):
             analyze_results.main(f"ImageJ/GPM/results/{folder}")
 
+    # Check the results for insufficient germination and spore deposition
+    check_results.main()
+
     # Compile the results into a workbook
     compile_workbook.main()
 
@@ -109,9 +112,6 @@ def batch_process(image_folder):
     for file in os.listdir("results"):
         if file.endswith(".csv") and "Control" not in file:
             calculate_ed50.main(file)
-
-    # Check the results for insufficient germination and spore deposition
-    check_results.main()
 
     # Calculate the elapsed time
     elapsed_time = time.time() - start_time

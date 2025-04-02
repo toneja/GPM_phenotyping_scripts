@@ -27,10 +27,14 @@ import os
 def main():
     """Check the results and make sure the data is usable."""
     os.chdir(os.path.dirname(__file__))
+    print("Quality checking phenotyping data...")
+    keepers = []
+    g143a_mutants = ["BPP-3", "BPP-5", "CAT1", "CL9-3", "GAT1", "QR1-2"]
     for file in os.listdir("results"):
         if file.endswith(".csv"):
             plate = file.split("_")[1].upper()
             isolate = file.split(".")[0].split("_")[2].upper()
+            discard_reasons = []
             if "UVC" in plate:
                 block_size = 4
             else:
@@ -47,18 +51,33 @@ def main():
                         germination_avg = round(germination / block_size, 2)
                         spore_avg = round(spores / block_size, 2)
                         # Control/SHAM wells must have at least 50% germination
-                        if germination_avg < 50 and treatment == (
-                            "Control" or "SHAM 100 μg/mL"
-                        ):
-                            print(
-                                f"{isolate}: {plate}: {treatment}: Poor germination: {germination_avg}%"
-                            )
+                        # QoI tolerant isolates must have sufficient germination in those treatments also
+                        if germination_avg < 50:
+                            if treatment == ("Control" or "SHAM 100 μg/mL") or (
+                                isolate in g143a_mutants and "strobin" in treatment
+                            ):
+                                discard_reasons.append(
+                                    f"{treatment}: Poor germination: {germination_avg}%"
+                                )
                         # Each treatment must average at least 10 spores per well
                         if spore_avg < 10:
-                            print(
-                                f"{isolate}: {plate}: {treatment}: Poor spore deposition: {spore_avg}"
+                            discard_reasons.append(
+                                f"{treatment}: Poor spore deposition: {spore_avg}"
                             )
                         germination, spores = 0, 0
+            if discard_reasons:
+                print(f"\n{isolate}: {plate}: is not usable:")
+                for reason in discard_reasons:
+                    print(f"* {reason}")
+                # Delete bad results output, keep the data out of the workbook
+                os.remove(file)
+            else:
+                keepers.append([isolate, plate])
+    if keepers:
+        keepers.sort()
+        print(f"\nThe following assay runs are keepers:")
+        for i, keeper in enumerate(keepers):
+            print(f"{keepers[i][0]}, {keepers[i][1]}")
 
 
 if __name__ == "__main__":
