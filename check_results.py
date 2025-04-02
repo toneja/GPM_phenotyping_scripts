@@ -22,6 +22,7 @@
 
 import csv
 import os
+from tabulate import tabulate
 
 
 def main():
@@ -57,27 +58,32 @@ def main():
                                 isolate in g143a_mutants and "strobin" in treatment
                             ):
                                 discard_reasons.append(
-                                    f"{treatment}: Poor germination: {germination_avg}%"
+                                    [
+                                        f"{treatment}",
+                                        f"Poor germination: {germination_avg}%",
+                                    ]
                                 )
                         # Each treatment must average at least 10 spores per well
                         if spore_avg < 10:
                             discard_reasons.append(
-                                f"{treatment}: Poor spore deposition: {spore_avg}"
+                                [f"{treatment}", f"Poor spore deposition: {spore_avg}"]
                             )
                         germination, spores = 0, 0
             if discard_reasons:
                 print(f"\n{isolate}: {plate}: is not usable:")
-                for reason in discard_reasons:
-                    print(f"* {reason}")
+                print(
+                    tabulate(
+                        discard_reasons, headers=["Treatment", "Reason for Discarding"]
+                    )
+                )
                 # Delete bad results output, keep the data out of the workbook
                 os.remove(file)
             else:
                 keepers.append([isolate, plate])
     if keepers:
         keepers.sort()
-        print(f"\nThe following assay runs are keepers:")
-        for i, keeper in enumerate(keepers):
-            print(f"{keepers[i][0]}, {keepers[i][1]}")
+        print(f"\nThe following {len(keepers)} assay runs are keepers:")
+        print(tabulate(keepers, headers=["Isolate", "Plate ID"]))
 
 
 if __name__ == "__main__":
