@@ -125,7 +125,7 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
         f"Sensitivity: -1: {sensitivity[0]}, 0: {sensitivity[1]}, 1: {sensitivity[2]}"
     )
     print(
-        f"Specificity: -1: {specificity[0]}, 0: {specificity[1]}, 1: {specificity[2]}"
+        f"Specificity: -1: {specificity[2]}, 0: {specificity[1]}, 1: {specificity[0]}"
     )
     print("Classification Report:")
     print(classification_report(y_test, y_pred, labels=np.unique(y_pred)))
