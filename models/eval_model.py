@@ -53,7 +53,7 @@ def preprocess_data(df, target_column):
     test_size = 0.3
     random_state = 42
     X = df.drop(
-        columns=["X", "Y", "Angle", "FeretX", "FeretY", "FeretAngle", target_column]
+        columns=["ID", "X", "Y", "Angle", "FeretX", "FeretY", "FeretAngle", target_column]
     )
     y = df[target_column]
 

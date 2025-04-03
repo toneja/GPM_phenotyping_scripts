@@ -30,11 +30,11 @@ from sklearn.linear_model import LogisticRegression
 
 def select_features(file):
     df = pd.read_csv(file)
-    X = df.drop(columns=["X", "Y", "Angle", "FeretX", "FeretY", "FeretAngle", "class"])
+    X = df.drop(columns=["ID", "X", "Y", "Angle", "FeretX", "FeretY", "FeretAngle", "class"])
     y = df["class"]
     model = LogisticRegression(solver="newton-cg", max_iter=1000)
     sfs = SequentialFeatureSelector(
-        model, n_features_to_select="auto", direction="forward", n_jobs=-1
+        model, n_features_to_select=8, direction="forward", n_jobs=-1
     )
     sfs.fit(X, y)
     print(f"Selected features: {', '.join(X.columns[sfs.get_support()])}")

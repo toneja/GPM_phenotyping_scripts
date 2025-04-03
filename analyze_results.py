@@ -37,10 +37,13 @@ def setup_regression():
     dataset = pandas.read_csv("models/model_training_data.csv")
     vals = [
         "Area",
+        "Perim.",
         "Major",
         "Minor",
         "Circ.",
+        "Feret",
         "AR",
+        "Round",
     ]
     _x = dataset[vals]
     _y = dataset["class"]
@@ -59,10 +62,13 @@ def identify_roi(row, model):
         [
             [
                 int(row["Area"]),
+                float(row["Perim."]),
                 float(row["Major"]),
                 float(row["Minor"]),
                 float(row["Circ."]),
+                float(row["Feret"]),
                 float(row["AR"]),
+                float(row["Round"]),
             ]
         ]
     )
