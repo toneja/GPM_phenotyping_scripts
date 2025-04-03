@@ -133,14 +133,6 @@ def analyze_results(plate, isolate):
             ]
         )
 
-    # 24-well UV-C assay does not require as much information
-    if _48hr_size < 96:
-        locs = [7, 6, 5, 1]
-        for loc in locs:
-            headers.remove(headers[loc])
-            for data in germination_data:
-                data.remove(data[loc])
-
     # Sort the data by treatment with the controls and SHAM at the top
     germination_data.sort()
     i = 0
