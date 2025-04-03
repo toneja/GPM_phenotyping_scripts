@@ -84,7 +84,7 @@ def plot_roc_curve(y_test, y_pred_proba, model_classes):
     plt.xlabel("False Positive Rate (1 - Specificity)")
     plt.ylabel("True Positive Rate (Sensitivity)")
     plt.title("ROI Classification Model")
-    plt.legend()
+    plt.legend(title="Area Under Curve")
     plt.savefig("ROC_Curve.png", dpi=300, bbox_inches="tight")
     print("ROC Curve chart saved to ROC_Curve.png")
 
