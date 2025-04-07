@@ -38,8 +38,10 @@ def main():
             discard_reasons = []
             if "UVC" in plate:
                 block_size = 4
+                spore_min = 50
             else:
                 block_size = 8
+                spore_min = 10
             file = os.path.join("results", file)
             germination, spores = 0, 0
             with open(file, "r", newline="", encoding="utf-8") as csv_file:
@@ -63,8 +65,8 @@ def main():
                                         f"Poor germination: {germination_avg}%",
                                     ]
                                 )
-                        # Each treatment must average at least 10 spores per well
-                        if spore_avg < 10:
+                        # Each treatment must average at least a minimum number of spores per well
+                        if spore_avg < spore_min:
                             discard_reasons.append(
                                 [f"{treatment}", f"Poor spore deposition: {spore_avg}"]
                             )
