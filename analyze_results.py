@@ -85,24 +85,20 @@ def analyze_results(plate, isolate):
         csv_handler(os.path.join(f"{results_path}48hr", csv_file), model)
         for csv_file in os.listdir(f"{results_path}48hr")
     ]
-    i = 0
-    for file in os.listdir(f"{images_path}48hr"):
+    for i, file in enumerate(os.listdir(f"{images_path}48hr")):
         if not os.path.exists(f"{results_path}48hr/{file.replace('.tif', '.csv')}"):
             _48hr_results.insert(
                 i, [0, 0, 0, 0, 0, 0, f"{file.replace('.tif', '.jpg')} - BAD IMAGE"]
             )
-        i += 1
     _48hr_size = len(_48hr_results)
     if os.path.exists(f"{results_path}0hr"):
         _0hr_results = [
             csv_handler(os.path.join(f"{results_path}0hr", csv_file), model)
             for csv_file in os.listdir(f"{results_path}0hr")
         ]
-        i = 0
-        for file in os.listdir(f"{images_path}0hr"):
+        for i, file in enumerate(os.listdir(f"{images_path}0hr")):
             if not os.path.exists(f"{results_path}0hr/{file.replace('.tif', '.csv')}"):
                 _0hr_results.insert(i, [0, 0, 0, 0, 0, 0, file.replace(".tif", ".jpg")])
-            i += 1
     else:
         _0hr_results = [[0, 0, 0, 0, 0, 0, "NA"]] * _48hr_size
     # Output data and file headers
@@ -135,15 +131,13 @@ def analyze_results(plate, isolate):
 
     # Sort the data by treatment with the controls and SHAM at the top
     germination_data.sort()
-    i = 0
-    for item in germination_data:
+    for i, item in enumerate(germination_data):
         if item[0] == "Control":
             germination_data.insert(0, germination_data.pop(i))
         elif item[0] == "SHAM 100 μg/mL":
             germination_data.insert(8, germination_data.pop(i))
         elif item[0] == "Trifloxystrobin 10 μg/mL":
             germination_data.insert(40, germination_data.pop(i))
-        i += 1
 
     # Write the results to the output file
     with open(
