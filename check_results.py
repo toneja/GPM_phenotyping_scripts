@@ -30,7 +30,16 @@ def main():
     os.chdir(os.path.dirname(__file__))
     print("Quality checking phenotyping data...")
     keepers = []
-    g143a_mutants = ["BPP-3", "BPP-5", "CAT1", "CL9-3", "GAT1", "QR1-2"]
+    g143a_mutants = [
+        "ARC-2A",
+        "ARC-2B",
+        "BPP-3",
+        "BPP-5",
+        "CAT1",
+        "CL9-3",
+        "GAT1",
+        "QR1-2",
+    ]
     for file in os.listdir("results"):
         if file.endswith(".csv"):
             plate = file.split("_")[1].upper()
@@ -51,8 +60,8 @@ def main():
                     spores += int(row["Total"])
                     treatment = row["Treatment"]
                     if i % block_size == 0:
-                        germination_avg = round(germination / block_size, 2)
-                        spore_avg = round(spores / block_size, 2)
+                        germination_avg = int(round(germination / block_size, 0))
+                        spore_avg = int(round(spores / block_size, 0))
                         # Control/SHAM wells must have at least 50% germination
                         # QoI tolerant isolates must have sufficient germination in those treatments also
                         if germination_avg < 50:
