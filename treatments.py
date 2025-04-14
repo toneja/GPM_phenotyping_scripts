@@ -282,4 +282,20 @@ def get_treatments(plate, block):
             UVC3, UVC1, UVC5, UVC4, CNTL, UVC2,
             CNTL, UVC5, UVC1, UVC2, UVC3, UVC4,
         ]
+    elif plate == "plateUVC11":
+        # F, A, E, D, C, B
+        treatments = [
+            CNTL, UVC2, UVC3, UVC1, UVC5, UVC4,
+            UVC5, UVC4, UVC2, UVC1, UVC3, CNTL,
+            UVC4, CNTL, UVC1, UVC2, UVC3, UVC5,
+            UVC3, UVC1, CNTL, UVC5, UVC4, UVC2,
+        ]
+    elif plate == "plateUVC12":
+        # F, C, B, D, A, E
+        treatments = [
+            CNTL, UVC5, UVC3, UVC4, UVC2, UVC1,
+            UVC2, UVC1, UVC5, UVC4, UVC3, CNTL,
+            UVC1, CNTL, UVC4, UVC5, UVC3, UVC2,
+            UVC3, UVC4, CNTL, UVC2, UVC1, UVC5,
+        ]
     return treatments[block]
