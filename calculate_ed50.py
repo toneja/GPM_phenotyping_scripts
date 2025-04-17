@@ -47,7 +47,7 @@ def calculate_ed50(csv_file):
         units = "μg/mL"
     # Load the data
     data = pd.read_csv(csv_file)
-    data = data[data["Treatment"].str.contains("Quinoxyfen|Speed", na=False)]
+    data = data[data["Treatment"].str.contains("Quinoxyfen|Speed|J/m2", na=False)]
     data["Concentration"] = data["Treatment"].str.extract(r"([\d\.]+)").astype(float)
     data = data.dropna(subset=["Concentration"])
     concentrations = data["Concentration"].values
@@ -63,23 +63,31 @@ def calculate_ed50(csv_file):
         logistic_4pl, concentrations, germination_rates, p0=initial_guess, maxfev=10000
     )
     ed50 = np.exp(popt[2])
+    if "UVC" in plate:
+        ed50 = int(round(ed50, 0))
+    else:
+        ed50 = f"{ed50:.4f}"
     # Plot the DRC
-    x_vals = np.logspace(
-        np.log10(min(concentrations)), np.log10(max(concentrations)), 100
-    )
+    if "UVC" in plate:
+        x_vals = np.linspace(min(concentrations), max(concentrations), 100)
+    else:
+        x_vals = np.logspace(
+            np.log10(min(concentrations)), np.log10(max(concentrations)), 100
+        )
     y_vals = logistic_4pl(x_vals, *popt)
     plt.figure()
     plt.scatter(concentrations, germination_rates, label="Data")
     plt.plot(x_vals, y_vals, label="Fitted Curve", color="red")
-    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50:.4f} {units}")
-    plt.xscale("log")
+    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50} {units}")
+    if "UVC" not in plate:
+        plt.xscale("log")
     plt.xlabel(f"{treatment} Concentration {units}")
     plt.ylabel("Germination Rate (%)")
     plt.legend()
     plt.title(f"{treatment} Dose-Response Curve: {isolate} - {plate}")
     plt.savefig(f"ED50_{isolate}_{plate}.png")
     plt.close()
-    print(f"Estimated {treatment} ED50: {isolate}, {plate}: {ed50:.4f} {units}")
+    print(f"Estimated {treatment} ED50: {isolate}, {plate}: {ed50} {units}")
 
 
 def main(csv_file):

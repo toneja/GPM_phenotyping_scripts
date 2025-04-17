@@ -34,6 +34,7 @@ import analyze_results
 import calculate_ed50
 import check_results
 import compile_workbook
+import convert_timings
 
 
 def batch_process(image_folder):
@@ -104,6 +105,9 @@ def batch_process(image_folder):
 
     # Check the results for insufficient germination and spore deposition
     check_results.main()
+
+    # Convert manual distance timings to real-world exposure output units
+    convert_timings.main()
 
     # Compile the results into a workbook
     compile_workbook.main()
