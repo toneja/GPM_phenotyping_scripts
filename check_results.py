@@ -65,8 +65,10 @@ def main():
                         # Control/SHAM wells must have at least 50% germination
                         # QoI tolerant isolates must have sufficient germination in those treatments also
                         if germination_avg < 50:
-                            if treatment == ("Control" or "SHAM 100 μg/mL") or (
-                                isolate in g143a_mutants and "strobin" in treatment
+                            if (
+                                treatment == "Control"
+                                or treatment == "SHAM 100 μg/mL"
+                                or (isolate in g143a_mutants and "strobin" in treatment)
                             ):
                                 discard_reasons.append(
                                     [
