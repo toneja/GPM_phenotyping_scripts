@@ -21,7 +21,7 @@ For more details, please see the LICENSE file.
 ## Usage
 1) Place image albums into the "ECHO Images" directory.
 2) Run batch_process.py to process the image albums. The results will be\
-    compiled into an Excel workbook named GPMFungicideAssay_Workbook.xlsx\
+    compiled into an Excel workbook named GPMPhenotypingAssay_Workbook.xlsx\
     found in this directory. The results of the analysis will also be\
     outputted to the screen.
 
