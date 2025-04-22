@@ -37,7 +37,6 @@ def main():
         "BPP-5",
         "CAT1",
         "CL9-3",
-        "GAT1",
         "QR1-2",
     ]
     for file in os.listdir("results"):
