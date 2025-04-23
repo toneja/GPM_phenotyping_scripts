@@ -59,8 +59,17 @@ def calculate_ed50(csv_file):
         np.log(np.median(concentrations)),
         -1,
     ]
+    bounds = (
+        [0, 0, np.log(min(concentrations)), -10],
+        [100, 100, np.log(max(concentrations) * 10), 10],
+    )
     popt, _ = curve_fit(
-        logistic_4pl, concentrations, germination_rates, p0=initial_guess, maxfev=10000
+        logistic_4pl,
+        concentrations,
+        germination_rates,
+        p0=initial_guess,
+        maxfev=10000,
+        bounds=bounds,
     )
     ed50 = np.exp(popt[2])
     if "UVC" in plate:
@@ -81,7 +90,7 @@ def calculate_ed50(csv_file):
     plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50} {units}")
     if "UVC" not in plate:
         plt.xscale("log")
-    plt.xlabel(f"{treatment} Concentration {units}")
+    plt.xlabel(f"{treatment} Dose ({units})")
     plt.ylabel("Germination Rate (%)")
     plt.legend()
     plt.title(f"{treatment} Dose-Response Curve: {isolate} - {plate}")
