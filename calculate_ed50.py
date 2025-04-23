@@ -22,9 +22,11 @@
 
 import os
 import sys
+import warnings
 import pandas as pd
 import numpy as np
 from scipy.optimize import curve_fit
+from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 
 
@@ -76,6 +78,9 @@ def calculate_ed50(csv_file):
         ed50 = int(round(ed50, 0))
     else:
         ed50 = f"{ed50:.4f}"
+    # Calculate R-squared
+    fitted = logistic_4pl(concentrations, *popt)
+    r2 = round(r2_score(germination_rates, fitted), 3)
     # Plot the DRC
     if "UVC" in plate:
         x_vals = np.linspace(min(concentrations), max(concentrations), 100)
@@ -88,6 +93,10 @@ def calculate_ed50(csv_file):
     plt.scatter(concentrations, germination_rates, label="Data")
     plt.plot(x_vals, y_vals, label="Fitted Curve", color="red")
     plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50} {units}")
+    # add R-squared value to the legend while suppressing annoying warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        plt.plot([], [], "", label=f"R$^2$ = {r2}", linestyle="None", marker="")
     if "UVC" not in plate:
         plt.xscale("log")
     plt.xlabel(f"{treatment} Dose ({units})")
