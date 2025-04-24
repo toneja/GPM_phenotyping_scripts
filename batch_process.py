@@ -35,6 +35,7 @@ import calculate_ed50
 import check_results
 import compile_workbook
 import convert_timings
+import normalize_germination
 
 
 def batch_process(image_folder):
@@ -111,6 +112,9 @@ def batch_process(image_folder):
 
     # Compile the results into a workbook
     compile_workbook.main()
+
+    # Normalize germination percentages relative to the controls
+    normalize_germination.main()
 
     # Generate Dose-Response curves
     for file in os.listdir("results"):
