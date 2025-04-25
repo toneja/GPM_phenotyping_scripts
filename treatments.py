@@ -33,11 +33,11 @@ QXF5 = "Quinoxyfen 10 μg/mL"
 QXF6 = "Quinoxyfen 100 μg/mL"
 TFX1 = "Trifloxystrobin 10 μg/mL"
 # Definitions of UV-C treatments
-UVC1 = "Speed 1.5"
+UVC1 = "Speed 1"
 UVC2 = "Speed 2"
 UVC3 = "Speed 3"
-UVC4 = "Speed 5"
-UVC5 = "Speed 9"
+UVC4 = "Speed 4"
+UVC5 = "Speed 5"
 
 
 # maps of treatment blocks

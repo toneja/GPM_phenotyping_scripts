@@ -33,12 +33,11 @@ def main():
             timings_file = f"ECHO Images/{plate}_{isolate}_48hr/_timings.csv"
             if os.path.exists(timings_file):
                 timings = {}
-                speeds = [1.5, 2, 3, 5, 9]
                 with open(timings_file, "r", encoding="utf-8") as in_file:
                     reader = csv.reader(
                         in_file, delimiter=",", quoting=csv.QUOTE_NONNUMERIC
                     )
-                    for i, row in enumerate(reader):
+                    for i, row in enumerate(reader, start=1):
                         # take the average time from 3 runs
                         exposure_time = sum(row) / 3
                         # convert measured timings to measured lamp length
@@ -48,7 +47,7 @@ def main():
                         Wperm2 = 20.6385
                         # calculate UV-C dose based on exposure time
                         uvc_dose = int(round(Wperm2 * exposure_time, 0))
-                        timings[f"Speed {speeds[i]}"] = f"{uvc_dose} J/m2"
+                        timings[f"Speed {i}"] = f"{uvc_dose} J/m2"
                 with open(file, "r", encoding="utf-8") as out_file:
                     content = out_file.read()
                     for key, value in timings.items():
