@@ -30,9 +30,9 @@ from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 
 
-def logistic_4pl(x, bottom, top, log_ed50, hill_slope):
+def logistic_4pl(x, bottom, top, ed50, hill_slope):
     """docstring goes here"""
-    return bottom + (top - bottom) / (1 + np.exp(hill_slope * (np.log(x) - log_ed50)))
+    return bottom + (top - bottom) / (1 + np.exp(hill_slope * (np.log(x) - np.log(ed50))))
 
 
 def calculate_ed50(csv_file):
@@ -58,14 +58,14 @@ def calculate_ed50(csv_file):
     initial_guess = [
         min(germination_rates),
         max(germination_rates),
-        np.log(np.median(concentrations)),
+        np.median(concentrations),
         -1,
     ]
     bounds = (
-        [0, 0, np.log(min(concentrations)), -10],
-        [100, 100, np.log(max(concentrations) * 10), 10],
+        [0, 0, min(concentrations), -10],
+        [100, 100, max(concentrations) * 10, 10],
     )
-    popt, _ = curve_fit(
+    popt, pcov = curve_fit(
         logistic_4pl,
         concentrations,
         germination_rates,
@@ -73,11 +73,15 @@ def calculate_ed50(csv_file):
         maxfev=10000,
         bounds=bounds,
     )
-    ed50 = np.exp(popt[2])
+    ed50 = popt[2]
+    # Calculate standard error for ED50
+    ed50_SE = np.sqrt(np.diag(pcov))[2]
     if "UVC" in plate:
         ed50 = int(round(ed50, 0))
+        ed50_SE = int(round(ed50_SE, 0))
     else:
         ed50 = f"{ed50:.4f}"
+        ed50_SE = f"{ed50_SE:.4f}"
     # Calculate R-squared
     fitted = logistic_4pl(concentrations, *popt)
     r2 = round(r2_score(germination_rates, fitted), 3)
@@ -92,7 +96,7 @@ def calculate_ed50(csv_file):
     plt.figure()
     plt.scatter(concentrations, germination_rates, label="Data")
     plt.plot(x_vals, y_vals, label="Fitted Curve", color="red")
-    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50} {units}")
+    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50} ± {ed50_SE} {units}")
     # add R-squared value to the legend while suppressing annoying warnings
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -105,7 +109,7 @@ def calculate_ed50(csv_file):
     plt.title(f"{treatment} Dose-Response Curve: {isolate} - {plate}")
     plt.savefig(f"ED50_{isolate}_{plate}.png")
     plt.close()
-    print(f"Estimated {treatment} ED50: {isolate}, {plate}: {ed50} {units}")
+    print(f"Estimated {treatment} ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} {units}")
 
 
 def main(csv_file):
