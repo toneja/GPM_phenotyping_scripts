@@ -17,43 +17,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import csv
 import os
+import pandas as pd
+
+
+def calculate_exposure(row, first, last):
+    sampled_len = 250
+    exposure_time = sum(row[first:last]) / 3
+    exposure_time *= row["Lamp Length (mm)"] / sampled_len
+    uvc_dose = int(round(exposure_time * row["Irradiance (W/m2)"], 0))
+    return uvc_dose
 
 
 def main():
     os.chdir(os.path.dirname(__file__))
-    for file in os.listdir("results"):
-        if "UVC" not in file:
-            continue
-        if file.endswith(".csv"):
-            plate = file.split("_")[1]
-            isolate = file.split(".")[0].split("_")[2]
-            file = os.path.join("results", file)
-            timings_file = f"ECHO Images/{plate}_{isolate}_48hr/_timings.csv"
-            if os.path.exists(timings_file):
-                timings = {}
-                with open(timings_file, "r", encoding="utf-8") as in_file:
-                    reader = csv.reader(
-                        in_file, delimiter=",", quoting=csv.QUOTE_NONNUMERIC
-                    )
-                    for i, row in enumerate(reader, start=1):
-                        # take the average time from 3 runs
-                        exposure_time = sum(row) / 3
-                        # convert measured timings to measured lamp length
-                        # 0.25m (timed distance) -> 0.385m (length of lamp)
-                        exposure_time *= 0.385 / 0.25
-                        # measured lamp output in W/m2
-                        Wperm2 = 20.6385
-                        # calculate UV-C dose based on exposure time
-                        uvc_dose = int(round(Wperm2 * exposure_time, 0))
-                        timings[f"Speed {i}"] = f"{uvc_dose} J/m2"
-                with open(file, "r", encoding="utf-8") as out_file:
-                    content = out_file.read()
-                    for key, value in timings.items():
-                        content = content.replace(key, str(value))
-                with open(file, "w", encoding="utf-8") as out_file:
-                    out_file.write(content)
+    if os.path.exists("__UVC_assay-data.csv"):
+        uvc_data = pd.read_csv("__UVC_assay-data.csv")
+        uvc_df = pd.DataFrame(uvc_data)
+        for i, row in uvc_df.iterrows():
+            plate = row["Plate ID"]
+            isolate = row["Isolate"]
+            doses = {}
+            col = 4
+            for index in range(1, 5 + 1):
+                doses[f"Speed {index}"] = f"{calculate_exposure(row, col, col + 3)} J/m2"
+                col += 3
+            results_file = f"results/FinalResults_plate{plate}_{isolate}.csv"
+            if os.path.exists(results_file):
+                assay_data = pd.read_csv(results_file)
+                assay_df = pd.DataFrame(assay_data)
+                for key, value in doses.items():
+                    assay_df.replace(key, value, inplace=True)
+                assay_df.to_csv(results_file, index=False)
 
 
 if __name__ == "__main__":
