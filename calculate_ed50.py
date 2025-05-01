@@ -41,15 +41,9 @@ def calculate_ed50(csv_file):
     args = os.path.splitext(csv_file)[0].split("_")
     plate = args[1].upper()
     isolate = args[2].upper()
-    if "UVC" in plate:
-        treatment = "UV-C"
-        units = "J/m$^2$"
-    else:
-        treatment = "Quinoxyfen"
-        units = "μg/mL"
     # Load the data
     data = pd.read_csv(csv_file)
-    data = data[data["Treatment"].str.contains("Quinoxyfen|Speed|J/m2", na=False)]
+    data = data[data["Treatment"].str.contains("Speed|J/m2", na=False)]
     data["Concentration"] = data["Treatment"].str.extract(r"([\d\.]+)").astype(float)
     data = data.dropna(subset=["Concentration"])
     concentrations = data["Concentration"].values
@@ -73,47 +67,37 @@ def calculate_ed50(csv_file):
         maxfev=10000,
         bounds=bounds,
     )
-    ed50 = popt[2]
+    ed50 = int(round(popt[2], 0))
     # Calculate standard error for ED50
-    ed50_SE = np.sqrt(np.diag(pcov))[2]
-    if "UVC" in plate:
-        ed50 = int(round(ed50, 0))
-        ed50_SE = int(round(ed50_SE, 0))
-    else:
-        ed50 = f"{ed50:.4f}"
-        ed50_SE = f"{ed50_SE:.4f}"
+    ed50_SE = int(round(np.sqrt(np.diag(pcov))[2], 0))
     # Calculate R-squared
     fitted = logistic_4pl(concentrations, *popt)
     r2 = round(r2_score(germination_rates, fitted), 3)
     # Plot the DRC
-    if "UVC" in plate:
-        x_vals = np.linspace(min(concentrations), max(concentrations), 100)
-    else:
-        x_vals = np.logspace(
-            np.log10(min(concentrations)), np.log10(max(concentrations)), 100
-        )
+    x_vals = np.linspace(min(concentrations), max(concentrations), 100)
     y_vals = logistic_4pl(x_vals, *popt)
     plt.figure()
     plt.scatter(concentrations, germination_rates, label="Data")
     plt.plot(x_vals, y_vals, label="Fitted Curve", color="red")
-    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50} ± {ed50_SE} {units}")
+    plt.axvline(ed50, linestyle="--", color="green", label=f"ED50 = {ed50} ± {ed50_SE} J/m$^2$")
     # add R-squared value to the legend while suppressing annoying warnings
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         plt.plot([], [], "", label=f"R$^2$ = {r2}", linestyle="None", marker="")
-    if "UVC" not in plate:
-        plt.xscale("log")
-    plt.xlabel(f"{treatment} Dose ({units})")
+    plt.xlabel(f"UV-C Dose (J/m$^2$)")
     plt.ylabel("Germination Rate (%)")
     plt.legend()
-    plt.title(f"{treatment} Dose-Response Curve: {isolate} - {plate}")
+    plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
     plt.savefig(f"ED50_{isolate}_{plate}.png")
     plt.close()
-    print(f"Estimated {treatment} ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} {units}")
+    print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m$^2$")
 
 
 def main(csv_file):
     """docstring goes here"""
+    # Only calculate ED50 for UV-C assay runs
+    if "UVC" not in csv_file:
+        return
     os.chdir(f"{os.path.dirname(__file__)}/results")
     calculate_ed50(csv_file)
 
