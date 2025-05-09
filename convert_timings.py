@@ -31,8 +31,8 @@ def calculate_exposure(row, first, last):
 
 def main():
     os.chdir(os.path.dirname(__file__))
-    if os.path.exists("__UVC_assay-data.csv"):
-        uvc_data = pd.read_csv("__UVC_assay-data.csv")
+    if os.path.exists("__UVC_assay-data.xlsx"):
+        uvc_data = pd.read_excel("__UVC_assay-data.xlsx")
         uvc_df = pd.DataFrame(uvc_data)
         for i, row in uvc_df.iterrows():
             plate = row["Plate ID"]
