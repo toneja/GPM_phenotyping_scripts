@@ -40,7 +40,9 @@ def main():
             doses = {}
             col = uvc_df.columns.get_loc("Time 1a")
             for index in range(1, 5 + 1):
-                doses[f"Speed {index}"] = f"{calculate_exposure(row, col, col + 3)} J/m2"
+                doses[
+                    f"Speed {index}"
+                ] = f"{calculate_exposure(row, col, col + 3)} J/m2"
                 col += 3
             results_file = f"results/FinalResults_plate{plate}_{isolate}.csv"
             if os.path.exists(results_file):

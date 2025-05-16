@@ -32,7 +32,9 @@ import matplotlib.pyplot as plt
 
 def logistic_4pl(x, bottom, top, ed50, hill_slope):
     """docstring goes here"""
-    return bottom + (top - bottom) / (1 + np.exp(hill_slope * (np.log(x) - np.log(ed50))))
+    return bottom + (top - bottom) / (
+        1 + np.exp(hill_slope * (np.log(x) - np.log(ed50)))
+    )
 
 
 def calculate_ed50(csv_file):
@@ -77,7 +79,14 @@ def calculate_ed50(csv_file):
     x_vals = np.linspace(min(concentrations), max(concentrations), 100)
     y_vals = logistic_4pl(x_vals, *popt)
     plt.figure()
-    plt.scatter(concentrations, germination_rates, label="Data", color="black", marker="o", edgecolors="black")
+    plt.scatter(
+        concentrations,
+        germination_rates,
+        label="Data",
+        color="black",
+        marker="o",
+        edgecolors="black",
+    )
     plt.plot(x_vals, y_vals, label="Fitted Curve", color="black", linestyle="-")
     plt.axvline(ed50, linestyle="--", color="black", label=f"ED50 = {ed50} ± {ed50_SE}")
     # add R-squared value to the legend while suppressing annoying warnings
