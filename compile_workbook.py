@@ -20,9 +20,9 @@
 """Combines multiple CSV results files into a single Excel workbook."""
 
 import os
-import csv
 import sys
 import openpyxl
+import pandas as pd
 
 
 def compile_workbook(workbook_file, csv_files):
@@ -54,12 +54,13 @@ def compile_workbook(workbook_file, csv_files):
             sheet = workbook.create_sheet(title=sheet_name)
 
             # Open the csv file and read in the data
-            with open(file, "r", encoding="utf-8") as csv_file:
-                csv_reader = csv.reader(csv_file)
+            data = pd.read_csv(file)
+            df = pd.DataFrame(data)
 
-                # Loop through the rows  and add them to the sheet
-                for row in csv_reader:
-                    sheet.append(row)
+            # Loop through the rows and add them to the sheet
+            sheet.append(df.columns.tolist())
+            for i, row in df.iterrows():
+                sheet.append(row.tolist())
 
             # Auto-size columns to fit content
             for column in sheet.columns:

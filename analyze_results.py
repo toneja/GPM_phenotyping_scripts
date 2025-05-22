@@ -23,10 +23,9 @@
 
 """
 
-import csv
 import os
 import sys
-import pandas
+import pandas as pd
 from sklearn import linear_model
 from tabulate import tabulate
 from treatments import get_treatments
@@ -34,7 +33,7 @@ from treatments import get_treatments
 
 def setup_regression():
     """Setup the logistic regression used to determine ROI identity."""
-    dataset = pandas.read_csv("models/model_training_data.csv")
+    dataset = pd.read_csv("models/model_training_data.csv")
     vals = [
         "Area",
         "Perim.",
@@ -140,16 +139,10 @@ def analyze_results(plate, isolate):
             germination_data.insert(40, germination_data.pop(i))
 
     # Write the results to the output file
-    with open(
-        f"results/FinalResults_{plate}_{isolate}.csv",
-        "w",
-        encoding="utf-8",
-        newline="",
-    ) as csv_outfile:
-        csv_writer = csv.writer(csv_outfile)
-        csv_writer.writerow(headers)
-        for row in germination_data:
-            csv_writer.writerow(row)
+    df = pd.DataFrame(germination_data)
+    df.to_csv(
+        f"results/FinalResults_{plate}_{isolate}.csv", header=headers, index=False
+    )
 
     # Print a table of the results for the user
     print("=" * os.get_terminal_size()[0])
@@ -161,39 +154,34 @@ def analyze_results(plate, isolate):
 def csv_handler(input_file, model):
     """Read CSV file produced by ImageJ and analyze each ROI using logistic regression."""
     # open csv file
-    with open(
-        input_file,
-        "r",
-        encoding="utf-8",
-    ) as csv_file:
-        # read csv as a dict so header is skipped and value lookup is simpler
-        csv_reader = csv.DictReader(csv_file, delimiter=",")
-        roi_count, roi_germinated = 0, 0
-        area_total, perim_total, feret_total = 0, 0, 0
-        for row in csv_reader:
-            # new debris filter
-            _id = identify_roi(row, model)
-            if _id == -1:
-                # skip bad ROIs
-                continue
-            roi_germinated += _id
-            roi_count += 1
-            area_total += int(row["Area"])
-            perim_total += float(row["Perim."])
-            feret_total += float(row["Feret"])
-        # Handle empty images
-        if roi_count == 0:
-            image_data = [0] * 6
-        else:
-            image_data = [
-                roi_germinated,
-                roi_count,
-                roi_germinated / roi_count * 100,
-                round(area_total / roi_count, 1),
-                round(perim_total / roi_count, 1),
-                round(feret_total / roi_count, 1),
-            ]
-        image_data.extend([os.path.basename(input_file).replace(".csv", ".jpg")])
+    data = pd.read_csv(input_file)
+    df = pd.DataFrame(data)
+    roi_count, roi_germinated = 0, 0
+    area_total, perim_total, feret_total = 0, 0, 0
+    for i, row in df.iterrows():
+        # debris filter
+        _id = identify_roi(row, model)
+        if _id == -1:
+            # skip bad ROIs
+            continue
+        roi_germinated += _id
+        roi_count += 1
+        area_total += int(row["Area"])
+        perim_total += float(row["Perim."])
+        feret_total += float(row["Feret"])
+    # Handle empty images
+    if roi_count == 0:
+        image_data = [0] * 6
+    else:
+        image_data = [
+            roi_germinated,
+            roi_count,
+            roi_germinated / roi_count * 100,
+            round(area_total / roi_count, 1),
+            round(perim_total / roi_count, 1),
+            round(feret_total / roi_count, 1),
+        ]
+    image_data.extend([os.path.basename(input_file).replace(".csv", ".jpg")])
     return image_data
 
 
