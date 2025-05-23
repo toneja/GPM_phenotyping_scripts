@@ -97,7 +97,7 @@ def calculate_ed50(csv_file):
     max_tick = int(np.ceil(max(max(concentrations), ed50) / 50.0) * 50)
     plt.xticks(np.arange(min_tick, max_tick + 1, 50))
     plt.xlabel(f"UV-C Dose (J/m$^2$)")
-    plt.ylabel("Mean germination relative to control (%)")
+    plt.ylabel("Germination relative to control (%)")
     plt.legend()
     plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
     plt.savefig(f"ED50_{isolate}_{plate}.png")
