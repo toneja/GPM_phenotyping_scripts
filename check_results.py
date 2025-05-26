@@ -90,8 +90,21 @@ def main():
                 )
                 # Delete bad results output, keep the data out of the workbook
                 os.remove(file)
+                check_result = "FAIL"
             else:
                 keepers.append([isolate, plate])
+                check_result = "PASS"
+            assay_file = "__UVC_assay-data.xlsx"
+            if os.path.exists(assay_file):
+                assay_data = pd.read_excel(assay_file)
+                assay_df = pd.DataFrame(assay_data)
+                for index, row in assay_df.iterrows():
+                    if (
+                        row["Isolate"] == isolate
+                        and row["Plate ID"].upper() == plate.split("PLATE")[1]
+                    ):
+                        assay_df.at[index, "Quality Check"] = check_result
+                assay_df.to_excel(assay_file, index=False)
     if keepers:
         keepers.sort()
         print(f"\nThe following {len(keepers)} assay runs are keepers:")

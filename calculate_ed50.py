@@ -102,7 +102,19 @@ def calculate_ed50(csv_file):
     plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
     plt.savefig(f"ED50_{isolate}_{plate}.png")
     plt.close()
-    print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m$^2$")
+    print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m^2")
+    # add the ED50 to tracking spreadsheet
+    assay_file = "../__UVC_assay-data.xlsx"
+    if os.path.exists(assay_file):
+        assay_data = pd.read_excel(assay_file)
+        assay_df = pd.DataFrame(assay_data)
+        for index, row in assay_df.iterrows():
+            if (
+                row["Isolate"] == isolate
+                and row["Plate ID"].upper() == plate.split("PLATE")[1]
+            ):
+                assay_df.at[index, "ED50 (J/m^2)"] = f"{ed50} ± {ed50_SE}"
+        assay_df.to_excel(assay_file, index=False)
 
 
 def main(csv_file):
