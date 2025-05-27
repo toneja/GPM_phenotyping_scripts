@@ -33,11 +33,15 @@ def format_workbook(workbook_file):
             max_length = 0
             column_letter = openpyxl.utils.get_column_letter(column[0].column)
             for cell in column:
-                try:
-                    if len(str(cell.value)) > max_length:
-                        max_length = len(cell.value)
-                except:
-                    pass
+                if cell.value == "Quality Check":
+                    max_length = 13
+                    break
+                else:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(cell.value)
+                    except:
+                        pass
             adjusted_width = max_length + 2
             sheet.column_dimensions[column_letter].width = adjusted_width
     workbook.save(workbook_file)
