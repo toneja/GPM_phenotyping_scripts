@@ -90,7 +90,10 @@ def main():
         os.listdir("results"),
         key=lambda x: x.split("_")[2],
     ):
-        if not (file.endswith(".csv") and file.startswith("FinalResults_plate")):
+        if (
+            not (file.endswith(".csv") and file.startswith("FinalResults_plate"))
+            or "Control" in file
+        ):
             continue
         file_path = os.path.join("results", file)
         csv_files.append(file_path)
