@@ -62,21 +62,6 @@ def compile_workbook(workbook_file, csv_files):
             for i, row in df.iterrows():
                 sheet.append(row.tolist())
 
-            # Auto-size columns to fit content
-            for column in sheet.columns:
-                max_length = 0
-                column_letter = openpyxl.utils.get_column_letter(
-                    column[0].column
-                )  # Get column letter
-                for cell in column:
-                    try:  # Avoid error on empty cells
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(cell.value)
-                    except:
-                        pass
-                adjusted_width = max_length + 2
-                sheet.column_dimensions[column_letter].width = adjusted_width
-
             print(f"Added sheet {sheet_name} to workbook")
         else:
             print(f"Skipped sheet {sheet_name}: already in the workbook")

@@ -35,6 +35,7 @@ import calculate_ed50
 import check_results
 import compile_workbook
 import convert_timings
+import format_workbook
 import normalize_germination
 
 
@@ -120,6 +121,9 @@ def batch_process(image_folder):
     for file in os.listdir("results"):
         if file.endswith(".csv") and "Control" not in file:
             calculate_ed50.main(file)
+
+    # Fix up the workbook formatting
+    format_workbook.main()
 
     # Calculate the elapsed time
     elapsed_time = time.time() - start_time
