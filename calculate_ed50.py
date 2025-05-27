@@ -119,11 +119,10 @@ def calculate_ed50(csv_file):
                 row["Isolate"] == isolate
                 and row["Plate ID"].upper() == plate.split("PLATE")[1]
             ):
-                assay_df.at[index, "ED50 (J/m^2)"] = f"{ed50} ± {ed50_SE}"
                 sheet.cell(
                     row=index + 1,
                     column=assay_df.columns.get_loc("ED50 (J/m^2)") + 1,
-                    value=assay_df.at[index, "ED50 (J/m^2)"],
+                    value=f"{ed50} ± {ed50_SE}",
                 )
         uvc_workbook.save(workbook)
 
