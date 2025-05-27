@@ -25,6 +25,7 @@ import sys
 import warnings
 import pandas as pd
 import numpy as np
+import openpyxl
 from scipy.optimize import curve_fit
 from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
@@ -104,17 +105,27 @@ def calculate_ed50(csv_file):
     plt.close()
     print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m^2")
     # add the ED50 to tracking spreadsheet
-    assay_file = "../__UVC_assay-data.xlsx"
-    if os.path.exists(assay_file):
-        assay_data = pd.read_excel(assay_file)
-        assay_df = pd.DataFrame(assay_data)
-        for index, row in assay_df.iterrows():
+    workbook = "../GPMPhenotypingAssay_Workbook.xlsx"
+    if os.path.exists(workbook):
+        uvc_workbook = openpyxl.load_workbook(workbook)
+        if "Assay Data" in uvc_workbook.sheetnames:
+            sheet = uvc_workbook["Assay Data"]
+        else:
+            return
+        assay_df = pd.DataFrame(sheet.values)
+        assay_df.columns = assay_df.iloc[0]
+        for index, row in assay_df[1:].iterrows():
             if (
                 row["Isolate"] == isolate
                 and row["Plate ID"].upper() == plate.split("PLATE")[1]
             ):
                 assay_df.at[index, "ED50 (J/m^2)"] = f"{ed50} ± {ed50_SE}"
-        assay_df.to_excel(assay_file, index=False)
+                sheet.cell(
+                    row=index + 1,
+                    column=assay_df.columns.get_loc("ED50 (J/m^2)") + 1,
+                    value=assay_df.at[index, "ED50 (J/m^2)"],
+                )
+        uvc_workbook.save(workbook)
 
 
 def main(csv_file):

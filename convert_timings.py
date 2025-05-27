@@ -18,6 +18,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import os
+import openpyxl
 import pandas as pd
 
 
@@ -31,10 +32,16 @@ def calculate_exposure(row, first, last):
 
 def main():
     os.chdir(os.path.dirname(__file__))
-    if os.path.exists("__UVC_assay-data.xlsx"):
-        uvc_data = pd.read_excel("__UVC_assay-data.xlsx")
-        uvc_df = pd.DataFrame(uvc_data)
-        for i, row in uvc_df.iterrows():
+    workbook = "GPMPhenotypingAssay_Workbook.xlsx"
+    if os.path.exists(workbook):
+        uvc_workbook = openpyxl.load_workbook(workbook)
+        if "Assay Data" in uvc_workbook.sheetnames:
+            sheet = uvc_workbook["Assay Data"]
+        else:
+            return
+        uvc_df = pd.DataFrame(sheet.values)
+        uvc_df.columns = uvc_df.iloc[0]
+        for i, row in uvc_df[1:].iterrows():
             plate = row["Plate ID"]
             isolate = row["Isolate"]
             doses = {}
