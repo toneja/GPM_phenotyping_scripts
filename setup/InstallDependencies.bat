@@ -6,12 +6,15 @@ if %errorlevel% neq 0 (
     pause
     exit /b
 )
+pip3.exe install numpy
 pip3.exe install openpyxl
 pip3.exe install pandas
 pip3.exe install pillow
 pip3.exe install requests
 pip3.exe install scikit-learn
+pip3.exe install scipy
 pip3.exe install sklearn
+pip3.exe install statsmodels
 pip3.exe install tabulate
 
 REM Set the download URL and destination file
