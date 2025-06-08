@@ -25,7 +25,7 @@ import requests
 import zipfile
 
 
-def main():
+def main(prompt=True):
     """Download and install the update zip file."""
     # Download the zip file
     URL = "https://github.com/toneja/GPM_phenotyping_scripts/archive/refs/heads/revolution.zip"
@@ -38,10 +38,11 @@ def main():
     # Unpack the zip file
     print("Extracting update files...")
     with zipfile.ZipFile(io.BytesIO(archive.content)) as zip_arc:
-        zip_arc.extractall("../..")
-    input("File update complete. Press ENTER to close.")
+        zip_arc.extractall("..")
+    if prompt:
+        input("File update complete. Press ENTER to close.")
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
-    main()
+    main(True)

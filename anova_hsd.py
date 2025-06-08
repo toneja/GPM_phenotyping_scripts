@@ -68,7 +68,7 @@ def oneway_anova(x, y, test):
         tukey_hsd(anova_df, test)
 
 
-def main():
+def main(prompt=True):
     os.chdir(os.path.dirname(__file__))
     workbook_file = "GPMPhenotypingAssay_Workbook.xlsx"
     if os.path.exists(workbook_file):
@@ -94,8 +94,9 @@ def main():
             print("Missing Assay Data sheet in workbook.")
     else:
         print("Missing workbook file: GPMPhenotypingAssay_Workbook.xlsx")
-    input("\nTests complete. Press ENTER to quit.\n")
+    if prompt:
+        input("\nTests complete. Press ENTER to quit.\n")
 
 
 if __name__ == "__main__":
-    main()
+    main(True)

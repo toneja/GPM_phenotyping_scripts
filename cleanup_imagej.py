@@ -23,7 +23,7 @@ import os
 import shutil
 
 
-def cleanup_imagej():
+def cleanup_imagej(prompt=True):
     """Clean up any results files that exist."""
     print("Cleaning up ImageJ files...")
     os.chdir(os.path.dirname(__file__))
@@ -42,8 +42,9 @@ def cleanup_imagej():
     print("Cleanup complete.")
     print(f"Deleted {removed_files} files.")
     print(f"Deleted {removed_folders} folders.")
-    input("Press ENTER to exit.\n")
+    if prompt:
+        input("Press ENTER to exit.\n")
 
 
 if __name__ == "__main__":
-    cleanup_imagej()
+    cleanup_imagej(True)

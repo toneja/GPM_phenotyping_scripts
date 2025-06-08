@@ -39,7 +39,7 @@ import format_workbook
 import normalize_germination
 
 
-def batch_process(image_folder="ECHO Images"):
+def batch_process(image_folder="ECHO Images", prompt=True):
     """Analyze all the images found in "ECHO Images" subdirectories."""
     # Start the timer
     start_time = time.time()
@@ -135,7 +135,8 @@ def batch_process(image_folder="ECHO Images"):
     # Print elapsed time in H:M:S format
     print(f"\nElapsed time: {time.strftime('%H:%M:%S', time.gmtime(elapsed_time))}")
     print(f"Assay runs processed: {processed // 2}")
-    input("Batch processing complete. Press ENTER.\n")
+    if prompt:
+        input("Batch processing complete. Press ENTER.\n")
 
 
 if __name__ == "__main__":
@@ -143,4 +144,4 @@ if __name__ == "__main__":
         IMAGE_FOLDER = sys.argv[1]
     else:
         IMAGE_FOLDER = "ECHO Images"
-    batch_process(IMAGE_FOLDER)
+    batch_process(IMAGE_FOLDER, True)

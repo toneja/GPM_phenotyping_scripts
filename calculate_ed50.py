@@ -38,7 +38,7 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
     )
 
 
-def calculate_ed50(csv_file):
+def calculate_ed50(csv_file, show_plot=False):
     """docstring goes here"""
     # Extract plate ID and isolate name
     args = os.path.splitext(csv_file)[0].split("_")
@@ -102,6 +102,8 @@ def calculate_ed50(csv_file):
     plt.legend()
     plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
     plt.savefig(f"results/ED50_{isolate}_{plate}.png")
+    if show_plot:
+        plt.show()
     plt.close()
     print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m^2")
     # add the ED50 to tracking spreadsheet
@@ -127,13 +129,13 @@ def calculate_ed50(csv_file):
         uvc_workbook.save(workbook)
 
 
-def main(csv_file):
+def main(csv_file, show_plot=False):
     """docstring goes here"""
     # Only calculate ED50 for UV-C assay runs
     if "UVC" not in csv_file:
         return
     os.chdir(os.path.dirname(__file__))
-    calculate_ed50(csv_file)
+    calculate_ed50(csv_file, show_plot)
 
 
 if __name__ == "__main__":
