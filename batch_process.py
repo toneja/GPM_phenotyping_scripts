@@ -39,14 +39,14 @@ import format_workbook
 import normalize_germination
 
 
-def batch_process(image_folder):
+def batch_process(image_folder="ECHO Images"):
     """Analyze all the images found in "ECHO Images" subdirectories."""
     # Start the timer
     start_time = time.time()
     # Count how many albums are processed
     processed = 0
-    # Work inside the ImageJ directory
-    os.chdir(f"{os.path.dirname(__file__)}/ImageJ")
+    # Work inside this directory
+    os.chdir(os.path.dirname(__file__))
     # Iterate through the image folders
     for folder_name in os.listdir(image_folder):
         # Full path to the current image folder
@@ -55,15 +55,15 @@ def batch_process(image_folder):
         # Check if the current item is a directory
         if os.path.isdir(current_folder) and "plate" in current_folder:
             # Check if the album has already been processed
-            if os.path.exists(f"GPM/images/{folder_name}") and os.path.exists(
-                f"GPM/results/{folder_name}"
+            if os.path.exists(f"ImageJ/GPM/images/{folder_name}") and os.path.exists(
+                f"ImageJ/GPM/results/{folder_name}"
             ):
                 print(f"Skipping folder: {current_folder}, already processed.")
                 continue
 
             # make output folders
-            os.makedirs(f"GPM/images/{folder_name}", exist_ok=True)
-            os.makedirs(f"GPM/results/{folder_name}", exist_ok=True)
+            os.makedirs(f"ImageJ/GPM/images/{folder_name}", exist_ok=True)
+            os.makedirs(f"ImageJ/GPM/results/{folder_name}", exist_ok=True)
 
             print(f"Processing folder: {current_folder}")
             processed += 1
@@ -79,9 +79,9 @@ def batch_process(image_folder):
 
             # Execute the ImageJ macro for the current folder
             command = [
-                "./ImageJ.exe",
+                "./ImageJ/ImageJ.exe",
                 "-macro",
-                "GPM/BatchProcess.ijm",
+                "ImageJ/GPM/BatchProcess.ijm",
                 current_folder,
             ]
 
@@ -91,17 +91,21 @@ def batch_process(image_folder):
                 print(f"Error executing the macro: {exception}")
 
             # Relocate output files into their respective release folders
-            for file in os.listdir("GPM/images"):
+            for file in os.listdir("ImageJ/GPM/images"):
                 if file.endswith(".tif"):
-                    os.replace(f"GPM/images/{file}", f"GPM/images/{folder_name}/{file}")
-            for file in os.listdir("GPM/results"):
+                    os.replace(
+                        f"ImageJ/GPM/images/{file}",
+                        f"ImageJ/GPM/images/{folder_name}/{file}",
+                    )
+            for file in os.listdir("ImageJ/GPM/results"):
                 if file.endswith(".csv"):
                     os.replace(
-                        f"GPM/results/{file}", f"GPM/results/{folder_name}/{file}"
+                        f"ImageJ/GPM/results/{file}",
+                        f"ImageJ/GPM/results/{folder_name}/{file}",
                     )
 
     # Process the ImageJ results
-    for folder in os.listdir("GPM/results"):
+    for folder in os.listdir("ImageJ/GPM/results"):
         if folder.endswith("48hr"):
             analyze_results.main(f"ImageJ/GPM/results/{folder}")
 
@@ -120,6 +124,7 @@ def batch_process(image_folder):
     # Generate Dose-Response curves
     for file in os.listdir("results"):
         if file.endswith(".csv") and "Control" not in file:
+            file = os.path.join("results", file)
             calculate_ed50.main(file)
 
     # Fix up the workbook formatting
@@ -137,5 +142,5 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         IMAGE_FOLDER = sys.argv[1]
     else:
-        IMAGE_FOLDER = "../ECHO Images"
+        IMAGE_FOLDER = "ECHO Images"
     batch_process(IMAGE_FOLDER)

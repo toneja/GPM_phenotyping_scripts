@@ -101,11 +101,11 @@ def calculate_ed50(csv_file):
     plt.ylabel("Germination relative to control (%)")
     plt.legend()
     plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
-    plt.savefig(f"ED50_{isolate}_{plate}.png")
+    plt.savefig(f"results/ED50_{isolate}_{plate}.png")
     plt.close()
     print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m^2")
     # add the ED50 to tracking spreadsheet
-    workbook = "../GPMPhenotypingAssay_Workbook.xlsx"
+    workbook = "GPMPhenotypingAssay_Workbook.xlsx"
     if os.path.exists(workbook):
         uvc_workbook = openpyxl.load_workbook(workbook)
         if "Assay Data" in uvc_workbook.sheetnames:
@@ -132,7 +132,7 @@ def main(csv_file):
     # Only calculate ED50 for UV-C assay runs
     if "UVC" not in csv_file:
         return
-    os.chdir(f"{os.path.dirname(__file__)}/results")
+    os.chdir(os.path.dirname(__file__))
     calculate_ed50(csv_file)
 
 
