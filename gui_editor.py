@@ -571,6 +571,9 @@ class ExcelDataEditor:
                 # Restore stdout
                 sys.stdout = old_stdout
 
+            # Automatically load the updated file
+            self.load_excel_data()
+
             # Show the output to the user
             self.show_output_dialog("ED50 Calculation", output)
 
