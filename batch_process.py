@@ -36,7 +36,6 @@ import check_results
 import compile_workbook
 import convert_timings
 import format_workbook
-import normalize_germination
 
 
 def batch_process(image_folder="ECHO Images", prompt=True):
@@ -117,9 +116,6 @@ def batch_process(image_folder="ECHO Images", prompt=True):
 
     # Compile the results into a workbook
     compile_workbook.main()
-
-    # Normalize germination percentages relative to the controls
-    normalize_germination.main()
 
     # Generate Dose-Response curves
     for file in os.listdir("results"):

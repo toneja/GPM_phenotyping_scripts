@@ -46,11 +46,25 @@ def calculate_ed50(csv_file, show_plot=False):
     isolate = args[2].upper()
     # Load the data
     data = pd.read_csv(csv_file)
+    # Take the average of the controls
+    controls = data[data["Treatment"].str.contains("Control")]
+    control_avg = sum(controls["48hr %"].values) / len(controls)
+    # Extract dose and response data
     data = data[data["Treatment"].str.contains("Speed|J/m2", na=False)]
     data["Concentration"] = data["Treatment"].str.extract(r"([\d\.]+)").astype(float)
     data = data.dropna(subset=["Concentration"])
     concentrations = data["Concentration"].values
     germination_rates = data["48hr %"].values
+    # Normalize germination rates relative to the controls
+    for i, n in enumerate(germination_rates):
+        germination_rates[i] = min(round(n / control_avg * 100, 2), 100)
+    # Use mean germination values
+    size = int(len(germination_rates) / len(set(concentrations)))
+    concentrations = [concentrations[i] for i in range(0, len(concentrations), size)]
+    germination_rates = [
+        sum(germination_rates[i : i + size]) / size
+        for i in range(0, len(germination_rates), size)
+    ]
     # Fit the curve and generate ED50
     initial_guess = [
         min(germination_rates),
@@ -75,7 +89,7 @@ def calculate_ed50(csv_file, show_plot=False):
     ed50_SE = int(round(np.sqrt(np.diag(pcov))[2], 0))
     # Calculate R-squared
     fitted = logistic_4pl(concentrations, *popt)
-    r2 = round(r2_score(germination_rates, fitted), 3)
+    r2 = round(r2_score(germination_rates, fitted), 5)
     # Plot the DRC
     x_vals = np.linspace(min(concentrations), max(concentrations), 100)
     y_vals = logistic_4pl(x_vals, *popt)
