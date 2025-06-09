@@ -38,14 +38,26 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
     )
 
 
-def calculate_ed50(csv_file, show_plot=False):
+def calculate_ed50(isolate, plate, show_plot=False):
     """docstring goes here"""
-    # Extract plate ID and isolate name
-    args = os.path.splitext(csv_file)[0].split("_")
-    plate = args[1].upper()
-    isolate = args[2].upper()
+    # Format isolate name and plate ID
+    isolate = isolate.upper()
+    plate = plate.upper()
+    sheet_name = f"{isolate} ({plate})"
     # Load the data
-    data = pd.read_csv(csv_file)
+    workbook = "GPMPhenotypingAssay_Workbook.xlsx"
+    if os.path.exists(workbook):
+        uvc_workbook = openpyxl.load_workbook(workbook)
+        if sheet_name in uvc_workbook.sheetnames:
+            sheet = uvc_workbook[sheet_name]
+        else:
+            print(f"Missing sheet: {isolate} {plate}")
+            return
+    else:
+        print(f"Missing workbook: {workbook}")
+        return
+    data = pd.DataFrame(sheet.values)
+    data.columns = data.iloc[0]
     # Take the average of the controls
     controls = data[data["Treatment"].str.contains("Control")]
     control_avg = sum(controls["48hr %"].values) / len(controls)
@@ -121,36 +133,31 @@ def calculate_ed50(csv_file, show_plot=False):
     plt.close()
     print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m^2")
     # add the ED50 to tracking spreadsheet
-    workbook = "GPMPhenotypingAssay_Workbook.xlsx"
-    if os.path.exists(workbook):
-        uvc_workbook = openpyxl.load_workbook(workbook)
-        if "Assay Data" in uvc_workbook.sheetnames:
-            sheet = uvc_workbook["Assay Data"]
-        else:
-            return
-        assay_df = pd.DataFrame(sheet.values)
-        assay_df.columns = assay_df.iloc[0]
-        for index, row in assay_df[1:].iterrows():
-            if (
-                row["Isolate"] == isolate
-                and row["Plate ID"].upper() == plate.split("PLATE")[1]
-            ):
-                sheet.cell(
-                    row=index + 1,
-                    column=assay_df.columns.get_loc("ED50 (J/m^2)") + 1,
-                    value=f"{ed50} ± {ed50_SE}",
-                )
-        uvc_workbook.save(workbook)
+    if "Assay Data" in uvc_workbook.sheetnames:
+        sheet = uvc_workbook["Assay Data"]
+    else:
+        print("Missing sheet: Assay Data")
+        return
+    assay_df = pd.DataFrame(sheet.values)
+    assay_df.columns = assay_df.iloc[0]
+    for index, row in assay_df[1:].iterrows():
+        if row["Isolate"] == isolate and row["Plate ID"].upper() == plate:
+            sheet.cell(
+                row=index + 1,
+                column=assay_df.columns.get_loc("ED50 (J/m^2)") + 1,
+                value=f"{ed50} ± {ed50_SE}",
+            )
+    uvc_workbook.save(workbook)
 
 
-def main(csv_file, show_plot=False):
+def main(isolate, plate, show_plot=False):
     """docstring goes here"""
     # Only calculate ED50 for UV-C assay runs
-    if "UVC" not in csv_file:
+    if "UVC" not in plate.upper():
         return
     os.chdir(os.path.dirname(__file__))
-    calculate_ed50(csv_file, show_plot)
+    calculate_ed50(isolate, plate, show_plot)
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2])

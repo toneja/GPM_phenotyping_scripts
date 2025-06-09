@@ -120,8 +120,9 @@ def batch_process(image_folder="ECHO Images", prompt=True):
     # Generate Dose-Response curves
     for file in os.listdir("results"):
         if file.endswith(".csv") and "Control" not in file:
-            file = os.path.join("results", file)
-            calculate_ed50.main(file)
+            isolate = os.path.splitext(file.split("_")[2])[0]
+            plate = file.split("_")[1].split("plate")[1]
+            calculate_ed50.main(isolate, plate)
 
     # Fix up the workbook formatting
     format_workbook.main()

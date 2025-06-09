@@ -575,7 +575,7 @@ class ExcelDataEditor:
 
             try:
                 # Execute the calculate_ed50.main function
-                calculate_ed50.main(file_path, True)
+                calculate_ed50.main(isolate, plate_id, True)
 
                 # Get the captured output
                 output = captured_output.getvalue()
