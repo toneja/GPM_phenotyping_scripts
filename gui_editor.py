@@ -549,23 +549,8 @@ class ExcelDataEditor:
                 )
                 return
 
-            # Expected file path
-            file_path = f"results/FinalResults_plate{plate_id}_{isolate}.csv"
-
-            if not file_path:
-                # Get debug info about what files are actually in the results folder
-                debug_info = self.get_debug_info(expected_file_path)
-                messagebox.showerror(
-                    "Error",
-                    f"Could not find file matching pattern:\n{expected_file_path}\n\n"
-                    f"Plate ID: '{plate_id}'\n"
-                    f"Isolate: '{isolate}'\n\n"
-                    f"Debug Info:\n{debug_info}",
-                )
-                return
-
             # Update status
-            self.status_var.set(f"Calculating ED50 for {file_path}...")
+            self.status_var.set(f"Calculating ED50 for {isolate} {plate_id}...")
             self.root.update()
 
             # Capture stdout to get the output from the script
@@ -589,7 +574,7 @@ class ExcelDataEditor:
             # Show the output to the user
             self.show_output_dialog("ED50 Calculation", output)
 
-            self.status_var.set(f"ED50 calculation completed for {file_path}")
+            self.status_var.set(f"ED50 calculation completed for {isolate} {plate_id}")
 
         except Exception as e:
             messagebox.showerror("Error", f"Error during ED50 calculation: {str(e)}")
@@ -650,39 +635,6 @@ class ExcelDataEditor:
         # Close button
         close_button = ttk.Button(main_frame, text="Close", command=dialog.destroy)
         close_button.pack(pady=(10, 0))
-
-    def get_debug_info(self, expected_path):
-        """Get debug information about the file search"""
-        directory = os.path.dirname(expected_path)
-
-        debug_lines = []
-        debug_lines.append(f"Current working directory: {os.getcwd()}")
-        debug_lines.append(f"Looking in directory: {directory}")
-        debug_lines.append(f"Directory exists: {os.path.exists(directory)}")
-
-        if os.path.exists(directory):
-            try:
-                files = os.listdir(directory)
-                debug_lines.append(f"Files in directory ({len(files)} total):")
-                for file in sorted(files):
-                    debug_lines.append(f"  - {file}")
-            except OSError as e:
-                debug_lines.append(f"Error reading directory: {e}")
-        else:
-            debug_lines.append("Directory does not exist!")
-            # Show what directories do exist at the current level
-            try:
-                current_files = os.listdir(".")
-                debug_lines.append("Files/folders in current directory:")
-                for item in sorted(current_files):
-                    if os.path.isdir(item):
-                        debug_lines.append(f"  [DIR] {item}")
-                    else:
-                        debug_lines.append(f"  [FILE] {item}")
-            except OSError:
-                debug_lines.append("Cannot read current directory")
-
-        return "\n".join(debug_lines)
 
 
 def main():
