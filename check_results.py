@@ -109,9 +109,12 @@ def main():
                             and row["Plate ID"].upper() == plate.split("PLATE")[1]
                         ):
                             assay_df.at[index, "Quality Check"] = check_result
-                    assay_df.to_excel(
-                        workbook, sheet_name="Assay Data", header=False, index=False
-                    )
+                    with pd.ExcelWriter(
+                        workbook, mode="a", if_sheet_exists="overlay"
+                    ) as writer:
+                        assay_df.to_excel(
+                            writer, sheet_name="Assay Data", header=False, index=False
+                        )
     if keepers:
         keepers.sort()
         print(f"\nThe following {len(keepers)} assay runs are keepers:")
