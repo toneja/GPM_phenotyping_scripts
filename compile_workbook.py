@@ -48,23 +48,23 @@ def compile_workbook(workbook_file, csv_files):
         isolate_name = file_parts[-1].upper()
         plate_id = file_parts[-2].replace("plate", "").upper()
 
-        # Create a new sheet in the workbook
         sheet_name = f"{isolate_name} ({plate_id})"
-        if sheet_name not in workbook.sheetnames:
-            sheet = workbook.create_sheet(title=sheet_name)
+        # Replace old data
+        if sheet_name in workbook.sheetnames:
+            workbook.remove(workbook[sheet_name])
+        # Create a new sheet in the workbook
+        sheet = workbook.create_sheet(title=sheet_name)
 
-            # Open the csv file and read in the data
-            data = pd.read_csv(file)
-            df = pd.DataFrame(data)
+        # Open the csv file and read in the data
+        data = pd.read_csv(file)
+        df = pd.DataFrame(data)
 
-            # Loop through the rows and add them to the sheet
-            sheet.append(df.columns.tolist())
-            for i, row in df.iterrows():
-                sheet.append(row.tolist())
+        # Loop through the rows and add them to the sheet
+        sheet.append(df.columns.tolist())
+        for i, row in df.iterrows():
+            sheet.append(row.tolist())
 
-            print(f"Added sheet {sheet_name} to workbook")
-        else:
-            print(f"Skipped sheet {sheet_name}: already in the workbook")
+        print(f"Added sheet {sheet_name} to workbook")
 
     # Sort the sheets in the workbook alphabetically by isolate name
     workbook.worksheets.sort(key=lambda sheet: sheet.title)
