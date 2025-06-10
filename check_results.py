@@ -110,7 +110,7 @@ def main():
                         ):
                             assay_df.at[index, "Quality Check"] = check_result
                     with pd.ExcelWriter(
-                        workbook, mode="a", if_sheet_exists="overlay"
+                        workbook, engine="openpyxl", mode="a", if_sheet_exists="overlay"
                     ) as writer:
                         assay_df.to_excel(
                             writer, sheet_name="Assay Data", header=False, index=False
