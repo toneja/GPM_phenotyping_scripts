@@ -40,6 +40,8 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
 
 def calculate_ed50(isolate, plate, show_plot=False):
     """docstring goes here"""
+    # ignore annoying warnings
+    warnings.filterwarnings("ignore")
     # Format isolate name and plate ID
     isolate = isolate.upper()
     plate = plate.upper()
@@ -116,10 +118,8 @@ def calculate_ed50(isolate, plate, show_plot=False):
     )
     plt.plot(x_vals, y_vals, label="Fitted Curve", color="black", linestyle="-")
     plt.axvline(ed50, linestyle="--", color="black", label=f"ED50 = {ed50} ± {ed50_SE}")
-    # add R-squared value to the legend while suppressing annoying warnings
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        plt.plot([], [], "", label=f"R$^2$ = {r2}", linestyle="None", marker="")
+    # add R-squared value to the legend
+    plt.plot([], [], "", label=f"R$^2$ = {r2}", linestyle="None", marker="")
     min_tick = int(np.floor(min(min(concentrations), 0) / 50.0) * 50)
     max_tick = int(np.ceil(max(max(concentrations), ed50) / 50.0) * 50)
     plt.xticks(np.arange(min_tick, max_tick + 1, 50))
