@@ -28,6 +28,8 @@ import os
 import subprocess
 import sys
 import time
+import openpyxl
+import pandas as pd
 from PIL import Image
 
 import analyze_results
@@ -65,7 +67,8 @@ def batch_process(image_folder="ECHO Images", prompt=True):
             os.makedirs(f"ImageJ/GPM/results/{folder_name}", exist_ok=True)
 
             print(f"Processing folder: {current_folder}")
-            processed += 1
+            if any(x in folder_name for x in ("48hr", "Control")):
+                processed += 1
 
             # Convert any tif files to jpg; req for ImageJ
             for file in os.listdir(current_folder):
@@ -118,11 +121,19 @@ def batch_process(image_folder="ECHO Images", prompt=True):
     compile_workbook.main()
 
     # Generate Dose-Response curves
-    for file in os.listdir("results"):
-        if file.endswith(".csv") and "Control" not in file:
-            isolate = os.path.splitext(file.split("_")[2])[0]
-            plate = file.split("_")[1].split("plate")[1]
-            calculate_ed50.main(isolate, plate)
+    workbook = "GPMPhenotypingAssay_Workbook.xlsx"
+    if os.path.exists(workbook):
+        uvc_workbook = openpyxl.load_workbook(workbook)
+        sheet_name = "Assay Data"
+        if sheet_name in uvc_workbook.sheetnames:
+            sheet = uvc_workbook[sheet_name]
+            df = pd.DataFrame(sheet.values)
+            df.columns = df.iloc[0]
+            for i, row in df[1:].iterrows():
+                if row["Quality Check"] == "PASS":
+                    isolate = row["Isolate"]
+                    plate = row["Plate ID"]
+                    calculate_ed50.main(isolate, plate)
 
     # Fix up the workbook formatting
     format_workbook.main()
@@ -131,7 +142,7 @@ def batch_process(image_folder="ECHO Images", prompt=True):
     elapsed_time = time.time() - start_time
     # Print elapsed time in H:M:S format
     print(f"\nElapsed time: {time.strftime('%H:%M:%S', time.gmtime(elapsed_time))}")
-    print(f"Assay runs processed: {processed // 2}")
+    print(f"Assay runs processed: {processed}")
     if prompt:
         input("Batch processing complete. Press ENTER.\n")
 
