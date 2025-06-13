@@ -133,7 +133,11 @@ def batch_process(image_folder="ECHO Images", prompt=True):
                 if row["Quality Check"] == "PASS":
                     isolate = row["Isolate"]
                     plate = row["Plate ID"]
-                    calculate_ed50.main(isolate, plate)
+                    # Only calculate ED50's for assay runs that are being processed
+                    if os.path.exists(
+                        f"results/FinalResults_plate{plate}_{isolate}.csv"
+                    ):
+                        calculate_ed50.main(isolate, plate)
 
     # Fix up the workbook formatting
     format_workbook.main()
