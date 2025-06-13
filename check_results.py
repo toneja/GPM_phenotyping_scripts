@@ -21,6 +21,7 @@
 
 
 import os
+import warnings
 import openpyxl
 import pandas as pd
 from tabulate import tabulate
@@ -28,6 +29,8 @@ from tabulate import tabulate
 
 def main():
     """Check the results and make sure the data is usable."""
+    # Ignore warnings
+    warnings.filterwarnings("ignore")
     os.chdir(os.path.dirname(__file__))
     print("Quality checking phenotyping data...")
     keepers = []

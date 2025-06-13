@@ -21,6 +21,7 @@
 
 import os
 import sys
+import warnings
 import openpyxl
 import pandas as pd
 
@@ -29,6 +30,8 @@ def compile_workbook(workbook_file, csv_files):
     """
     Compiles the csv files into the workbook.
     """
+    # Ignore warnings
+    warnings.filterwarnings("ignore")
     # Check if output workbook already exists
     if os.path.exists(workbook_file):
         # If it does, load the existing workbook
