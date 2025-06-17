@@ -41,7 +41,7 @@ def main():
             return
         uvc_df = pd.DataFrame(sheet.values)
         uvc_df.columns = uvc_df.iloc[0]
-        for i, row in uvc_df[1:].iterrows():
+        for _, row in uvc_df[1:].iterrows():
             plate = row["Plate ID"]
             isolate = row["Isolate"]
             doses = {}

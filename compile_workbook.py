@@ -64,7 +64,7 @@ def compile_workbook(workbook_file, csv_files):
 
         # Loop through the rows and add them to the sheet
         sheet.append(df.columns.tolist())
-        for i, row in df.iterrows():
+        for _, row in df.iterrows():
             sheet.append(row.tolist())
 
         print(f"Added sheet {sheet_name} to workbook")

@@ -129,7 +129,7 @@ def batch_process(image_folder="ECHO Images", prompt=True):
             sheet = uvc_workbook[sheet_name]
             df = pd.DataFrame(sheet.values)
             df.columns = df.iloc[0]
-            for i, row in df[1:].iterrows():
+            for _, row in df[1:].iterrows():
                 if row["Quality Check"] == "PASS":
                     isolate = row["Isolate"]
                     plate = row["Plate ID"]

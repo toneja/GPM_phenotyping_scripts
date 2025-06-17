@@ -158,7 +158,7 @@ def csv_handler(input_file, model):
     df = pd.DataFrame(data)
     roi_count, roi_germinated = 0, 0
     area_total, perim_total, feret_total = 0, 0, 0
-    for i, row in df.iterrows():
+    for _, row in df.iterrows():
         # debris filter
         _id = identify_roi(row, model)
         if _id == -1:

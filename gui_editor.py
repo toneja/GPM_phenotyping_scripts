@@ -16,7 +16,7 @@ import update
 class ExcelDataEditor:
     def __init__(self, root):
         self.root = root
-        self.root.title("Excel Data Editor - Assay Data")
+        self.root.title("Excel Data Editor - GPM Assay Data")
         self.root.geometry("1080x720")
 
         self.current_file = None
@@ -240,7 +240,7 @@ class ExcelDataEditor:
             # Store the actual dataframe index as a tag for internal use
             self.tree.insert("", "end", values=values, tags=(str(idx),))
 
-    def on_sheet_change(self, event=None):
+    def on_sheet_change(self, _=None):
         self.current_sheet = self.sheet_var.get()
         self.display_sheet()
 
