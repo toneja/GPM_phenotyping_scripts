@@ -421,7 +421,20 @@ class ExcelDataEditor:
                     if module_name == "batch_process":
                         result = batch_process.batch_process("ECHO Images", False)
                     elif module_name == "anova_hsd":
-                        result = anova_hsd.main(False)
+                        x, y = pd.Series(), pd.Series()
+                        selected_items = self.tree.selection()
+                        if len(selected_items) >= 4:
+                            df = self.excel_data[self.current_sheet]
+                            for i, _ in enumerate(selected_items):
+                                item = selected_items[i]
+                                index = self.tree.index(item)
+                                x.at[i] = df.iloc[index]["Isolate"]
+                                y.at[i] = df.iloc[index]["ED50 (J/m^2)"]
+                        if 1 <= len(selected_items) <= 3:
+                            print(
+                                "Select at least 4 runs to perform manual statistical analyses."
+                            )
+                        result = anova_hsd.main(False, x, y)
                     elif module_name == "cleanup_imagej":
                         result = cleanup_imagej.cleanup_imagej(False)
                     elif module_name == "calculate_ed50":
