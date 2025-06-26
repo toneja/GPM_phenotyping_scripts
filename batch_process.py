@@ -137,7 +137,7 @@ def batch_process(image_folder="ECHO Images", prompt=True):
                     if os.path.exists(
                         f"results/FinalResults_plate{plate}_{isolate}.csv"
                     ):
-                        calculate_ed50.main(isolate, plate)
+                        calculate_ed50.main([isolate], [plate], False)
 
     # Fix up the workbook formatting
     format_workbook.main()

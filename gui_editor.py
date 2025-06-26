@@ -53,6 +53,9 @@ class ExcelDataEditor:
         tools_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Tools", menu=tools_menu)
         tools_menu.add_command(label="Get Results", command=self.get_results)
+        tools_menu.add_command(
+            label="Plot ED50(s)", command=self.calculate_ed50_for_row
+        )
         tools_menu.add_command(label="Get Stats", command=self.get_stats)
         tools_menu.add_command(label="Clean Files", command=self.cleanup_imagej)
         tools_menu.add_command(label="Update Code", command=self.update_code)
@@ -96,6 +99,9 @@ class ExcelDataEditor:
         ttk.Button(toolbar, text="Get Results", command=self.get_results).pack(
             side=tk.LEFT, padx=(0, 5)
         )
+        ttk.Button(
+            toolbar, text="Plot ED50(s)", command=self.calculate_ed50_for_row
+        ).pack(side=tk.LEFT, padx=(0, 5))
         ttk.Button(toolbar, text="Get Stats", command=self.get_stats).pack(
             side=tk.LEFT, padx=(0, 5)
         )
@@ -148,7 +154,7 @@ class ExcelDataEditor:
         self.context_menu.add_command(label="Add Column", command=self.add_column)
         self.context_menu.add_separator()
         self.context_menu.add_command(
-            label="Calculate ED50", command=self.calculate_ed50_for_row
+            label="Plot ED50(s)", command=self.calculate_ed50_for_row
         )
 
         self.tree.bind("<Button-3>", self.show_context_menu)  # Right-click
@@ -441,12 +447,19 @@ class ExcelDataEditor:
                         # Extract isolate name and plate ID
                         df = self.excel_data[self.current_sheet]
                         selected_items = self.tree.selection()
-                        for i, _ in enumerate(selected_items):
-                            item = selected_items[i]
-                            index = self.tree.index(item)
-                            isolate = df.iloc[index]["Isolate"]
-                            plate = df.iloc[index]["Plate ID"]
-                            result = calculate_ed50.main(isolate, plate, True)
+                        if not selected_items:
+                            result = "No rows selected."
+                        else:
+                            isolates = []
+                            plates = []
+                            for i, _ in enumerate(selected_items):
+                                item = selected_items[i]
+                                index = self.tree.index(item)
+                                # Exclude runs that didn't pass the quality check
+                                if df.iloc[index]["Quality Check"] == "PASS":
+                                    isolates.append(df.iloc[index]["Isolate"])
+                                    plates.append(df.iloc[index]["Plate ID"])
+                            result = calculate_ed50.main(isolates, plates, True)
                     elif module_name == "update":
                         result = update.main(False)
 
