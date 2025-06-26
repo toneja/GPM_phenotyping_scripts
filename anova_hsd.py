@@ -49,7 +49,7 @@ def tukey_hsd(anova_df, test):
         ylabel = "Timepoints"
     tukey.plot_simultaneous(ylabel=ylabel)
     plt.title(f"Tukey's Honestly Significant Difference Test ({test})")
-    plt.xlabel("Mean ED50 (J/m$^2$)")
+    plt.xlabel("Mean ED50 (J/m$^2$) + 95% Confidence Interval")
     plt.show()
     plt.close()
 
