@@ -466,7 +466,7 @@ class ExcelDataEditor:
                     # Create output window
                     output_window = tk.Toplevel(self.root)
                     output_window.title(f"Module Output - {module_name}")
-                    output_window.geometry("600x400")
+                    output_window.geometry("800x600")
 
                     # Text widget with scrollbar
                     text_frame = ttk.Frame(output_window)
