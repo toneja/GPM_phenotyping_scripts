@@ -38,7 +38,7 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
     )
 
 
-def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, pcov):
+def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, pcov, color=True):
     # Calculate ED50
     ed50 = int(round(popt[2], 0))
     # Calculate standard error for ED50
@@ -51,6 +51,7 @@ def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, p
     y_vals = logistic_4pl(x_vals, *popt)
     if index <= 0:
         plt.figure()
+    colors = ["green", "blue", "red", "orange"]
     line_styles = ["-", "--", "-.", ":"]
     markers = ["o", "^", "s", "X"]
     # Add a separator to the legend for readability
@@ -60,7 +61,7 @@ def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, p
         concentrations,
         germination_rates,
         label="Data" if index < 0 else plate,
-        color="black",
+        color=colors[index] if (index >= 0 and color) else "black",
         marker=markers[index if index >= 0 else 0],
         edgecolors="black",
     )
@@ -68,13 +69,13 @@ def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, p
         x_vals,
         y_vals,
         label="Fitted Curve",
-        color="black",
-        linestyle=line_styles[index if index >= 0 else 0],
+        color=colors[index] if (index >= 0 and color) else "black",
+        linestyle=line_styles[index if (index >= 0 and not color) else 0],
     )
     plt.axvline(
         ed50,
-        linestyle=line_styles[index if index >= 0 else 0],
-        color="black",
+        linestyle=line_styles[index if (index >= 0 and not color) else 0],
+        color=colors[index] if (index >=0 and color) else "black",
         label=f"ED$_{{50}}$ = {ed50} ± {ed50_SE}",
     )
     # add R-squared value to the legend
@@ -101,12 +102,6 @@ def calculate_ed50(isolates, plates, show_plot=False):
     # Plot up to 4 runs at a time
     if len(isolates) > 4:
         print(f"Can only plot up to 4 runs at a time, {len(isolates)} runs selected.")
-        return
-    # Only plot multiple runs if they are from the same isolate
-    if len(set(isolates)) > 1:
-        print(
-            f"Can only plot multiple runs from the same isolate, {len(set(isolates))} isolates selected."
-        )
         return
     # Load the data
     workbook = "GPMPhenotypingAssay_Workbook.xlsx"
