@@ -76,7 +76,7 @@ def plot_curve(
     )
     plt.axvline(
         ed50,
-        linestyle=line_styles[index if (index >= 0 and not color) else 0],
+        linestyle=line_styles[index if (index >= 0 and not color) else 1],
         color=colors[index] if (index >= 0 and color) else "black",
         label=f"ED$_{{50}}$ = {ed50} ± {ed50_SE}",
     )
