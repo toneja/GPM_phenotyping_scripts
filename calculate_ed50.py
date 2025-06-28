@@ -176,10 +176,10 @@ def calculate_ed50(isolates, plates, show_plot=False):
             return
         assay_df = pd.DataFrame(sheet.values)
         assay_df.columns = assay_df.iloc[0]
-        for index, row in assay_df[1:].iterrows():
+        for idx, row in assay_df[1:].iterrows():
             if row["Isolate"] == isolate and row["Plate ID"].upper() == plate:
                 sheet.cell(
-                    row=index + 1,
+                    row=idx + 1,
                     column=assay_df.columns.get_loc("ED50 (J/m^2)") + 1,
                     value=f"{ed50} ± {ed50_SE}",
                 )
