@@ -38,7 +38,9 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
     )
 
 
-def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, pcov, color=True):
+def plot_curve(
+    index, isolate, plate, concentrations, germination_rates, popt, pcov, color=True
+):
     # Calculate ED50
     ed50 = int(round(popt[2], 0))
     # Calculate standard error for ED50
@@ -50,7 +52,7 @@ def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, p
     x_vals = np.linspace(min(concentrations), max(concentrations), 100)
     y_vals = logistic_4pl(x_vals, *popt)
     if index <= 0:
-        plt.figure()
+        plt.figure(figsize=(10, 6))
     colors = ["green", "blue", "red", "orange"]
     line_styles = ["-", "--", "-.", ":"]
     markers = ["o", "^", "s", "X"]
@@ -75,7 +77,7 @@ def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, p
     plt.axvline(
         ed50,
         linestyle=line_styles[index if (index >= 0 and not color) else 0],
-        color=colors[index] if (index >=0 and color) else "black",
+        color=colors[index] if (index >= 0 and color) else "black",
         label=f"ED$_{{50}}$ = {ed50} ± {ed50_SE}",
     )
     # add R-squared value to the legend
@@ -86,12 +88,6 @@ def plot_curve(index, isolate, plate, concentrations, germination_rates, popt, p
     plt.xlabel("UV-C Dose (J/m$^2$)")
     plt.ylabel("Mean germination relative to control (%)")
     plt.legend()
-    if index < 0:
-        plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
-        plt.savefig(f"results/ED50_{isolate}_{plate}.png")
-    else:
-        plt.title(f"UV-C Dose-Response Curve: {isolate}")
-        plt.savefig(f"results/ED50_{isolate}_combined.png")
     return ed50, ed50_SE
 
 
@@ -188,6 +184,17 @@ def calculate_ed50(isolates, plates, show_plot=False):
                     value=f"{ed50} ± {ed50_SE}",
                 )
         uvc_workbook.save(workbook)
+    if index < 0:
+        plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
+        plt.savefig(f"results/ED50_{isolate}_{plate}.png", dpi=300, bbox_inches="tight")
+    else:
+        plotted = (
+            " - ".join(i for i in isolates) if len(set(isolates)) > 1 else isolates[0]
+        )
+        plt.title(f"UV-C Dose-Response Curve: {plotted}")
+        plt.savefig(
+            f"results/ED50_{plotted}_combined.png", dpi=300, bbox_inches="tight"
+        )
     # Show the plot if requested
     if show_plot:
         plt.show()
