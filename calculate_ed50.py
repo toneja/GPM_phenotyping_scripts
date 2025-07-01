@@ -21,6 +21,7 @@
 
 
 import os
+import re
 import sys
 import warnings
 import pandas as pd
@@ -36,6 +37,11 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
     return bottom + (top - bottom) / (
         1 + np.exp(hill_slope * (np.log(x) - np.log(ed50)))
     )
+
+
+def extract_timepoint(plate):
+    matches = re.findall(r"\b(\dhr\w*)\b", plate)
+    return matches[0] if matches else "1hrass"
 
 
 def plot_curve(
@@ -212,6 +218,10 @@ def main(isolates, plates, show_plot=False):
     if len(isolates) != len(plates):
         return
     os.chdir(os.path.dirname(__file__))
+    # Sort plate IDs by timepoint while maintaining isolate-plate pairs
+    paired = sorted(list(zip(plates, isolates)), key=lambda x: extract_timepoint(x[0]))
+    plates, isolates = zip(*paired)
+    plates, isolates = list(plates), list(isolates)
     calculate_ed50(isolates, plates, show_plot)
 
 
