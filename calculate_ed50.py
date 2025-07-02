@@ -40,8 +40,8 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
 
 
 def extract_timepoint(plate):
-    matches = re.findall(r"\b(\dhr\w*)\b", plate)
-    return matches[0] if matches else "1hrass"
+    matches = re.findall(r"(\d)(?i:hr)", plate)
+    return matches[0] if matches else "1"
 
 
 def plot_curve(
@@ -68,7 +68,9 @@ def plot_curve(
     plt.scatter(
         concentrations,
         germination_rates,
-        label="Data" if index < 0 else plate,
+        label="Data"
+        if index < 0
+        else f"{extract_timepoint(plate)} hr ({plate.split('-')[0]})",
         color=colors[index] if (index >= 0 and color) else "black",
         marker=markers[index if index >= 0 else 0],
         edgecolors="black",
