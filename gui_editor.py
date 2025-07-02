@@ -119,7 +119,7 @@ class ExcelDataEditor:
         ttk.Label(sheet_frame, text="Sheet:").pack(side=tk.LEFT, padx=(0, 5))
         self.sheet_var = tk.StringVar()
         self.sheet_combo = ttk.Combobox(
-            sheet_frame, textvariable=self.sheet_var, state="readonly"
+            sheet_frame, textvariable=self.sheet_var, state="readonly", width=35
         )
         self.sheet_combo.pack(side=tk.LEFT, padx=(0, 5))
         self.sheet_combo.bind("<<ComboboxSelected>>", self.on_sheet_change)
