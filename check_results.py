@@ -95,15 +95,17 @@ def main():
                 # Delete bad results output, keep the data out of the workbook
                 os.remove(file)
                 check_result = f"FAIL: {discard_reasons}"
+                sheet_name = "Archived Runs"
             else:
                 keepers.append([isolate, plate])
                 check_result = "PASS"
+                sheet_name = "Assay Data"
             # Add QC info to the master spreadsheet
             workbook = "GPMPhenotypingAssay_Workbook.xlsx"
             if os.path.exists(workbook):
                 uvc_workbook = openpyxl.load_workbook(workbook)
-                if "Assay Data" in uvc_workbook.sheetnames:
-                    sheet = uvc_workbook["Assay Data"]
+                if sheet_name in uvc_workbook.sheetnames:
+                    sheet = uvc_workbook[sheet_name]
                     assay_df = pd.DataFrame(sheet.values)
                     assay_df.columns = assay_df.iloc[0]
                     for index, row in assay_df[1:].iterrows():
@@ -116,7 +118,7 @@ def main():
                         workbook, engine="openpyxl", mode="a", if_sheet_exists="overlay"
                     ) as writer:
                         assay_df.to_excel(
-                            writer, sheet_name="Assay Data", header=False, index=False
+                            writer, sheet_name=sheet_name, header=False, index=False
                         )
     if keepers:
         keepers.sort()

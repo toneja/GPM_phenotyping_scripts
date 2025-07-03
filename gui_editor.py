@@ -153,6 +153,8 @@ class ExcelDataEditor:
         self.context_menu.add_separator()
         self.context_menu.add_command(label="Add Column", command=self.add_column)
         self.context_menu.add_separator()
+        self.context_menu.add_command(label="Archive Run(s)", command=self.archive_run)
+        self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Plot ED50(s)", command=self.calculate_ed50_for_row
         )
@@ -348,6 +350,36 @@ class ExcelDataEditor:
 
         self.display_sheet()
         self.status_var.set(f"New Column: {col_name} created")
+
+    def archive_run(self):
+        if not self.current_sheet:
+            messagebox.showwarning("Warning", "No sheet selected")
+            return
+
+        row_indices = self.get_selected_row_indices()
+        if row_indices is None:
+            messagebox.showwarning("Warning", "No row(s) selected")
+            return
+
+        for row_index in reversed(row_indices):
+            df = self.excel_data[self.current_sheet]
+            row_to_archive = pd.Series(df.iloc[row_index], index=df.columns)
+            archive_df = self.excel_data.get("Archived Runs")
+            if archive_df is None:
+                archive_df = pd.DataFrame(columns=df.columns)
+                archive_df = archive_df.astype(df.dtypes.to_dict())
+
+            # Insert duplicated row
+            self.excel_data["Archived Runs"] = pd.concat(
+                [archive_df, pd.DataFrame([row_to_archive])], ignore_index=True
+            )
+            # Remove row from Assay Data sheet
+            self.excel_data["Assay Data"] = df.drop(df.index[row_index]).reset_index(
+                drop=True
+            )
+
+        self.display_sheet()
+        self.status_var.set(f"Row(s) {row_indices} archived")
 
     def edit_cell(self, event):
         if not self.current_sheet:
