@@ -244,7 +244,14 @@ class ExcelDataEditor:
 
         for col in columns:
             self.tree.heading(col, text=col)
-            self.tree.column(col, width=120, minwidth=80)
+            self.tree.column(
+                col,
+                width=120,
+                minwidth=80,
+                stretch=False
+                if any(x in col for x in ("Plate ID", "Quality Check"))
+                else True,
+            )
 
         # Insert data (without index)
         for idx, row in df.iterrows():
