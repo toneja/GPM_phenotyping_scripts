@@ -561,7 +561,7 @@ class ExcelDataEditor:
             pady=10
         )
 
-        self.auto_open_assay_workbook()
+        self.display_sheet()
         self.status_var.set(f"Executed {module_name} module")
 
     def auto_open_assay_workbook(self):
