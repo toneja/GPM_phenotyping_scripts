@@ -129,15 +129,14 @@ def batch_process(image_folder="ECHO Images", prompt=True):
             sheet = uvc_workbook[sheet_name]
             df = pd.DataFrame(sheet.values)
             df.columns = df.iloc[0]
+            isolates, plates = [], []
             for _, row in df[1:].iterrows():
-                if row["Quality Check"] == "PASS":
-                    isolate = row["Isolate"]
-                    plate = row["Plate ID"]
-                    # Only calculate ED50's for assay runs that are being processed
-                    if os.path.exists(
-                        f"results/FinalResults_plate{plate}_{isolate}.csv"
-                    ):
-                        calculate_ed50.main([isolate], [plate], False)
+                # Only calculate ED50 if it is missing from the workbook
+                if row["Quality Check"] == "PASS" and pd.isna(row["ED50 (J/m^2)"]):
+                    isolates.append(row["Isolate"])
+                    plates.append(row["Plate ID"])
+            if isolates and plates:
+                calculate_ed50.main(isolates, plates, False)
 
     # Fix up the workbook formatting
     format_workbook.main()
