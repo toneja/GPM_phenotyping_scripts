@@ -24,7 +24,7 @@ class ExcelDataEditor:
         self.current_sheet = None
 
         self.setup_ui()
-        self.auto_open_assay_workbook()
+        self.open_assay_workbook()
 
     def setup_ui(self):
         # Menu bar
@@ -561,14 +561,19 @@ class ExcelDataEditor:
             pady=10
         )
 
+        self.open_assay_workbook()
         self.display_sheet()
         self.status_var.set(f"Executed {module_name} module")
 
-    def auto_open_assay_workbook(self):
-        """Automatically open GPMPhenotypingAssay_Workbook.xlsx and select 'Assay Data' sheet if present"""
-        workbook_path = "GPMPhenotypingAssay_Workbook.xlsx"
+    def open_assay_workbook(self):
+        """Automatically open the assay workbook and select 'Assay Data' sheet if present"""
+        workbook_path = (
+            "GPMPhenotypingAssay_Workbook.xlsx"
+            if self.current_file is None
+            else self.current_file
+        )
 
-        # Check if GPMPhenotypingAssay_Workbook.xlsx exists in the current directory
+        # Check if workbook exists in the current directory
         if os.path.exists(workbook_path):
             try:
                 self.excel_data = pd.read_excel(workbook_path, sheet_name=None)
@@ -579,28 +584,29 @@ class ExcelDataEditor:
                 self.sheet_combo["values"] = sheet_names
 
                 # Try to select "Assay Data" sheet, otherwise use first sheet
-                if "Assay Data" in sheet_names:
-                    self.sheet_var.set("Assay Data")
-                    self.current_sheet = "Assay Data"
+                sheet_name = (
+                    "Assay Data" if self.current_sheet is None else self.current_sheet
+                )
+                if sheet_name in sheet_names:
+                    self.sheet_var.set(sheet_name)
+                    self.current_sheet = sheet_name
                     self.status_var.set(
-                        f"Opened: {os.path.basename(workbook_path)} - Sheet: 'Assay Data'"
+                        f"Opened: {os.path.basename(workbook_path)} - Sheet: '{sheet_name}'"
                     )
                 elif sheet_names:
                     self.sheet_var.set(sheet_names[0])
                     self.current_sheet = sheet_names[0]
                     self.status_var.set(
-                        f"Opened: {os.path.basename(workbook_path)} - Sheet: '{sheet_names[0]}' ('Assay Data' sheet not found)"
+                        f"Opened: {os.path.basename(workbook_path)} - Sheet: '{sheet_names[0]}' ('{sheet_name}' sheet not found)"
                     )
 
                 self.display_sheet()
 
             except Exception as e:
-                self.status_var.set(
-                    f"Error opening GPMPhenotypingAssay_Workbook.xlsx: {str(e)}"
-                )
+                self.status_var.set(f"Error opening {workbook_path}: {str(e)}")
         else:
             self.status_var.set(
-                "Ready - GPMPhenotypingAssay_Workbook.xlsx not found in current directory"
+                f"Ready - {workbook_path} not found in current directory"
             )
 
 
