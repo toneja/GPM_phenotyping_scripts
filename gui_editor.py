@@ -457,12 +457,32 @@ class ExcelDataEditor:
             stdout_capture = StringIO()
             stderr_capture = StringIO()
 
+            # Create output window
+            output_window = tk.Toplevel(self.root)
+            output_window.title(f"Module Output - {module_name}")
+            output_window.geometry("1080x720")
+
+            # Text widget with scrollbar
+            text_frame = ttk.Frame(output_window)
+            text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+            output_text = tk.Text(text_frame, wrap=tk.WORD)
+            output_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+            output_text.insert(tk.END, f"Running {function_call}\n")
+            output_text.insert(tk.END, "=" * 50 + "\n\n")
+
+            scrollbar = ttk.Scrollbar(text_frame, command=output_text.yview)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+            output_text.config(yscrollcommand=scrollbar.set)
+
             try:
                 sys.stdout = stdout_capture
                 sys.stderr = stderr_capture
 
                 # Import and execute the specific module
                 try:
+                    result = None
                     if module_name == "batch_process":
                         result = batch_process.batch_process("ECHO Images", False)
                     elif module_name == "anova_hsd":
@@ -501,25 +521,6 @@ class ExcelDataEditor:
                             result = calculate_ed50.main(isolates, plates, True)
                     elif module_name == "update":
                         result = update.main(False)
-
-                    # Create output window
-                    output_window = tk.Toplevel(self.root)
-                    output_window.title(f"Module Output - {module_name}")
-                    output_window.geometry("1080x720")
-
-                    # Text widget with scrollbar
-                    text_frame = ttk.Frame(output_window)
-                    text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-
-                    output_text = tk.Text(text_frame, wrap=tk.WORD)
-                    output_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
-                    output_text.insert(tk.END, f"Running {function_call}\n")
-                    output_text.insert(tk.END, "=" * 50 + "\n\n")
-
-                    scrollbar = ttk.Scrollbar(text_frame, command=output_text.yview)
-                    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-                    output_text.config(yscrollcommand=scrollbar.set)
 
                     # If the function returns something, display it
                     if result is not None:
