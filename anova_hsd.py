@@ -39,14 +39,15 @@ def extract_timepoint(plate_id):
 
 def tukey_hsd(anova_df, test):
     tukey = pairwise_tukeyhsd(
-        endog=anova_df["ED50"], groups=anova_df["Isolate"], alpha=0.05
+        endog=anova_df["ED50"], groups=anova_df["Group"], alpha=0.05
     )
     print(f"\n*** TUKEY HSD SUMMARY: {test} ***")
     print(tukey.summary().as_text())
-    if any(x in test for x in ("Inter", "Manual")):
-        ylabel = "Isolates"
-    else:
-        ylabel = "Timepoints"
+    ylabel = (
+        "Isolates"
+        if any(x in test for x in ("Inter", "Manual"))
+        else "Hours Since Sunset"
+    )
     tukey.plot_simultaneous(ylabel=ylabel)
     plt.title(f"Tukey's Honestly Significant Difference Test ({test})")
     plt.xlabel("Mean ED50 (J/m$^2$) + 95% Confidence Interval")
@@ -56,16 +57,14 @@ def tukey_hsd(anova_df, test):
 
 def oneway_anova(x, y, test):
     warnings.filterwarnings("ignore")
-    anova_df = pd.DataFrame({"Isolate": x, "ED50": y})
-    model = ols("ED50~Isolate", data=anova_df)
+    anova_df = pd.DataFrame({"Group": x, "ED50": y})
+    model = ols("ED50~Group", data=anova_df)
     results = model.fit()
     anova_table = sm.stats.anova_lm(results, typ=2)
-    p_value = anova_table["PR(>F)"]["Isolate"]
     print(f"*** ANOVA TABLE: {test} ***")
     print(results.summary().as_text())
     print("=" * 91)
-    if p_value < 0.05:
-        tukey_hsd(anova_df, test)
+    tukey_hsd(anova_df, test)
 
 
 def main(prompt=True, x=pd.Series(), y=pd.Series()):
