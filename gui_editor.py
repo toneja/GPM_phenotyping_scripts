@@ -459,6 +459,7 @@ class ExcelDataEditor:
 
             # Create output window
             output_window = tk.Toplevel(self.root)
+            output_window.withdraw()
             output_window.title(f"Module Output - {module_name}")
             output_window.geometry("1080x720")
 
@@ -561,6 +562,9 @@ class ExcelDataEditor:
         ttk.Button(output_window, text="Close", command=output_window.destroy).pack(
             pady=10
         )
+
+        # Show the ouput window
+        output_window.deiconify()
 
         self.open_assay_workbook()
         self.display_sheet()
