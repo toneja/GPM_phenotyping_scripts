@@ -33,8 +33,8 @@ def extract_ed50(value):
 
 
 def extract_timepoint(plate_id):
-    match = re.search(r"(\d+hr\w*|\d+min\w*)", str(plate_id))
-    return match.group(1) if match else "1hrass"
+    matches = re.findall(r"(\d+)(?i:hr)", str(plate_id))
+    return int(matches[0]) if matches else 1
 
 
 def tukey_hsd(anova_df, test):
