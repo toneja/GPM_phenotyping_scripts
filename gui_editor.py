@@ -246,6 +246,29 @@ class ExcelDataEditor:
             self.current_file = file_path
             self.save_file()
 
+    def save_text_output(self):
+        if not self.text_output:
+            messagebox.showerror("Error", "There is no text output to save.")
+            return
+
+        file_path = filedialog.asksaveasfilename(
+            title="Save Text File",
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+        )
+
+        if not file_path:
+            return
+
+        try:
+            with open(file_path, "w") as file:
+                file.write(self.text_output)
+            self.status_var.set(f"Saved: {os.path.basename(file_path)}")
+            messagebox.showinfo("Success", "File saved successfully!")
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save file: {str(e)}")
+
     def display_sheet(self):
         if not self.current_sheet or self.current_sheet not in self.excel_data:
             return
@@ -467,6 +490,7 @@ class ExcelDataEditor:
 
     def _run_specific_module(self, module_name, function_call):
         """Generic method to run a specific module's main function"""
+        self.text_output = None
         # Run the module
         try:
             # Capture stdout/stderr
@@ -484,7 +508,7 @@ class ExcelDataEditor:
 
             # Text widget with scrollbar
             text_frame = ttk.Frame(output_window)
-            text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            text_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=10, pady=10)
 
             output_text = tk.Text(text_frame, wrap=tk.WORD)
             output_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -559,10 +583,15 @@ class ExcelDataEditor:
                 if stdout_value:
                     output_text.insert(tk.END, "OUTPUT:\n")
                     output_text.insert(tk.END, stdout_value + "\n")
+                    # Pass stdout so it can saved to a file
+                    if module_name == "anova_hsd":
+                        self.text_output = stdout_value
 
                 if stderr_value:
                     output_text.insert(tk.END, "ERRORS:\n")
                     output_text.insert(tk.END, stderr_value + "\n")
+                    # Pass stdout so it can saved to a file
+                    self.text_output = stderr_value
 
                 if not stdout_value and not stderr_value:
                     output_text.insert(
@@ -577,9 +606,14 @@ class ExcelDataEditor:
             output_text.insert(tk.END, f"UNEXPECTED ERROR: {str(e)}\n")
             output_text.insert(tk.END, f"Traceback:\n{traceback.format_exc()}\n")
 
+        # Save As Button for statistics tests output or error messages
+        if self.text_output:
+            ttk.Button(
+                output_window, text="Save As", command=self.save_text_output
+            ).pack(pady=(0, 10))
         # Close button
         ttk.Button(output_window, text="Close", command=output_window.destroy).pack(
-            pady=10
+            pady=(0, 10)
         )
 
         # Show the ouput window
