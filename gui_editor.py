@@ -313,7 +313,7 @@ class ExcelDataEditor:
         tags = []
         for item in list(selections):
             tags.append(int(self.tree.item(item, "tags")[0]))
-        return (tags if len(tags) > 1 else tags[0]) if tags else None
+        return tags if tags else None
 
     def add_row(self):
         if not self.current_sheet:
@@ -440,7 +440,7 @@ class ExcelDataEditor:
 
         column = self.tree.identify_column(event.x)
         col_index = int(column.replace("#", "")) - 1  # No index column offset needed
-        row_index = self.get_selected_row_indices()
+        row_index = self.get_selected_row_indices()[0]
 
         if row_index is None:
             return
