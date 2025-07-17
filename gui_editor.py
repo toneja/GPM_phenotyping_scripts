@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""docstring goes here."""
+
+
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog, simpledialog
 import os
@@ -33,7 +36,10 @@ import update
 
 
 class ExcelDataEditor:
+    """docstring goes here."""
+
     def __init__(self, root):
+        """docstring goes here."""
         self.root = root
         self.root.title("Excel Data Editor - GPM Assay Data")
         self.root.geometry("1080x720")
@@ -41,11 +47,13 @@ class ExcelDataEditor:
         self.current_file = None
         self.excel_data = {}
         self.current_sheet = None
+        self.text_output = None
 
         self.setup_ui()
         self.open_assay_workbook()
 
     def setup_ui(self):
+        """docstring goes here."""
         # Menu bar
         menubar = tk.Menu(self.root)
         self.root.config(menu=menubar)
@@ -190,12 +198,14 @@ class ExcelDataEditor:
         status_bar.pack(fill=tk.X, pady=(10, 0))
 
     def show_context_menu(self, event):
+        """docstring goes here."""
         try:
             self.context_menu.tk_popup(event.x_root, event.y_root)
         finally:
             self.context_menu.grab_release()
 
     def open_file(self):
+        """docstring goes here."""
         file_path = filedialog.askopenfilename(
             title="Open Excel File",
             filetypes=[("Excel files", "*.xlsx *.xls"), ("All files", "*.*")],
@@ -220,6 +230,7 @@ class ExcelDataEditor:
                 messagebox.showerror("Error", f"Failed to open file: {str(e)}")
 
     def save_file(self):
+        """docstring goes here."""
         if not self.current_file:
             self.save_as_file()
             return
@@ -236,6 +247,7 @@ class ExcelDataEditor:
             messagebox.showerror("Error", f"Failed to save file: {str(e)}")
 
     def save_as_file(self):
+        """docstring goes here."""
         file_path = filedialog.asksaveasfilename(
             title="Save Excel File",
             defaultextension=".xlsx",
@@ -247,6 +259,7 @@ class ExcelDataEditor:
             self.save_file()
 
     def save_text_output(self):
+        """docstring goes here."""
         if not self.text_output:
             messagebox.showerror("Error", "There is no text output to save.")
             return
@@ -261,7 +274,7 @@ class ExcelDataEditor:
             return
 
         try:
-            with open(file_path, "w") as file:
+            with open(file_path, "w", encoding="utf-8") as file:
                 file.write(self.text_output)
             self.status_var.set(f"Saved: {os.path.basename(file_path)}")
             messagebox.showinfo("Success", "File saved successfully!")
@@ -270,6 +283,7 @@ class ExcelDataEditor:
             messagebox.showerror("Error", f"Failed to save file: {str(e)}")
 
     def display_sheet(self):
+        """docstring goes here."""
         if not self.current_sheet or self.current_sheet not in self.excel_data:
             return
 
@@ -290,9 +304,7 @@ class ExcelDataEditor:
                 col,
                 width=120,
                 minwidth=80,
-                stretch=False
-                if any(x in col for x in ("Plate ID", "Quality Check"))
-                else True,
+                stretch=not any(x in col for x in ("Plate ID", "Quality Check")),
             )
 
         # Insert data (without index)
@@ -302,20 +314,21 @@ class ExcelDataEditor:
             self.tree.insert("", "end", values=values, tags=(str(idx),))
 
     def on_sheet_change(self, _=None):
+        """docstring goes here."""
         self.current_sheet = self.sheet_var.get()
         self.display_sheet()
 
     def get_selected_row_indices(self):
-        selections = self.tree.selection()
-        if not selections:
-            return None
-
+        """docstring goes here."""
         tags = []
-        for item in list(selections):
-            tags.append(int(self.tree.item(item, "tags")[0]))
-        return tags if tags else None
+        selections = self.tree.selection()
+        if selections:
+            for item in list(selections):
+                tags.append(int(self.tree.item(item, "tags")[0]))
+        return tags
 
     def add_row(self):
+        """docstring goes here."""
         if not self.current_sheet:
             messagebox.showwarning("Warning", "No sheet selected")
             return
@@ -334,6 +347,7 @@ class ExcelDataEditor:
         self.status_var.set("Row added")
 
     def delete_row(self):
+        """docstring goes here."""
         if not self.current_sheet:
             messagebox.showwarning("Warning", "No sheet selected")
             return
@@ -355,6 +369,7 @@ class ExcelDataEditor:
             self.status_var.set(f"Row(s) {row_indices} deleted")
 
     def duplicate_row(self):
+        """docstring goes here."""
         if not self.current_sheet:
             messagebox.showwarning("Warning", "No sheet selected")
             return
@@ -382,6 +397,7 @@ class ExcelDataEditor:
         self.status_var.set(f"Row(s) {row_indices} duplicated")
 
     def add_column(self):
+        """docstring goes here."""
         if not self.current_sheet:
             return
 
@@ -401,6 +417,7 @@ class ExcelDataEditor:
         self.status_var.set(f"New Column: {col_name} created")
 
     def archive_run(self):
+        """docstring goes here."""
         if not self.current_sheet:
             messagebox.showwarning("Warning", "No sheet selected")
             return
@@ -431,6 +448,7 @@ class ExcelDataEditor:
         self.status_var.set(f"Row(s) {row_indices} archived")
 
     def edit_cell(self, event):
+        """docstring goes here."""
         if not self.current_sheet:
             return
 
@@ -534,8 +552,7 @@ class ExcelDataEditor:
                         selected_items = self.tree.selection()
                         if len(selected_items) >= 4:
                             df = self.excel_data[self.current_sheet]
-                            for i, _ in enumerate(selected_items):
-                                item = selected_items[i]
+                            for i, item in enumerate(selected_items):
                                 index = self.tree.index(item)
                                 x.at[i] = df.iloc[index]["Isolate"]
                                 y.at[i] = df.iloc[index]["ED50 (J/m^2)"]
@@ -555,8 +572,7 @@ class ExcelDataEditor:
                         else:
                             isolates = []
                             plates = []
-                            for i, _ in enumerate(selected_items):
-                                item = selected_items[i]
+                            for item in selected_items:
                                 index = self.tree.index(item)
                                 # Exclude runs that didn't pass the quality check
                                 if df.iloc[index]["Quality Check"] == "PASS":
@@ -575,6 +591,7 @@ class ExcelDataEditor:
                     output_text.insert(
                         tk.END, f"Traceback:\n{traceback.format_exc()}\n"
                     )
+                    self.text_output = str(e)
 
                 # Get captured output
                 stdout_value = stdout_capture.getvalue()
@@ -605,6 +622,7 @@ class ExcelDataEditor:
         except Exception as e:
             output_text.insert(tk.END, f"UNEXPECTED ERROR: {str(e)}\n")
             output_text.insert(tk.END, f"Traceback:\n{traceback.format_exc()}\n")
+            self.text_output = str(e)
 
         # Save As Button for statistics tests output or error messages
         if self.text_output:
@@ -669,6 +687,7 @@ class ExcelDataEditor:
 
 
 def main():
+    """docstring goes here."""
     # Ensure we're running from the script's directory
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 

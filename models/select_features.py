@@ -29,6 +29,7 @@ from sklearn.linear_model import LogisticRegression
 
 
 def select_features(file):
+    """docstring goes here."""
     df = pd.read_csv(file)
     X = df.drop(
         columns=["ID", "X", "Y", "Angle", "FeretX", "FeretY", "FeretAngle", "class"]
@@ -44,6 +45,7 @@ def select_features(file):
 
 
 def main(file):
+    """docstring goes here."""
     select_features(file)
     input("Feature selection complete. Press ENTER to close.\n")
 

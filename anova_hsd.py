@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""docstring goes here"""
+
+
 import os
 import re
 import warnings
@@ -28,16 +31,19 @@ import matplotlib.pyplot as plt
 
 
 def extract_ed50(value):
+    """docstring goes here"""
     match = re.match(r"(\d+)", str(value))
     return int(match.group(1)) if match else None
 
 
 def extract_timepoint(plate_id):
+    """docstring goes here"""
     matches = re.findall(r"(\d+)(?i:hr)", str(plate_id))
     return int(matches[0]) if matches else 1
 
 
 def tukey_hsd(anova_df, test):
+    """docstring goes here"""
     tukey = pairwise_tukeyhsd(
         endog=anova_df["ED50"], groups=anova_df["Group"], alpha=0.05
     )
@@ -56,11 +62,12 @@ def tukey_hsd(anova_df, test):
 
 
 def oneway_anova(x, y, test):
+    """docstring goes here"""
     warnings.filterwarnings("ignore")
     anova_df = pd.DataFrame({"Group": x, "ED50": y})
     model = ols("ED50~Group", data=anova_df)
     results = model.fit()
-    anova_table = sm.stats.anova_lm(results, typ=2)
+    sm.stats.anova_lm(results, typ=2)
     print(f"*** ANOVA TABLE: {test} ***")
     print(results.summary().as_text())
     print("=" * 91)
@@ -68,6 +75,7 @@ def oneway_anova(x, y, test):
 
 
 def main(prompt=True, x=pd.Series(), y=pd.Series()):
+    """docstring goes here"""
     os.chdir(os.path.dirname(__file__))
     workbook_file = "GPMPhenotypingAssay_Workbook.xlsx"
     if os.path.exists(workbook_file):

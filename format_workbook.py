@@ -17,11 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""docstring goes here."""
+
+
 import os
 import openpyxl
 
 
 def format_workbook(workbook_file):
+    """docstring goes here."""
     if os.path.exists(workbook_file):
         workbook = openpyxl.load_workbook(workbook_file)
     else:
@@ -36,18 +40,15 @@ def format_workbook(workbook_file):
                 if cell.value == "Quality Check":
                     max_length = 13
                     break
-                else:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(cell.value)
-                    except:
-                        pass
+                if len(str(cell.value)) > max_length:
+                    max_length = len(cell.value)
             adjusted_width = max_length + 2
             sheet.column_dimensions[column_letter].width = adjusted_width
     workbook.save(workbook_file)
 
 
 def main():
+    """docstring goes here."""
     os.chdir(os.path.dirname(__file__))
     format_workbook("GPMPhenotypingAssay_Workbook.xlsx")
 

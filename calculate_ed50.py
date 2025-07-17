@@ -40,13 +40,13 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
 
 
 def extract_timepoint(plate):
+    """docstring goes here"""
     matches = re.findall(r"(\d+)(?i:hr)", plate)
     return int(matches[0]) if matches else 1
 
 
-def plot_curve(
-    index, isolate, plate, concentrations, germination_rates, popt, pcov, color=True
-):
+def plot_curve(index, plate, concentrations, germination_rates, popt, pcov, color=True):
+    """docstring goes here"""
     # Calculate ED50
     ed50 = int(round(popt[2], 0))
     # Calculate standard error for ED50
@@ -90,8 +90,8 @@ def plot_curve(
     )
     # add R-squared value to the legend
     plt.plot([], [], "", label=f"R$^2$ = {r2}", linestyle="None", marker="")
-    min_tick = int(np.floor(min(min(concentrations), 0) / 50.0) * 50)
-    max_tick = int(np.ceil(max(max(concentrations), ed50) / 50.0) * 50)
+    min_tick = int(np.floor(min(np.min(concentrations), 0) / 50.0) * 50)
+    max_tick = int(np.ceil(max(np.max(concentrations), ed50) / 50.0) * 50)
     plt.xticks(np.arange(min_tick, max_tick + 1, 50))
     plt.xlabel("UV-C Dose (J/m$^2$)")
     plt.ylabel("Mean germination relative to control (%)")
@@ -173,7 +173,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
         if len(isolates) == 1:
             index = -1
         ed50, ed50_SE = plot_curve(
-            index, isolate, plate, concentrations, germination_rates, popt, pcov
+            index, plate, concentrations, germination_rates, popt, pcov
         )
         print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m^2")
         # add the ED50 to tracking spreadsheet
@@ -192,9 +192,11 @@ def calculate_ed50(isolates, plates, show_plot=False):
                     value=f"{ed50} ± {ed50_SE}",
                 )
         uvc_workbook.save(workbook)
-    if index < 0:
-        plt.title(f"UV-C Dose-Response Curve: {isolate} - {plate}")
-        plt.savefig(f"results/ED50_{isolate}_{plate}.png", dpi=300, bbox_inches="tight")
+    if len(plates) == 1:
+        plt.title(f"UV-C Dose-Response Curve: {isolates[0]} - {plates[0]}")
+        plt.savefig(
+            f"results/ED50_{isolates[0]}_{plates[0]}.png", dpi=300, bbox_inches="tight"
+        )
     else:
         plotted = (
             " - ".join(i for i in isolates) if len(set(isolates)) > 1 else isolates[0]

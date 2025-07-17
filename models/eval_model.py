@@ -143,6 +143,7 @@ def evaluate_predictive_model(X_train, X_test, y_train, y_test):
 
 
 def main(file):
+    """docstring goes here."""
     df = pd.read_csv(file)
     X_train, X_test, y_train, y_test = preprocess_data(df, "class")
     selected_features = select_features(file)
