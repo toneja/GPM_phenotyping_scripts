@@ -73,8 +73,6 @@ class ExcelDataEditor:
         edit_menu.add_command(label="Add Row", command=self.add_row)
         edit_menu.add_command(label="Delete Row", command=self.delete_row)
         edit_menu.add_command(label="Duplicate Row", command=self.duplicate_row)
-        edit_menu.add_separator()
-        edit_menu.add_command(label="Add Column", command=self.add_column)
 
         # Tools menu
         tools_menu = tk.Menu(menubar, tearoff=0)
@@ -177,8 +175,6 @@ class ExcelDataEditor:
         self.context_menu.add_command(label="Add Row", command=self.add_row)
         self.context_menu.add_command(label="Delete Row", command=self.delete_row)
         self.context_menu.add_command(label="Duplicate Row", command=self.duplicate_row)
-        self.context_menu.add_separator()
-        self.context_menu.add_command(label="Add Column", command=self.add_column)
         self.context_menu.add_separator()
         self.context_menu.add_command(label="Archive Run(s)", command=self.archive_run)
         self.context_menu.add_separator()
@@ -395,26 +391,6 @@ class ExcelDataEditor:
 
         self.display_sheet()
         self.status_var.set(f"Row(s) {row_indices} duplicated")
-
-    def add_column(self):
-        """docstring goes here."""
-        if not self.current_sheet:
-            return
-
-        df = self.excel_data[self.current_sheet]
-        col_name = simpledialog.askstring("New Column", "Enter column name:")
-        if not col_name:
-            return
-
-        if col_name in df.columns:
-            tk.messagebox.showerror("Error", f"Column '{col_name}' already exists.")
-            return
-
-        # Add a new empty column
-        df[col_name] = ""
-
-        self.display_sheet()
-        self.status_var.set(f"New Column: {col_name} created")
 
     def archive_run(self):
         """docstring goes here."""
