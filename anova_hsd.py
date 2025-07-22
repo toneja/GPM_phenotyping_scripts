@@ -23,11 +23,12 @@
 import os
 import re
 import warnings
+
+import matplotlib.pyplot as plt
 import pandas as pd
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
-import matplotlib.pyplot as plt
 
 
 def extract_ed50(value):

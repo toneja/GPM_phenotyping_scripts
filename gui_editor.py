@@ -20,12 +20,13 @@
 """docstring goes here."""
 
 
-import tkinter as tk
-from tkinter import ttk, messagebox, filedialog, simpledialog
 import os
 import sys
-from io import StringIO
+import tkinter as tk
 import traceback
+from io import StringIO
+from tkinter import filedialog, messagebox, simpledialog, ttk
+
 import pandas as pd
 
 import anova_hsd

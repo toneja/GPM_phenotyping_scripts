@@ -28,24 +28,25 @@ Evaluate the model's accuracy in predicting the output label and print the evalu
 
 import os
 import sys
+
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+import pandas as pd
+from select_features import select_features
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
+    auc,
     classification_report,
+    confusion_matrix,
+    f1_score,
+    log_loss,
     precision_score,
     recall_score,
-    f1_score,
     roc_auc_score,
     roc_curve,
-    auc,
-    log_loss,
-    confusion_matrix,
 )
-from select_features import select_features
+from sklearn.model_selection import train_test_split
 
 
 def preprocess_data(df, target_column):

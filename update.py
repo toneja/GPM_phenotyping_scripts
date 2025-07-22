@@ -21,8 +21,9 @@
 
 import io
 import os
-import requests
 import zipfile
+
+import requests
 
 
 def main(prompt=True):

@@ -24,12 +24,13 @@ import os
 import re
 import sys
 import warnings
-import pandas as pd
+
+import matplotlib.pyplot as plt
 import numpy as np
 import openpyxl
+import pandas as pd
 from scipy.optimize import curve_fit
 from sklearn.metrics import r2_score
-import matplotlib.pyplot as plt
 
 
 def logistic_4pl(x, bottom, top, ed50, hill_slope):

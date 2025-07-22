@@ -25,9 +25,11 @@
 
 import os
 import sys
+
 import pandas as pd
 from sklearn import linear_model
 from tabulate import tabulate
+
 from treatments import get_treatments
 
 
