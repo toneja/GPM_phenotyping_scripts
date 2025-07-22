@@ -161,7 +161,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
             [0, 0, min(concentrations), -10],
             [100, 100, max(concentrations) * 10, 10],
         )
-        popt, pcov = curve_fit(
+        popt, pcov = curve_fit(  # pylint: disable=unbalanced-tuple-unpacking
             logistic_4pl,
             concentrations,
             germination_rates,
