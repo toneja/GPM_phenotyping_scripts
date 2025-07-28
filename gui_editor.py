@@ -450,14 +450,10 @@ class ExcelDataEditor:
         )
 
         if new_value is not None:
-            # Try to convert to appropriate type
-            try:
-                if new_value.isdigit():
-                    new_value = int(new_value)
-                elif new_value.replace(".", "").isdigit():
-                    new_value = float(new_value)
-            except:
-                pass  # Keep as string
+            if new_value.isdigit():
+                new_value = int(new_value)
+            elif new_value.replace(".", "").isdigit():
+                new_value = float(new_value)
 
             self.excel_data[self.current_sheet].iloc[row_index, col_index] = new_value
             self.display_sheet()
