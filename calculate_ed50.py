@@ -133,10 +133,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
         control_avg = sum(controls["48hr %"].values) / len(controls)
         # Extract dose and response data
         data = data[data["Treatment"].str.contains("Speed|J/m2", na=False)]
-        data["Concentration"] = (
-            data["Treatment"].str.extract(r"([\d\.]+)").astype(float)
-        )
-        data = data.dropna(subset=["Concentration"])
+        data["Concentration"] = data["Treatment"].str.extract(r"(\d+)").astype(int)
         concentrations = data["Concentration"].values
         germination_rates = data["48hr %"].values
         # Normalize germination rates relative to the controls
