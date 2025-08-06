@@ -112,4 +112,4 @@ def main(prompt=True, x=pd.Series(), y=pd.Series()):
 
 
 if __name__ == "__main__":
-    main(True, pd.Series(), pd.Series)
+    main(True, pd.Series(), pd.Series())
