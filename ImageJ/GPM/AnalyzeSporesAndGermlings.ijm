@@ -19,8 +19,11 @@ run("Subtract Background...", "rolling=10 light");
 setAutoThreshold("MaxEntropy");
 // setThreshold(0, 240, "raw");
 
+// Black ROIs on a light background
+setOption("BlackBackground", false);
+
 // Generate a binary image from our image
-run("Convert to Mask", "background=Light");
+run("Convert to Mask");
 
 // Remove some of the small speckles
 run("Despeckle");
