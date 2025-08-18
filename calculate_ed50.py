@@ -42,8 +42,8 @@ def logistic_4pl(x, bottom, top, ed50, hill_slope):
 
 def extract_timepoint(plate):
     """docstring goes here"""
-    matches = re.findall(r"(\d+)(?i:hr)", plate)
-    return int(matches[0]) if matches else 1
+    matches = re.compile(r"(\d+(?:\.\d+)?)(?i:hr)").search(plate)
+    return float(matches.group(1)) if matches else 1.0
 
 
 def plot_curve(index, plate, concentrations, germination_rates, popt, pcov, color=True):

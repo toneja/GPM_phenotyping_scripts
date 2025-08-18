@@ -47,7 +47,7 @@ def main():
     for file in os.listdir("results"):
         if file.endswith(".csv"):
             plate = file.split("_")[1].upper()
-            isolate = file.split(".")[0].split("_")[2].upper()
+            isolate = os.path.splitext(file)[0].split("_")[2].upper()
             discard_reasons = []
             if "UVC" in plate:
                 block_size = 4

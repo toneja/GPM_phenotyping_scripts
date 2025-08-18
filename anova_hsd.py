@@ -34,13 +34,13 @@ from statsmodels.stats.multicomp import pairwise_tukeyhsd
 def extract_ed50(value):
     """docstring goes here"""
     match = re.match(r"(\d+)", str(value))
-    return int(match.group(1)) if match else None
+    return int(match.group(1)) if match else 0
 
 
 def extract_timepoint(plate_id):
     """docstring goes here"""
-    matches = re.findall(r"(\d+)(?i:hr)", str(plate_id))
-    return int(matches[0]) if matches else 1
+    matches = re.compile(r"(\d+(?:\.\d+)?)(?i:hr)").search(plate_id)
+    return float(matches.group(1)) if matches else 1.0
 
 
 def tukey_hsd(anova_df, test):
