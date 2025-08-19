@@ -21,6 +21,7 @@
 
 
 import os
+import re
 import sys
 import tkinter as tk
 import traceback
@@ -279,6 +280,33 @@ class ExcelDataEditor:
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save file: {str(e)}")
 
+    def sort_by_column(self, col, reverse):
+        """docstring goes here."""
+        # Get all treeview data
+        data = [(self.tree.set(k, col), k) for k in self.tree.get_children("")]
+
+        # Sort Plate ID data by date string
+        if col == "Plate ID":
+            data.sort(key=lambda t: int(t[0].split("-")[1]), reverse=reverse)
+        # Sort by ED50; ignore SE value
+        elif col == "ED50 (J/m^2)":
+            data.sort(
+                key=lambda t: int(re.match(r"(\d+)", t[0]).group(1)), reverse=reverse
+            )
+        else:
+            # Try to sort numerically, fallback to string sort
+            try:
+                data.sort(key=lambda t: float(t[0]), reverse=reverse)
+            except ValueError:
+                data.sort(key=lambda t: t[0].lower(), reverse=reverse)
+
+        # Rearrange data into sorted positions
+        for index, (val, k) in enumerate(data):
+            self.tree.move(k, "", index)
+
+        # Reverse sort on next click of same header
+        self.tree.heading(col, command=lambda: self.sort_by_column(col, not reverse))
+
     def display_sheet(self):
         """docstring goes here."""
         if not self.current_sheet or self.current_sheet not in self.excel_data:
@@ -296,7 +324,9 @@ class ExcelDataEditor:
         self.tree["show"] = "headings"
 
         for col in columns:
-            self.tree.heading(col, text=col)
+            self.tree.heading(
+                col, text=col, command=lambda c=col: self.sort_by_column(c, False)
+            )
             self.tree.column(
                 col,
                 width=120,
