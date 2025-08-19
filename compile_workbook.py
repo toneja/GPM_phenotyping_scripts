@@ -52,7 +52,7 @@ def compile_workbook(workbook_file, csv_files):
         isolate_name = file_parts[-1].upper()
         plate_id = file_parts[-2].replace("plate", "").upper()
 
-        sheet_name = f"{isolate_name} ({plate_id})"
+        sheet_name = f"{isolate_name} {plate_id}"
         # Replace old data
         if sheet_name in workbook.sheetnames:
             workbook.remove(workbook[sheet_name])

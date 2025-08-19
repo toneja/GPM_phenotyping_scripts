@@ -119,7 +119,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
         # Format isolate name and plate ID
         isolate = isolate.upper()
         plate = plate.upper()
-        sheet_name = f"{isolate} ({plate})"
+        sheet_name = f"{isolate} {plate}"
         if sheet_name in uvc_workbook.sheetnames:
             sheet = uvc_workbook[sheet_name]
         else:
