@@ -50,12 +50,9 @@ def tukey_hsd(anova_df, test):
     )
     print(f"\n*** TUKEY HSD SUMMARY: {test} ***")
     print(tukey.summary().as_text())
-    ylabel = (
-        "Isolates"
-        if any(x in test for x in ("Inter", "Manual"))
-        else "Hours Since Sunset"
+    tukey.plot_simultaneous(
+        ylabel="Isolates" if "Inter" in test else "Hours Since Sunset"
     )
-    tukey.plot_simultaneous(ylabel=ylabel)
     plt.title(f"Tukey's Honestly Significant Difference Test ({test})")
     plt.xlabel("Mean ED50 (J/m$^2$) + 95% Confidence Interval")
     plt.show()
@@ -75,7 +72,7 @@ def oneway_anova(x, y, test):
     tukey_hsd(anova_df, test)
 
 
-def main(prompt=True, x=pd.Series(), y=pd.Series()):
+def main(prompt=True):
     """docstring goes here"""
     os.chdir(os.path.dirname(__file__))
     workbook_file = "GPMPhenotypingAssay_Workbook.xlsx"
@@ -85,24 +82,19 @@ def main(prompt=True, x=pd.Series(), y=pd.Series()):
             df = xls.parse("Assay Data")
             # Only include runs that passed the quality filter
             keeper_df = df[df["Quality Check"] == "PASS"].copy()
-            if x.empty or y.empty:
-                # Perform ANOVA test between isolates
-                x = keeper_df["Isolate"].values
-                y = keeper_df["ED50 (J/m^2)"].apply(extract_ed50).values
-                oneway_anova(x, y, "Inter-Isolate")
-                # Perform ANOVA test between timepoints
-                keeper_df["Timepoint"] = keeper_df["Plate ID"].apply(extract_timepoint)
-                # Get unique isolate names
-                isolates = set(x)
-                for isolate in isolates:
-                    isolate_df = keeper_df[keeper_df["Isolate"] == isolate]
-                    x = (isolate_df["Timepoint"]).values
-                    y = isolate_df["ED50 (J/m^2)"].apply(extract_ed50).values
-                    oneway_anova(x, y, f"Intra-Isolate: {isolate}")
-            else:
-                # Compare manually selected assay runs
-                y = y.apply(extract_ed50).values
-                oneway_anova(x, y, "Manual Selections")
+            # Perform ANOVA test between isolates
+            x = keeper_df["Isolate"].values
+            y = keeper_df["ED50 (J/m^2)"].apply(extract_ed50).values
+            oneway_anova(x, y, "Inter-Isolate")
+            # Perform ANOVA test between timepoints
+            keeper_df["Timepoint"] = keeper_df["Plate ID"].apply(extract_timepoint)
+            # Get unique isolate names
+            isolates = set(x)
+            for isolate in isolates:
+                isolate_df = keeper_df[keeper_df["Isolate"] == isolate]
+                x = isolate_df["Timepoint"].values
+                y = isolate_df["ED50 (J/m^2)"].apply(extract_ed50).values
+                oneway_anova(x, y, f"Intra-Isolate: {isolate}")
         else:
             print("Missing Assay Data sheet in workbook.")
     else:
@@ -112,4 +104,4 @@ def main(prompt=True, x=pd.Series(), y=pd.Series()):
 
 
 if __name__ == "__main__":
-    main(True, pd.Series(), pd.Series())
+    main(True)
