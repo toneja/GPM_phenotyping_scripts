@@ -568,7 +568,6 @@ class ExcelDataEditor:
                         result = cleanup_imagej.cleanup_imagej(False)
                     elif module_name == "calculate_ed50":
                         # Extract isolate name and plate ID
-                        df = self.excel_data[self.current_sheet]
                         selected_items = self.tree.selection()
                         if not selected_items:
                             result = "No rows selected."
@@ -576,11 +575,10 @@ class ExcelDataEditor:
                             isolates = []
                             plates = []
                             for item in selected_items:
-                                index = self.tree.index(item)
                                 # Exclude runs that didn't pass the quality check
-                                if df.iloc[index]["Quality Check"] == "PASS":
-                                    isolates.append(df.iloc[index]["Isolate"])
-                                    plates.append(df.iloc[index]["Plate ID"])
+                                if self.tree.set(item, "Quality Check") == "PASS":
+                                    isolates.append(self.tree.set(item, "Isolate"))
+                                    plates.append(self.tree.set(item, "Plate ID"))
                             result = calculate_ed50.main(isolates, plates, True)
                     elif module_name == "update":
                         result = update.main(False)
