@@ -291,7 +291,12 @@ class ExcelDataEditor:
         # Sort by ED50; ignore SE value
         elif col == "ED50 (J/m^2)":
             data.sort(
-                key=lambda t: int(re.match(r"(\d+)", t[0]).group(1)), reverse=reverse
+                key=lambda t: (
+                    int(re.match(r"(\d+)", t[0]).group(1))
+                    if not t[0] == "nan"
+                    else float("inf")
+                ),
+                reverse=reverse,
             )
         else:
             # Try to sort numerically, fallback to string sort
