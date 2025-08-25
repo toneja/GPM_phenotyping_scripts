@@ -72,6 +72,25 @@ def oneway_anova(x, y, test):
     tukey_hsd(anova_df, test)
 
 
+def compare_isolates(df):
+    """Perform ANOVA test between isolates."""
+    x = df["Isolate"].values
+    y = df["ED50 (J/m^2)"].apply(extract_ed50).values
+    oneway_anova(x, y, "Inter-Isolate")
+
+
+def compare_timepoints(df):
+    """Perform ANOVA test between timepoints."""
+    df["Timepoint"] = df["Plate ID"].apply(extract_timepoint)
+    # Get unique isolate names
+    isolates = set(df["Isolate"].values)
+    for isolate in isolates:
+        isolate_df = df[df["Isolate"] == isolate]
+        x = isolate_df["Timepoint"].values
+        y = isolate_df["ED50 (J/m^2)"].apply(extract_ed50).values
+        oneway_anova(x, y, f"Intra-Isolate: {isolate}")
+
+
 def main(prompt=True):
     """docstring goes here"""
     os.chdir(os.path.dirname(__file__))
@@ -83,18 +102,9 @@ def main(prompt=True):
             # Only include runs that passed the quality filter
             keeper_df = df[df["Quality Check"] == "PASS"].copy()
             # Perform ANOVA test between isolates
-            x = keeper_df["Isolate"].values
-            y = keeper_df["ED50 (J/m^2)"].apply(extract_ed50).values
-            oneway_anova(x, y, "Inter-Isolate")
+            compare_isolates(keeper_df)
             # Perform ANOVA test between timepoints
-            keeper_df["Timepoint"] = keeper_df["Plate ID"].apply(extract_timepoint)
-            # Get unique isolate names
-            isolates = set(x)
-            for isolate in isolates:
-                isolate_df = keeper_df[keeper_df["Isolate"] == isolate]
-                x = isolate_df["Timepoint"].values
-                y = isolate_df["ED50 (J/m^2)"].apply(extract_ed50).values
-                oneway_anova(x, y, f"Intra-Isolate: {isolate}")
+            compare_timepoints(keeper_df)
         else:
             print("Missing Assay Data sheet in workbook.")
     else:
