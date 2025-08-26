@@ -293,7 +293,7 @@ class ExcelDataEditor:
             data.sort(
                 key=lambda t: (
                     int(re.match(r"(\d+)", t[0]).group(1))
-                    if not t[0] == "nan"
+                    if t[0][0].isdigit()
                     else float("inf")
                 ),
                 reverse=reverse,
