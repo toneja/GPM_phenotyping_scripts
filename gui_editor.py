@@ -72,6 +72,7 @@ class ExcelDataEditor:
         # Edit menu
         edit_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Edit", menu=edit_menu)
+        edit_menu.add_command(label="Add Run", command=self.add_run)
         edit_menu.add_command(label="Add Row", command=self.add_row)
         edit_menu.add_command(label="Delete Row", command=self.delete_row)
         edit_menu.add_command(label="Duplicate Row", command=self.duplicate_row)
@@ -109,6 +110,9 @@ class ExcelDataEditor:
             side=tk.LEFT, fill=tk.Y, padx=(0, 10)
         )
 
+        ttk.Button(toolbar, text="Add Run", command=self.add_run).pack(
+            side=tk.LEFT, padx=(0, 5)
+        )
         ttk.Button(toolbar, text="Add Row", command=self.add_row).pack(
             side=tk.LEFT, padx=(0, 5)
         )
@@ -205,6 +209,7 @@ class ExcelDataEditor:
     def open_file(self):
         """docstring goes here."""
         file_path = filedialog.askopenfilename(
+            initialdir=".",
             title="Open Excel File",
             filetypes=[("Excel files", "*.xlsx *.xls"), ("All files", "*.*")],
         )
@@ -247,6 +252,7 @@ class ExcelDataEditor:
     def save_as_file(self):
         """docstring goes here."""
         file_path = filedialog.asksaveasfilename(
+            initialdir=".",
             title="Save Excel File",
             defaultextension=".xlsx",
             filetypes=[("Excel files", "*.xlsx"), ("All files", "*.*")],
@@ -263,6 +269,7 @@ class ExcelDataEditor:
             return
 
         file_path = filedialog.asksaveasfilename(
+            initialdir=".",
             title="Save Text File",
             defaultextension=".txt",
             filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
@@ -358,6 +365,44 @@ class ExcelDataEditor:
             for item in list(selections):
                 tags.append(int(self.tree.item(item, "tags")[0]))
         return tags
+
+    def add_run(self):
+        """docstring goes here."""
+        if not self.current_sheet:
+            messagebox.showwarning("Warning", "No sheet selected")
+            return
+
+        df = self.excel_data[self.current_sheet]
+
+        # Get path to the image directory
+        folder_path = filedialog.askdirectory(
+            initialdir="./ECHO Images", title="Select an Image Folder"
+        )
+        if not folder_path:
+            return
+
+        # Extract data from directory name
+        parts = os.path.basename(folder_path).split("_")
+        isolate = parts[1]
+        plate = parts[0].split("plate")[1]
+
+        # Wavelength: (irradiance, lamp length)
+        lamp_dict = {254: (20.6385, 385)}
+        wavelength = int(plate.split("-")[-1])
+        irradiance, lamp_len = lamp_dict[wavelength][0], lamp_dict[wavelength][1]
+
+        # Create new row with the data; fill missing values with nans
+        new_data = [isolate, plate, "nan", "nan", irradiance, lamp_len]
+        new_data.extend(["nan"] * (len(df.columns) - len(new_data)))
+        new_row = pd.Series(new_data, index=df.columns)
+
+        # Add to dataframe
+        self.excel_data[self.current_sheet] = pd.concat(
+            [df, new_row.to_frame().T], ignore_index=True
+        )
+
+        self.display_sheet()
+        self.status_var.set("New assay run added")
 
     def add_row(self):
         """docstring goes here."""
