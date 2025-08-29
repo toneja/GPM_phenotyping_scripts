@@ -300,7 +300,7 @@ class ExcelDataEditor:
             data.sort(
                 key=lambda t: (
                     int(re.match(r"(\d+)", t[0]).group(1))
-                    if t[0][0].isdigit()
+                    if not t[0] == "nan"
                     else float("inf")
                 ),
                 reverse=reverse,
