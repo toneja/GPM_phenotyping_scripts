@@ -294,7 +294,9 @@ class ExcelDataEditor:
 
         # Sort Plate ID data by date string
         if col == "Plate ID":
-            data.sort(key=lambda t: int(t[0].split("-")[1]), reverse=reverse)
+            data.sort(
+                key=lambda t: float(t[0].split("-")[2].split("hr")[0]), reverse=reverse
+            )
         # Sort by ED50; ignore SE value
         elif col == "ED50 (J/m^2)":
             data.sort(
