@@ -368,11 +368,12 @@ class ExcelDataEditor:
 
     def add_run(self):
         """docstring goes here."""
-        if not self.current_sheet:
-            messagebox.showwarning("Warning", "No sheet selected")
+        if not self.current_sheet == "Assay Data":
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Assay Data' sheet.",
+            )
             return
-
-        df = self.excel_data[self.current_sheet]
 
         # Get path to the image directory
         folder_path = filedialog.askdirectory(
@@ -392,6 +393,7 @@ class ExcelDataEditor:
         irradiance, lamp_len = lamp_dict[wavelength][0], lamp_dict[wavelength][1]
 
         # Create new row with the data; fill missing values with nans
+        df = self.excel_data[self.current_sheet]
         new_data = [isolate, plate, "nan", "nan", irradiance, lamp_len]
         new_data.extend(["nan"] * (len(df.columns) - len(new_data)))
         new_row = pd.Series(new_data, index=df.columns)
@@ -406,8 +408,11 @@ class ExcelDataEditor:
 
     def add_row(self):
         """docstring goes here."""
-        if not self.current_sheet:
-            messagebox.showwarning("Warning", "No sheet selected")
+        if not self.current_sheet == "Assay Data":
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Assay Data' sheet.",
+            )
             return
 
         df = self.excel_data[self.current_sheet]
@@ -425,8 +430,11 @@ class ExcelDataEditor:
 
     def delete_row(self):
         """docstring goes here."""
-        if not self.current_sheet:
-            messagebox.showwarning("Warning", "No sheet selected")
+        if not self.current_sheet == "Assay Data":
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Assay Data' sheet.",
+            )
             return
 
         row_indices = self.get_selected_row_indices()
@@ -436,19 +444,21 @@ class ExcelDataEditor:
 
         # Confirm deletion
         if messagebox.askyesno("Confirm", f"Delete row(s) {row_indices}?"):
-            for row_index in reversed(row_indices):
-                df = self.excel_data[self.current_sheet]
-                self.excel_data[self.current_sheet] = df.drop(
-                    df.index[row_index]
-                ).reset_index(drop=True)
+            df = self.excel_data[self.current_sheet]
+            self.excel_data[self.current_sheet] = df.drop(
+                df.index[row_indices]
+            ).reset_index(drop=True)
 
             self.display_sheet()
             self.status_var.set(f"Row(s) {row_indices} deleted")
 
     def duplicate_row(self):
         """docstring goes here."""
-        if not self.current_sheet:
-            messagebox.showwarning("Warning", "No sheet selected")
+        if not self.current_sheet == "Assay Data":
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Assay Data' sheet.",
+            )
             return
 
         row_indices = self.get_selected_row_indices()
@@ -456,27 +466,21 @@ class ExcelDataEditor:
             messagebox.showwarning("Warning", "No row(s) selected")
             return
 
-        for row_index in reversed(row_indices):
-            df = self.excel_data[self.current_sheet]
-            row_to_duplicate = df.iloc[row_index].copy()
-
-            # Insert duplicated row
-            self.excel_data[self.current_sheet] = pd.concat(
-                [
-                    df.iloc[: row_index + 1],
-                    row_to_duplicate.to_frame().T,
-                    df.iloc[row_index + 1 :],
-                ],
-                ignore_index=True,
-            )
+        df = self.excel_data[self.current_sheet]
+        self.excel_data[self.current_sheet] = pd.concat(
+            [df, df.iloc[row_indices]], ignore_index=True
+        )
 
         self.display_sheet()
         self.status_var.set(f"Row(s) {row_indices} duplicated")
 
     def archive_run(self):
         """docstring goes here."""
-        if not self.current_sheet:
-            messagebox.showwarning("Warning", "No sheet selected")
+        if not self.current_sheet == "Assay Data":
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Assay Data' sheet.",
+            )
             return
 
         row_indices = self.get_selected_row_indices()
@@ -484,29 +488,30 @@ class ExcelDataEditor:
             messagebox.showwarning("Warning", "No row(s) selected")
             return
 
-        for row_index in reversed(row_indices):
-            df = self.excel_data[self.current_sheet]
-            row_to_archive = pd.Series(df.iloc[row_index], index=df.columns)
-            archive_df = self.excel_data.get("Archived Runs")
-            if archive_df is None:
-                archive_df = pd.DataFrame(columns=df.columns)
-                archive_df = archive_df.astype(df.dtypes.to_dict())
-
-            # Insert duplicated row
-            self.excel_data["Archived Runs"] = pd.concat(
-                [archive_df, pd.DataFrame([row_to_archive])], ignore_index=True
-            )
-            # Remove row from Assay Data sheet
-            self.excel_data["Assay Data"] = df.drop(df.index[row_index]).reset_index(
-                drop=True
-            )
+        df = self.excel_data[self.current_sheet]
+        archive_df = self.excel_data.get("Archived Runs")
+        if archive_df is None:
+            archive_df = pd.DataFrame(columns=df.columns)
+            archive_df = archive_df.astype(df.dtypes.to_dict())
+        # Insert archived row
+        self.excel_data["Archived Runs"] = pd.concat(
+            [archive_df, df.iloc[row_indices]], ignore_index=True
+        )
+        # Remove row from Assay Data sheet
+        self.excel_data["Assay Data"] = df.drop(df.index[row_indices]).reset_index(
+            drop=True
+        )
 
         self.display_sheet()
         self.status_var.set(f"Row(s) {row_indices} archived")
 
     def edit_cell(self, event):
         """docstring goes here."""
-        if not self.current_sheet:
+        if not any(x in self.current_sheet for x in ("Assay Data", "Archived Runs")):
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Assay Data' or 'Archived Runs' sheets.",
+            )
             return
 
         item = self.tree.selection()[0] if self.tree.selection() else None
