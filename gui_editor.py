@@ -394,10 +394,21 @@ class ExcelDataEditor:
         wavelength = int(plate.split("-")[-1])
         irradiance, lamp_len = lamp_dict[wavelength][0], lamp_dict[wavelength][1]
 
-        # Create new row with the data; fill missing values with nans
+        # Create new row with the data
         df = self.excel_data[self.current_sheet]
         new_data = [isolate, plate, "nan", "nan", irradiance, lamp_len]
-        new_data.extend(["nan"] * (len(df.columns) - len(new_data)))
+        # Fill in timings from previous row if users wants
+        if messagebox.askyesno(
+            "Copy timing data",
+            "Do you want to copy the timing data from the previous row?",
+        ):
+            # Get timing data from previous row
+            time_cols = df.filter(like="Time").columns
+            time_vals = df[time_cols].iloc[-1].tolist()
+        else:
+            # Fill missing timing data with nans
+            time_vals = ["nan"] * (len(df.columns) - len(new_data))
+        new_data.extend(time_vals)
         new_row = pd.Series(new_data, index=df.columns)
 
         # Add to dataframe
