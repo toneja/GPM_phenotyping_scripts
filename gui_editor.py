@@ -383,9 +383,27 @@ class ExcelDataEditor:
         )
         if not folder_path:
             return
+        folder_path = os.path.basename(folder_path)
+
+        # Sanity-check the parts of the assay folder name
+        if not re.compile(
+            r"^plateUVC(?P<plate>[1-9]|1[0-2])-"
+            r"(?P<date>\d{6})-"
+            r"(?P<timepoint>(\d+(?:\.\d+)?))hr-"
+            r"(?P<wavelength>-?\d+)"
+        ).match(folder_path):
+            messagebox.showerror(
+                "Error",
+                f"Incorrect formatting of folder name: {folder_path}",
+            )
+            messagebox.showwarning(
+                "Proper example folder name format:",
+                "plateUVC12-MMDDYY-24hr-254_ISOLATE_48hr",
+            )
+            return
 
         # Extract data from directory name
-        parts = os.path.basename(folder_path).split("_")
+        parts = folder_path.split("_")
         isolate = parts[1]
         plate = parts[0].split("plate")[1]
 
