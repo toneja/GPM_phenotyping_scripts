@@ -35,13 +35,15 @@ def main(prompt=True):
         with requests.get(URL, timeout=5) as archive:
             archive.raise_for_status()
     except requests.exceptions.RequestException as e:
-        raise SystemExit(e)
+        print(str(e))
+        return str(e)
     # Unpack the zip file
     print("Extracting update files...")
     with zipfile.ZipFile(io.BytesIO(archive.content)) as zip_arc:
         zip_arc.extractall("..")
     if prompt:
         input("File update complete. Press ENTER to close.")
+    return "Update complete."
 
 
 if __name__ == "__main__":
