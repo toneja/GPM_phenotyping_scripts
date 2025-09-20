@@ -21,7 +21,7 @@
 
 # This is dumb, find a better way to handle older plate maps
 OLD_MAPS = False
-# Definitions of fungicide treatments
+# Definitions of fungicide treatments; 1 μg/mL = 1 ppm
 CNTL = "Control"
 SHAM = "SHAM 100 μg/mL"
 AZX1 = "Azoxystrobin 10 μg/mL"
@@ -47,6 +47,7 @@ if OLD_MAPS:
     QXF2 = "Quinoxyfen 0.1 μg/mL"
     QXF3 = "Quinoxyfen 1 μg/mL"
 else:
+    QXF0 = "Quinoxyfen 0.0001 μg/mL"
     QXF1 = "Quinoxyfen 0.001 μg/mL"
     QXF2 = "Quinoxyfen 0.01 μg/mL"
     QXF3 = "Quinoxyfen 0.1 μg/mL"
@@ -333,6 +334,28 @@ def get_treatments(plate, block):
             QXF1, QXF3, QXF5, AZX1, QXF6, TFX1, PYL1, MDS1, CNTL, SHAM, QXF4, QXF2,
             QXF1, QXF3, QXF5, AZX1, QXF6, TFX1, PYL1, MDS1, CNTL, SHAM, QXF4, QXF2,
             QXF1, QXF3, QXF5, AZX1, QXF6, TFX1, PYL1, MDS1, CNTL, SHAM, QXF4, QXF2,
+        ]
+    elif plate == "plate19":
+        treatments = [
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+            PYL1, MDS1, SHAM, AZX1, CNTL, TFX1, QXF0, QXF2, QXF5, QXF3, QXF1, QXF4,
+        ]
+    elif plate == "plate20":
+        treatments = [
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+            TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
         ]
     elif plate == "plateQOIsOnly1":
         treatments = [
