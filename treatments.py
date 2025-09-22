@@ -357,52 +357,8 @@ def get_treatments(plate, block):
             TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
             TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
         ]
-    elif plate == "plateQOIsOnly1":
-        treatments = [
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-            AZX1, SHAM, MDS1, CNTL, PYL1, TFX1, PYL1, MDS1, SHAM, TFX1, AZX1, CNTL,
-        ]
-    elif plate == "plateQOIsOnly2":
-        treatments = [
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-            SHAM, PYL1, AZX1, SHAM, TFX1, PYL1, CNTL, CNTL, MDS1, AZX1, MDS1, TFX1,
-        ]
-    elif plate == "plateQOIsOnly3":
-        treatments = [
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-            TFX1, CNTL, SHAM, MDS1, CNTL, MDS1, AZX1, PYL1, TFX1, SHAM, PYL1, AZX1,
-        ]
-    elif plate == "plateQOIsOnly4":
-        treatments = [
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-            PYL1, MDS1, MDS1, AZX1, SHAM, CNTL, TFX1, AZX1, CNTL, PYL1, TFX1, SHAM,
-        ]
     elif plate == "plateUVCControl":
-        treatments = [ CNTL ]
+        treatments = [CNTL]
     elif plate == "plateUVC1":
         # B, A, D, E, F, C
         treatments = [
