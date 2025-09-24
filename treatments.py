@@ -19,45 +19,34 @@
 
 """Define treatment maps for fungicides in a 96-well plate."""
 
-# This is dumb, find a better way to handle older plate maps
-OLD_MAPS = False
 # Definitions of fungicide treatments; 1 μg/mL = 1 ppm
+# Controls
 CNTL = "Control"
 SHAM = "SHAM 100 μg/mL"
+# FRAC 11: Quinone Outside Inhibitors
 AZX1 = "Azoxystrobin 10 μg/mL"
-BOS1 = "Boscalid 1 μg/mL"
-BOS2 = "Boscalid 10 μg/mL"
-BOS3 = "Boscalid 100 μg/mL"
-DFC1 = "Difenoconazole 25 μg/mL"
-DFC2 = "Difenoconazole 250 μg/mL"
-DFC3 = "Difenoconazole 2500 μg/mL"
-FLU1 = "Fluopyram 1 μg/mL"
-FLU2 = "Fluopyram 10 μg/mL"
-FLU3 = "Fluopyram 100 μg/mL"
-FTF1 = "Flutriafol 25 μg/mL"
-FTF2 = "Flutriafol 250 μg/mL"
-FTF3 = "Flutriafol 2500 μg/mL"
-MCB1 = "Myclobutanil 25 μg/mL"
-MCB2 = "Myclobutanil 250 μg/mL"
-MCB3 = "Myclobutanil 2500 μg/mL"
 MDS1 = "Mandestrobin 10 μg/mL"
 PYL1 = "Pyraclostrobin 10 μg/mL"
-if OLD_MAPS:
-    QXF1 = "Quinoxyfen 0.01 μg/mL"
-    QXF2 = "Quinoxyfen 0.1 μg/mL"
-    QXF3 = "Quinoxyfen 1 μg/mL"
-else:
-    QXF0 = "Quinoxyfen 0.0001 μg/mL"
-    QXF1 = "Quinoxyfen 0.001 μg/mL"
-    QXF2 = "Quinoxyfen 0.01 μg/mL"
-    QXF3 = "Quinoxyfen 0.1 μg/mL"
-    QXF4 = "Quinoxyfen 1 μg/mL"
-    QXF5 = "Quinoxyfen 10 μg/mL"
-    QXF6 = "Quinoxyfen 100 μg/mL"
-TEB1 = "Tebuconazole 25 μg/mL"
-TEB2 = "Tebuconazole 250 μg/mL"
-TEB3 = "Tebuconazole 2500 μg/mL"
 TFX1 = "Trifloxystrobin 10 μg/mL"
+# FRAC 7: Succinate Dehydrogenase Inhibitors
+BOS1 = "Boscalid 0.01 μg/mL"
+BOS2 = "Boscalid 0.1 μg/mL"
+BOS3 = "Boscalid 1 μg/mL"
+BOS4 = "Boscalid 10 μg/mL"
+BOS5 = "Boscalid 100 μg/mL"
+FLU1 = "Fluopyram 0.01 μg/mL"
+FLU2 = "Fluopyram 0.1 μg/mL"
+FLU3 = "Fluopyram 1 μg/mL"
+FLU4 = "Fluopyram 10 μg/mL"
+FLU5 = "Fluopyram 100 μg/mL"
+# FRAC 13: Azanaphtalenes
+QXF0 = "Quinoxyfen 0.0001 μg/mL"
+QXF1 = "Quinoxyfen 0.001 μg/mL"
+QXF2 = "Quinoxyfen 0.01 μg/mL"
+QXF3 = "Quinoxyfen 0.1 μg/mL"
+QXF4 = "Quinoxyfen 1 μg/mL"
+QXF5 = "Quinoxyfen 10 μg/mL"
+QXF6 = "Quinoxyfen 100 μg/mL"
 # Definitions of UV-C treatments
 UVC1 = "Speed 1"
 UVC2 = "Speed 2"
@@ -71,139 +60,10 @@ def get_treatments(plate, block):
     """Returns the treatment in its corresponding well."""
     # Handle batches, eg. plate1a-1, plate1a-2, ...
     plate = plate.split("-")[0]
-    if plate == "plate1a":
-        treatments = [
-            CNTL, AZX1, BOS2, FLU1, FLU3, DFC2, FTF1, FTF3, MCB2, TEB1, TEB3, QXF2,
-            CNTL, AZX1, BOS2, FLU1, FLU3, DFC2, FTF1, FTF3, MCB2, TEB1, TEB3, QXF2,
-            CNTL, AZX1, BOS2, FLU1, FLU3, DFC2, FTF1, FTF3, MCB2, TEB1, TEB3, QXF2,
-            CNTL, AZX1, BOS2, FLU1, FLU3, DFC2, FTF1, FTF3, MCB2, TEB1, TEB3, QXF2,
-            SHAM, BOS1, BOS3, FLU2, DFC1, DFC3, FTF2, MCB1, MCB3, TEB2, QXF1, QXF3,
-            SHAM, BOS1, BOS3, FLU2, DFC1, DFC3, FTF2, MCB1, MCB3, TEB2, QXF1, QXF3,
-            SHAM, BOS1, BOS3, FLU2, DFC1, DFC3, FTF2, MCB1, MCB3, TEB2, QXF1, QXF3,
-            SHAM, BOS1, BOS3, FLU2, DFC1, DFC3, FTF2, MCB1, MCB3, TEB2, QXF1, QXF3,
-        ]
-    elif plate == "plate1b":
-        treatments = [
-            TEB1, TEB3, SHAM, FTF1, FTF3, QXF2, BOS1, BOS3, DFC2, FLU1, FLU3, MCB2,
-            TEB1, TEB3, SHAM, FTF1, FTF3, QXF2, BOS1, BOS3, DFC2, FLU1, FLU3, MCB2,
-            TEB1, TEB3, SHAM, FTF1, FTF3, QXF2, BOS1, BOS3, DFC2, FLU1, FLU3, MCB2,
-            TEB1, TEB3, SHAM, FTF1, FTF3, QXF2, BOS1, BOS3, DFC2, FLU1, FLU3, MCB2,
-            TEB2, CNTL, AZX1, FTF2, QXF1, QXF3, BOS2, DFC1, DFC3, FLU2, MCB1, MCB3,
-            TEB2, CNTL, AZX1, FTF2, QXF1, QXF3, BOS2, DFC1, DFC3, FLU2, MCB1, MCB3,
-            TEB2, CNTL, AZX1, FTF2, QXF1, QXF3, BOS2, DFC1, DFC3, FLU2, MCB1, MCB3,
-            TEB2, CNTL, AZX1, FTF2, QXF1, QXF3, BOS2, DFC1, DFC3, FLU2, MCB1, MCB3,
-        ]
-    elif plate == "plate2a":
-        treatments = [
-            TEB1, TEB3, MCB2, QXF1, QXF3, DFC2, BOS1, BOS3, FTF2, FLU1, FLU3, SHAM,
-            TEB1, TEB3, MCB2, QXF1, QXF3, DFC2, BOS1, BOS3, FTF2, FLU1, FLU3, SHAM,
-            TEB1, TEB3, MCB2, QXF1, QXF3, DFC2, BOS1, BOS3, FTF2, FLU1, FLU3, SHAM,
-            TEB1, TEB3, MCB2, QXF1, QXF3, DFC2, BOS1, BOS3, FTF2, FLU1, FLU3, SHAM,
-            TEB2, MCB1, MCB3, QXF2, DFC1, DFC3, BOS2, FTF1, FTF3, FLU2, CNTL, AZX1,
-            TEB2, MCB1, MCB3, QXF2, DFC1, DFC3, BOS2, FTF1, FTF3, FLU2, CNTL, AZX1,
-            TEB2, MCB1, MCB3, QXF2, DFC1, DFC3, BOS2, FTF1, FTF3, FLU2, CNTL, AZX1,
-            TEB2, MCB1, MCB3, QXF2, DFC1, DFC3, BOS2, FTF1, FTF3, FLU2, CNTL, AZX1,
-        ]
-    elif plate == "plate2b":
-        treatments = [
-            TEB1, TEB3, QXF2, BOS1, BOS3, DFC2, MCB1, MCB3, SHAM, FTF1, FTF3, FLU2,
-            TEB1, TEB3, QXF2, BOS1, BOS3, DFC2, MCB1, MCB3, SHAM, FTF1, FTF3, FLU2,
-            TEB1, TEB3, QXF2, BOS1, BOS3, DFC2, MCB1, MCB3, SHAM, FTF1, FTF3, FLU2,
-            TEB1, TEB3, QXF2, BOS1, BOS3, DFC2, MCB1, MCB3, SHAM, FTF1, FTF3, FLU2,
-            TEB2, QXF1, QXF3, BOS2, DFC1, DFC3, MCB2, CNTL, AZX1, FTF2, FLU1, FLU3,
-            TEB2, QXF1, QXF3, BOS2, DFC1, DFC3, MCB2, CNTL, AZX1, FTF2, FLU1, FLU3,
-            TEB2, QXF1, QXF3, BOS2, DFC1, DFC3, MCB2, CNTL, AZX1, FTF2, FLU1, FLU3,
-            TEB2, QXF1, QXF3, BOS2, DFC1, DFC3, MCB2, CNTL, AZX1, FTF2, FLU1, FLU3,
-        ]
-    elif plate == "plate3a":
-        treatments = [
-            MCB1, MCB3, FTF2, TEB1, TEB3, DFC2, QXF1, QXF3, SHAM, BOS1, BOS3, FLU2,
-            MCB1, MCB3, FTF2, TEB1, TEB3, DFC2, QXF1, QXF3, SHAM, BOS1, BOS3, FLU2,
-            MCB1, MCB3, FTF2, TEB1, TEB3, DFC2, QXF1, QXF3, SHAM, BOS1, BOS3, FLU2,
-            MCB1, MCB3, FTF2, TEB1, TEB3, DFC2, QXF1, QXF3, SHAM, BOS1, BOS3, FLU2,
-            MCB2, FTF1, FTF3, TEB2, DFC1, DFC3, QXF2, CNTL, AZX1, BOS2, FLU1, FLU3,
-            MCB2, FTF1, FTF3, TEB2, DFC1, DFC3, QXF2, CNTL, AZX1, BOS2, FLU1, FLU3,
-            MCB2, FTF1, FTF3, TEB2, DFC1, DFC3, QXF2, CNTL, AZX1, BOS2, FLU1, FLU3,
-            MCB2, FTF1, FTF3, TEB2, DFC1, DFC3, QXF2, CNTL, AZX1, BOS2, FLU1, FLU3,
-        ]
-    elif plate == "plate3b":
-        treatments = [
-            CNTL, AZX1, QXF2, FLU1, FLU3, DFC2, BOS1, BOS3, TEB2, FTF1, FTF3, MCB2,
-            CNTL, AZX1, QXF2, FLU1, FLU3, DFC2, BOS1, BOS3, TEB2, FTF1, FTF3, MCB2,
-            CNTL, AZX1, QXF2, FLU1, FLU3, DFC2, BOS1, BOS3, TEB2, FTF1, FTF3, MCB2,
-            CNTL, AZX1, QXF2, FLU1, FLU3, DFC2, BOS1, BOS3, TEB2, FTF1, FTF3, MCB2,
-            SHAM, QXF1, QXF3, FLU2, DFC1, DFC3, BOS2, TEB1, TEB3, FTF2, MCB1, MCB3,
-            SHAM, QXF1, QXF3, FLU2, DFC1, DFC3, BOS2, TEB1, TEB3, FTF2, MCB1, MCB3,
-            SHAM, QXF1, QXF3, FLU2, DFC1, DFC3, BOS2, TEB1, TEB3, FTF2, MCB1, MCB3,
-            SHAM, QXF1, QXF3, FLU2, DFC1, DFC3, BOS2, TEB1, TEB3, FTF2, MCB1, MCB3,
-        ]
-    elif plate == "plate4a":
-        treatments = [
-            QXF1, QXF3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            QXF1, QXF3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            QXF1, QXF3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            QXF1, QXF3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            QXF2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-            QXF2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-            QXF2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-            QXF2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-        ]
-    elif plate == "plate4b":
-        treatments = [
-            MCB1, MCB3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            MCB1, MCB3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            MCB1, MCB3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            MCB1, MCB3, FLU2, BOS1, BOS3, DFC2, FTF1, FTF3, TEB2, CNTL, AZX1, MCB2,
-            MCB2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-            MCB2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-            MCB2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-            MCB2, FLU1, FLU3, BOS2, DFC1, DFC3, FTF2, TEB1, TEB3, SHAM, MCB1, MCB3,
-        ]
-    elif plate == "plate5a":
-        treatments = [
-            FTF1, FTF3, QXF2, TEB1, TEB3, FLU2, BOS1, BOS3, SHAM, MCB1, MCB3, DFC2,
-            FTF1, FTF3, QXF2, TEB1, TEB3, FLU2, BOS1, BOS3, SHAM, MCB1, MCB3, DFC2,
-            FTF1, FTF3, QXF2, TEB1, TEB3, FLU2, BOS1, BOS3, SHAM, MCB1, MCB3, DFC2,
-            FTF1, FTF3, QXF2, TEB1, TEB3, FLU2, BOS1, BOS3, SHAM, MCB1, MCB3, DFC2,
-            FTF2, QXF1, QXF3, TEB2, FLU1, FLU3, BOS2, CNTL, AZX1, MCB2, DFC1, DFC3,
-            FTF2, QXF1, QXF3, TEB2, FLU1, FLU3, BOS2, CNTL, AZX1, MCB2, DFC1, DFC3,
-            FTF2, QXF1, QXF3, TEB2, FLU1, FLU3, BOS2, CNTL, AZX1, MCB2, DFC1, DFC3,
-            FTF2, QXF1, QXF3, TEB2, FLU1, FLU3, BOS2, CNTL, AZX1, MCB2, DFC1, DFC3,
-        ]
-    elif plate == "plate5b":
-        treatments = [
-            TEB1, TEB3, DFC2, BOS1, BOS3, FTF2, QXF1, QXF3, FLU2, MCB1, MCB3, SHAM,
-            TEB1, TEB3, DFC2, BOS1, BOS3, FTF2, QXF1, QXF3, FLU2, MCB1, MCB3, SHAM,
-            TEB1, TEB3, DFC2, BOS1, BOS3, FTF2, QXF1, QXF3, FLU2, MCB1, MCB3, SHAM,
-            TEB1, TEB3, DFC2, BOS1, BOS3, FTF2, QXF1, QXF3, FLU2, MCB1, MCB3, SHAM,
-            TEB2, DFC1, DFC3, BOS2, FTF1, FTF3, QXF2, FLU1, FLU3, MCB2, CNTL, AZX1,
-            TEB2, DFC1, DFC3, BOS2, FTF1, FTF3, QXF2, FLU1, FLU3, MCB2, CNTL, AZX1,
-            TEB2, DFC1, DFC3, BOS2, FTF1, FTF3, QXF2, FLU1, FLU3, MCB2, CNTL, AZX1,
-            TEB2, DFC1, DFC3, BOS2, FTF1, FTF3, QXF2, FLU1, FLU3, MCB2, CNTL, AZX1,
-        ]
-    elif plate == "plate6a":
-        treatments = [
-            MCB1, MCB3, FTF2, TEB1, TEB3, QXF2, CNTL, AZX1, DFC2, FLU1, FLU3, BOS2,
-            MCB1, MCB3, FTF2, TEB1, TEB3, QXF2, CNTL, AZX1, DFC2, FLU1, FLU3, BOS2,
-            MCB1, MCB3, FTF2, TEB1, TEB3, QXF2, CNTL, AZX1, DFC2, FLU1, FLU3, BOS2,
-            MCB1, MCB3, FTF2, TEB1, TEB3, QXF2, CNTL, AZX1, DFC2, FLU1, FLU3, BOS2,
-            MCB2, FTF1, FTF3, TEB2, QXF1, QXF3, SHAM, DFC1, DFC3, FLU2, BOS1, BOS3,
-            MCB2, FTF1, FTF3, TEB2, QXF1, QXF3, SHAM, DFC1, DFC3, FLU2, BOS1, BOS3,
-            MCB2, FTF1, FTF3, TEB2, QXF1, QXF3, SHAM, DFC1, DFC3, FLU2, BOS1, BOS3,
-            MCB2, FTF1, FTF3, TEB2, QXF1, QXF3, SHAM, DFC1, DFC3, FLU2, BOS1, BOS3,
-        ]
-    elif plate == "plate6b":
-        treatments = [
-            MCB1, MCB3, SHAM, DFC1, DFC3, FTF2, TEB1, TEB3, FLU2, BOS1, BOS3, QXF2,
-            MCB1, MCB3, SHAM, DFC1, DFC3, FTF2, TEB1, TEB3, FLU2, BOS1, BOS3, QXF2,
-            MCB1, MCB3, SHAM, DFC1, DFC3, FTF2, TEB1, TEB3, FLU2, BOS1, BOS3, QXF2,
-            MCB1, MCB3, SHAM, DFC1, DFC3, FTF2, TEB1, TEB3, FLU2, BOS1, BOS3, QXF2,
-            MCB2, CNTL, AZX1, DFC2, FTF1, FTF3, TEB2, FLU1, FLU3, BOS2, QXF1, QXF3,
-            MCB2, CNTL, AZX1, DFC2, FTF1, FTF3, TEB2, FLU1, FLU3, BOS2, QXF1, QXF3,
-            MCB2, CNTL, AZX1, DFC2, FTF1, FTF3, TEB2, FLU1, FLU3, BOS2, QXF1, QXF3,
-            MCB2, CNTL, AZX1, DFC2, FTF1, FTF3, TEB2, FLU1, FLU3, BOS2, QXF1, QXF3,
-        ]
-    elif plate == "plate7":
+    # plate IDs 1-6 are deprecated and have been removed from this branch
+    # plate IDs 7-20: treatments = QOI + Quinoxfen
+    # plate IDs 21-28: treatments = SDHI
+    if plate == "plate7":
         treatments = [
             PYL1, QXF4, QXF1, SHAM, MDS1, QXF3, AZX1, QXF2, QXF6, TFX1, QXF5, CNTL,
             PYL1, QXF4, QXF1, SHAM, MDS1, QXF3, AZX1, QXF2, QXF6, TFX1, QXF5, CNTL,
@@ -356,6 +216,94 @@ def get_treatments(plate, block):
             TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
             TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
             TFX1, PYL1, CNTL, MDS1, AZX1, SHAM, QXF1, QXF0, QXF2, QXF3, QXF4, QXF5,
+        ]
+    elif plate == "plate21":
+        treatments = [
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+            BOS4, CNTL, FLU3, BOS3, FLU1, BOS2, SHAM, BOS5, BOS1, FLU2, FLU4, FLU5,
+        ]
+    elif plate == "plate22":
+        treatments = [
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+            FLU4, BOS2, BOS5, FLU1, BOS3, BOS4, SHAM, FLU5, FLU3, BOS1, CNTL, FLU2,
+        ]
+    elif plate == "plate23":
+        treatments = [
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+            FLU2, FLU3, FLU5, FLU1, CNTL, BOS1, BOS3, BOS2, BOS5, BOS4, FLU4, SHAM,
+        ]
+    elif plate == "plate24":
+        treatments = [
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+            SHAM, FLU5, BOS5, FLU2, FLU4, BOS1, FLU1, CNTL, BOS2, BOS3, BOS4, FLU3,
+        ]
+    elif plate == "plate25":
+        treatments = [
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU5, FLU4, BOS5, BOS4, BOS3, FLU3, BOS2, FLU1, SHAM, BOS1, CNTL, FLU2,
+        ]
+    elif plate == "plate26":
+        treatments = [
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+            FLU3, BOS2, FLU1, FLU5, SHAM, BOS3, BOS4, BOS1, BOS5, CNTL, FLU2, FLU4,
+        ]
+    elif plate == "plate27":
+        treatments = [
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+            BOS3, FLU2, FLU1, BOS5, FLU3, FLU5, FLU4, BOS2, BOS4, SHAM, BOS1, CNTL,
+        ]
+    elif plate == "plate28":
+        treatments = [
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
+            FLU3, BOS4, BOS5, BOS2, FLU5, BOS3, FLU4, FLU1, SHAM, BOS1, CNTL, FLU2,
         ]
     elif plate == "plateUVCControl":
         treatments = [CNTL]
