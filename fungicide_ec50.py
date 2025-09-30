@@ -45,6 +45,8 @@ def calculate_ec50s(file):
     )
     workbook = openpyxl.load_workbook(file)
     for sheet_name in workbook.sheetnames:
+        # Initialize empty results
+        results = pd.Series([])
         sheet = workbook[sheet_name]
         df = pd.DataFrame(sheet.values)
         df.columns = df.iloc[0]
@@ -115,19 +117,32 @@ def calculate_ec50s(file):
                 )
             except Exception as e:
                 print(str(e))
-        separator = pd.Series([""] * len(results_df.columns), index=results_df.columns)
-        results_df = pd.concat([results_df, separator.to_frame().T], ignore_index=True)
+        if not results.empty:
+            separator = pd.Series(
+                [""] * len(results_df.columns), index=results_df.columns
+            )
+            results_df = pd.concat(
+                [results_df, separator.to_frame().T], ignore_index=True
+            )
+        else:
+            print(f"No EC50 results available for {isolate}: {plate}")
     results_df.sort_values(by="Isolate")
     with pd.ExcelWriter("FungicideEC50s.xlsx", engine="openpyxl") as writer:
         results_df.to_excel(writer, index=False)
-    return results_df.to_string(index=False)
+    return (
+        results_df.to_string(index=False)
+        if not results_df.empty
+        else f"No EC50 results available for this workbook: {file}.\n"
+    )
 
 
 def main():
     """Main function. Handle any arguments."""
     os.chdir(os.path.dirname(__file__))
-    results = calculate_ec50s(sys.argv[1]) if len(sys.argv) > 1 else calculate_ec50s(
-        "GPMPhenotypingAssay_Workbook.xlsx"
+    results = (
+        calculate_ec50s(sys.argv[1])
+        if len(sys.argv) > 1
+        else calculate_ec50s("GPMPhenotypingAssay_Workbook.xlsx")
     )
     input(results)
 
