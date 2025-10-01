@@ -41,7 +41,7 @@ def calculate_ec50s(file):
     if not os.path.exists(file):
         return f"File: {file} not found."
     results_df = pd.DataFrame(
-        columns=["Isolate", "Plate", "Fungicide", "EC50", "SE", "R^2"]
+        columns=["Isolate", "Plate", "Fungicide", "EC50", "SE", "R^2", "Keep?"]
     )
     workbook = openpyxl.load_workbook(file)
     for sheet_name in workbook.sheetnames:
@@ -51,6 +51,8 @@ def calculate_ec50s(file):
         df = pd.DataFrame(sheet.values)
         df.columns = df.iloc[0]
         df = df.drop(0).reset_index(drop=True)
+        if not any(x in df.columns for x in ("Treatment", "48hr %")):
+            continue
         isolate = sheet_name.split(" ")[0]
         plate = sheet_name.split(" ")[1]
         fungicides = list(
@@ -75,6 +77,15 @@ def calculate_ec50s(file):
             )
             concentrations = data["Concentration"].values
             germination_rates = data["48hr %"].values
+            # Check lower and upper bounds on germination rates
+            keep = (
+                "NO"
+                if (
+                    float(min(germination_rates)) >= 50
+                    or float(max(germination_rates)) <= 50
+                )
+                else "YES"
+            )
             # Fit the curve and generate EC50
             initial_guess = [
                 min(germination_rates),
@@ -99,8 +110,8 @@ def calculate_ec50s(file):
                 ec50_SE = np.sqrt(np.diag(pcov))[2]
                 fitted = logistic_4pl(concentrations, *popt)
                 r2 = round(r2_score(germination_rates, fitted), 5)
-                if ec50_SE > ec50:
-                    continue
+                if ec50_SE > ec50 and keep == "YES":
+                    keep = "MAYBE"
                 results = pd.Series(
                     [
                         isolate,
@@ -109,6 +120,7 @@ def calculate_ec50s(file):
                         ec50,
                         ec50_SE,
                         r2,
+                        keep,
                     ],
                     index=results_df.columns,
                 )
