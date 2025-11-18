@@ -197,7 +197,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
         )
     else:
         plotted = (
-            " - ".join(i for i in isolates) if len(set(isolates)) > 1 else isolates[0]
+            " - ".join(isolates) if len(set(isolates)) > 1 else isolates[0]
         )
         plt.title(f"UV-C Dose-Response Curve: {plotted}")
         plt.savefig(
