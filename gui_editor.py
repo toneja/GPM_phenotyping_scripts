@@ -183,6 +183,7 @@ class ExcelDataEditor:
         self.context_menu.add_command(label="Duplicate Row", command=self.duplicate_row)
         self.context_menu.add_separator()
         self.context_menu.add_command(label="Archive Run(s)", command=self.archive_run)
+        self.context_menu.add_command(label="Un-Archive Run(s)", command=self.unarchive_run)
         self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Plot ED50(s)", command=self.calculate_ed50_for_row
@@ -535,6 +536,38 @@ class ExcelDataEditor:
 
         self.display_sheet()
         self.status_var.set(f"Row(s) {row_indices} archived")
+
+    def unarchive_run(self):
+        """docstring goes here."""
+        if not self.current_sheet == "Archived Runs":
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Archived Runs' sheet.",
+            )
+            return
+
+        row_indices = self.get_selected_row_indices()
+        if row_indices is None:
+            messagebox.showwarning("Warning", "No row(s) selected")
+            return
+
+        df = self.excel_data[self.current_sheet]
+        assay_df = self.excel_data.get("Assay Data")
+        if assay_df is None:
+            # this isn't really ever going to happen, but we'll prep for it
+            assay_df = pd.DataFrame(columns=df.columns)
+            assay_df = assay_df.astype(df.types_to_dict())
+        # Insert Un-Archived row
+        self.excel_data["Assay Data"] = pd.concat(
+            [assay_df, df.iloc[row_indices]], ignore_index=True
+        )
+        # Remove row from Archived Runs sheet
+        self.excel_data["Archived Runs"] = df.drop(df.index[row_indices]).reset_index(
+            drop=True
+        )
+
+        self.display_sheet()
+        self.status_var.set(f"Row(s) {row_indices} un-archived")
 
     def edit_cell(self, event):
         """docstring goes here."""
