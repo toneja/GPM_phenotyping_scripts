@@ -132,8 +132,29 @@ def calculate_ed50(isolates, plates, show_plot=False):
         controls = data[data["Treatment"].str.contains("Control")]
         control_avg = sum(controls["48hr %"].values) / len(controls)
         # Extract dose and response data
-        data = data[data["Treatment"].str.contains("Speed|J/m2", na=False)]
-        data["Concentration"] = data["Treatment"].str.extract(r"(\d+)").astype(int)
+        data = data[data["Treatment"].str.contains("Speed|J/m2|Control", na=False)]
+        data["Concentration"] = pd.Series()
+        for _, row in data.iterrows():
+            if row["Treatment"] == "Control":
+                data["Concentration"] = pd.concat(
+                    [data["Concentration"], pd.Series([0])], ignore_index=True
+                )
+            else:
+                data["Concentration"] = pd.concat(
+                    [
+                        data["Concentration"],
+                        pd.Series(
+                            [
+                                int(
+                                    re.compile(r"(\d+)")
+                                    .search(row["Treatment"])
+                                    .group(1)
+                                )
+                            ]
+                        ),
+                    ],
+                    ignore_index=True,
+                )
         concentrations = data["Concentration"].values
         germination_rates = data["48hr %"].values
         # Normalize germination rates relative to the controls
@@ -196,9 +217,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
             f"results/ED50_{isolates[0]}_{plates[0]}.png", dpi=300, bbox_inches="tight"
         )
     else:
-        plotted = (
-            " - ".join(isolates) if len(set(isolates)) > 1 else isolates[0]
-        )
+        plotted = " - ".join(isolates) if len(set(isolates)) > 1 else isolates[0]
         plt.title(f"UV-C Dose-Response Curve: {plotted}")
         plt.savefig(
             f"results/ED50_{plotted}_combined.png", dpi=300, bbox_inches="tight"
