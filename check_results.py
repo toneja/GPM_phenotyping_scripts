@@ -61,8 +61,11 @@ def main():
             df = pd.DataFrame(data)
             for i, row in df.iterrows():
                 germination += float(row["48hr %"])
-                spores += int(row["Total"])
+                well_count = int(row["Total"])
+                spores += well_count
                 treatment = row["Treatment"]
+                if well_count < spore_min:
+                    print(f"WARNING: LOW SPORE COUNT: {isolate}: {plate}: {treatment}: {row['Image']}: {well_count}")
                 if (i + 1) % block_size == 0:
                     germination_avg = int(round(germination / block_size, 0))
                     spore_avg = int(round(spores / block_size, 0))
