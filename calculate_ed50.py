@@ -177,7 +177,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
             -1,
         ]
         bounds = (
-            [0, 0, min(concentrations), -10],
+            [0, 0, min(concentrations), -np.inf],
             [100, 100, max(concentrations) * 10, 10],
         )
         popt, pcov = curve_fit(  # pylint: disable=unbalanced-tuple-unpacking
