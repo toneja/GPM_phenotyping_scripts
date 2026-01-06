@@ -183,11 +183,14 @@ class ExcelDataEditor:
         self.context_menu.add_command(label="Duplicate Row", command=self.duplicate_row)
         self.context_menu.add_separator()
         self.context_menu.add_command(label="Archive Run(s)", command=self.archive_run)
-        self.context_menu.add_command(label="Un-Archive Run(s)", command=self.unarchive_run)
+        self.context_menu.add_command(
+            label="Un-Archive Run(s)", command=self.unarchive_run
+        )
         self.context_menu.add_separator()
         self.context_menu.add_command(
             label="Plot ED50(s)", command=self.calculate_ed50_for_row
         )
+        self.context_menu.add_command(label="Jump to sheet", command=self.jump_to_sheet)
 
         self.tree.bind("<Button-3>", self.show_context_menu)  # Right-click
         self.tree.bind("<Double-1>", self.edit_cell)  # Double-click to edit
@@ -607,6 +610,36 @@ class ExcelDataEditor:
             self.excel_data[self.current_sheet].iloc[row_index, col_index] = new_value
             self.display_sheet()
             self.status_var.set("Cell updated")
+
+    def jump_to_sheet(self):
+        """Jump to a specific sheet in the workbook"""
+        if not any(x in self.current_sheet for x in ("Assay Data", "Archived Runs")):
+            messagebox.showwarning(
+                "Warning",
+                "This operation is only available when editing the 'Assay Data' or 'Archived Runs' sheets.",
+            )
+            return
+
+        row_index = self.get_selected_row_indices()
+        if row_index is None:
+            messagebox.showwarning("Warning", "No row selected")
+            return
+        if len(row_index) > 1:
+            messagebox.showwarning("Warning", "You can only select 1 assay run")
+            return
+
+        df = self.excel_data[self.current_sheet]
+        isolate = df.iloc[row_index]["Isolate"].item()
+        plate = df.iloc[row_index]["Plate ID"].item()
+        sheet_name = f"{isolate} {plate}".upper()
+        if sheet_name not in list(self.excel_data.keys()):
+            messagebox.showwarning("Warning", f"Sheet: {sheet_name} is not in the workbook")
+            return
+
+        self.current_sheet = sheet_name
+        self.sheet_var.set(sheet_name)
+        self.display_sheet()
+        self.status_var.set(f"Displaying sheet {self.current_sheet}")
 
     def get_results(self):
         """Run batch_process.batch_process() and capture output"""
