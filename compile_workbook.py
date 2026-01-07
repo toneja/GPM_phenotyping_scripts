@@ -60,7 +60,11 @@ def compile_workbook(workbook_file, csv_files):
         sheet = workbook.create_sheet(title=sheet_name)
 
         # Open the csv file and read in the data
-        data = pd.read_csv(file)
+        try:
+            data = pd.read_csv(file)
+        except:
+            print(f"ERROR: unable to read {file} - file possibly corrupted.")
+            continue
         df = pd.DataFrame(data)
 
         # Loop through the rows and add them to the sheet

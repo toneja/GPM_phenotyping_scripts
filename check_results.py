@@ -57,7 +57,11 @@ def main():
                 spore_min = 10
             file = os.path.join("results", file)
             germination, spores = 0, 0
-            data = pd.read_csv(file)
+            try:
+                data = pd.read_csv(file)
+            except:
+                print(f"ERROR: unable to read {file} - file possibly corrupted.")
+                continue
             df = pd.DataFrame(data)
             for i, row in df.iterrows():
                 germination += float(row["48hr %"])
@@ -65,7 +69,9 @@ def main():
                 spores += well_count
                 treatment = row["Treatment"]
                 if well_count < spore_min:
-                    print(f"WARNING: LOW SPORE COUNT: {isolate}: {plate}: {treatment}: {row['Image']}: {well_count}")
+                    print(
+                        f"WARNING: LOW SPORE COUNT: {isolate}: {plate}: {treatment}: {row['Image']}: {well_count}"
+                    )
                 if (i + 1) % block_size == 0:
                     germination_avg = int(round(germination / block_size, 0))
                     spore_avg = int(round(spores / block_size, 0))
