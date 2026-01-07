@@ -97,7 +97,7 @@ def plot_curve(index, plate, concentrations, germination_rates, popt, pcov, colo
     plt.xlabel("UV-C Dose (J/m$^2$)")
     plt.ylabel("Mean germination relative to control (%)")
     plt.legend()
-    return ed50, ed50_SE
+    return ed50, ed50_SE, r2
 
 
 def calculate_ed50(isolates, plates, show_plot=False):
@@ -155,8 +155,8 @@ def calculate_ed50(isolates, plates, show_plot=False):
                     ],
                     ignore_index=True,
                 )
-        concentrations = data["Concentration"].values
-        germination_rates = data["48hr %"].values
+        concentrations = data["Concentration"].values.astype(float)
+        germination_rates = data["48hr %"].values.astype(float)
         # Normalize germination rates relative to the controls
         for i, n in enumerate(germination_rates):
             germination_rates[i] = min(round(n / control_avg * 100, 2), 100)
@@ -191,7 +191,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
         # Handle plotting of a single assay run
         if len(isolates) == 1:
             index = -1
-        ed50, ed50_SE = plot_curve(
+        ed50, ed50_SE, r2 = plot_curve(
             index, plate, concentrations, germination_rates, popt, pcov
         )
         print(f"Estimated UV-C ED50: {isolate}, {plate}: {ed50} ± {ed50_SE} J/m^2")
@@ -209,6 +209,11 @@ def calculate_ed50(isolates, plates, show_plot=False):
                     row=idx + 1,
                     column=assay_df.columns.get_loc("ED50 (J/m^2)") + 1,
                     value=f"{ed50} ± {ed50_SE}",
+                )
+                sheet.cell(
+                    row=idx + 1,
+                    column=assay_df.columns.get_loc("R^2") + 1,
+                    value=f"{r2}",
                 )
         uvc_workbook.save(workbook)
     if len(plates) == 1:
