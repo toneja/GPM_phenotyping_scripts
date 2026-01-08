@@ -89,6 +89,8 @@ def plot_curve(index, plate, concentrations, germination_rates, popt, pcov, colo
         color=colors[index] if (index >= 0 and color) else "black",
         label=f"ED$_{{50}}$ = {ed50} ± {ed50_SE}",
     )
+    # keep the y-axis scale consistent
+    plt.ylim((0, 100))
     # add R-squared value to the legend
     plt.plot([], [], "", label=f"R$^2$ = {r2}", linestyle="None", marker="")
     min_tick = int(np.floor(min(np.min(concentrations), 0) / 50.0) * 50)
