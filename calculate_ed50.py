@@ -164,13 +164,20 @@ def calculate_ed50(isolates, plates, show_plot=False):
             germination_rates[i] = min(round(n / control_avg * 100, 2), 100)
         # Use mean germination values
         size = int(len(germination_rates) / len(set(concentrations)))
-        concentrations = [
-            concentrations[i] for i in range(0, len(concentrations), size)
-        ]
         germination_rates = [
             sum(germination_rates[i : i + size]) / size
             for i in range(0, len(germination_rates), size)
         ]
+        # get unique concentrations
+        concentrations = np.unique(concentrations)
+        # sort the data back into its original order
+        concentrations = np.concatenate((concentrations[1:], concentrations[:1]))
+        concentrations = concentrations[::-1]
+        # calculate standard deviations for each dose - re-sort values after
+        std_df = data.groupby("Concentration").agg(std=("48hr %", "std")).reset_index()
+        sigma = std_df["std"].values.astype(float)
+        sigma = np.concatenate((sigma[1:], sigma[:1]))
+        sigma = sigma[::-1]
         # Fit the curve and generate ED50
         initial_guess = [
             min(germination_rates),
@@ -189,6 +196,7 @@ def calculate_ed50(isolates, plates, show_plot=False):
             p0=initial_guess,
             maxfev=10000,
             bounds=bounds,
+            sigma=sigma,
         )
         # Handle plotting of a single assay run
         if len(isolates) == 1:
