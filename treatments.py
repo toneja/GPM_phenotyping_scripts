@@ -22,7 +22,7 @@
 # Definitions of fungicide treatments; 1 μg/mL = 1 ppm
 # Controls
 CNTL = "Control"
-SHAM = "SHAM 100 μg/mL"
+SHAM = "SHAM 10 μg/mL"
 # FRAC 11: Quinone Outside Inhibitors
 AZX1 = "Azoxystrobin 10 μg/mL"
 MDS1 = "Mandestrobin 10 μg/mL"
