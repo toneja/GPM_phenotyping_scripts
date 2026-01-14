@@ -1,0 +1,22 @@
+Selected features: Area, Perim., Major, Minor, Circ., Feret, AR, Round
+Accuracy: 0.9514195583596214
+Precision: 0.951571441504869
+Recall: 0.9514195583596214
+F1 Score: 0.9475238845052817
+ROC AUC Score: 0.9807594917386965
+Log Loss: 0.14857778874693495
+Sensitivity: -1: 0.5805243445692884, 0: 0.9844851904090268, 1: 0.9865319865319865
+Specificity: -1: 0.9341246290801187, 0: 0.9811643835616438, 1: 0.9965552876334826
+Classification Report:
+              precision    recall  f1-score   support
+
+          -1       0.94      0.58      0.72       267
+           0       0.98      0.98      0.98      1418
+           1       0.93      0.99      0.96      1485
+
+    accuracy                           0.95      3170
+   macro avg       0.95      0.85      0.89      3170
+weighted avg       0.95      0.95      0.95      3170
+
+ROC Curve chart saved to ROC_Curve.png
+Model evaluation complete. Press ENTER to close.
