@@ -349,7 +349,7 @@ class ExcelDataEditor:
                 col,
                 width=120,
                 minwidth=80,
-                stretch=not any(x in col for x in ("Plate ID", "Quality Check")),
+                stretch=not any(x in col for x in ("Plate ID", "Quality Check", "Notes")),
             )
 
         # Insert data (without index)
