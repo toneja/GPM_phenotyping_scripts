@@ -296,7 +296,7 @@ class ExcelDataEditor:
         # Get all treeview data
         data = [(self.tree.set(k, col), k) for k in self.tree.get_children("")]
 
-        # Sort Plate ID data by date string
+        # Sort Plate ID data by irradiation timepoint
         if col == "Plate ID":
             data.sort(
                 key=lambda t: float(t[0].split("-")[2].split("hr")[0]), reverse=reverse
@@ -311,6 +311,19 @@ class ExcelDataEditor:
                 ),
                 reverse=reverse,
             )
+        # Properly handle sorting by date
+        elif col == "Date":
+            # Sort with the year at the beginning - TODO: use datetime for this
+            data.sort(
+                key=lambda t: int(
+                    t[0].split("/")[2] + t[0].split("/")[0] + t[0].split("/")[1]
+                ),
+                reverse=reverse,
+            )
+        # Properly handle sorting by Application Time
+        elif col == "App Time":
+            # Sort by the first chunk of the string
+            data.sort(key=lambda t: float(t[0].split(" hour")[0]), reverse=reverse)
         else:
             # Try to sort numerically, fallback to string sort
             try:
@@ -349,7 +362,9 @@ class ExcelDataEditor:
                 col,
                 width=120,
                 minwidth=80,
-                stretch=not any(x in col for x in ("Plate ID", "Quality Check", "Notes")),
+                stretch=not any(
+                    x in col for x in ("Plate ID", "Quality Check", "Notes")
+                ),
             )
 
         # Insert data (without index)
@@ -410,6 +425,11 @@ class ExcelDataEditor:
         parts = folder_path.split("_")
         isolate = parts[1]
         plate = parts[0].split("plate")[1]
+        date = plate.split("-")[1]
+        mm, dd, yy = date[0:2], date[2:4], date[4:6]
+        date = f"{mm}/{dd}/20{yy}"
+        timepoint = plate.split("-")[2].split("hr")[0]
+        timepoint += " hour" if float(timepoint) == 1 else " hours"
 
         # Wavelength: (irradiance, lamp length)
         lamp_dict = {254: (20.6385, 385)}
@@ -418,14 +438,26 @@ class ExcelDataEditor:
 
         # Create new row with the data
         df = self.excel_data[self.current_sheet]
-        new_data = [isolate, plate, "nan", "nan", irradiance, lamp_len]
+        new_data = [
+            date,
+            isolate,
+            timepoint,
+            wavelength,
+            plate,
+            "nan",  # Quality Check
+            "nan",  # ED50
+            "nan",  # R^2
+            "nan",  # Notes
+            irradiance,
+            lamp_len,
+        ]
         # Fill in timings from previous row if users wants
         if messagebox.askyesno(
             "Copy timing data",
             "Do you want to copy the timing data from the previous row?",
         ):
             # Get timing data from previous row
-            time_cols = df.filter(like="Time").columns
+            time_cols = df.filter(like="Time ").columns
             time_vals = df[time_cols].iloc[-1].tolist()
         else:
             # Fill missing timing data with nans
@@ -633,7 +665,9 @@ class ExcelDataEditor:
         plate = df.iloc[row_index]["Plate ID"].item()
         sheet_name = f"{isolate} {plate}".upper()
         if sheet_name not in list(self.excel_data.keys()):
-            messagebox.showwarning("Warning", f"Sheet: {sheet_name} is not in the workbook")
+            messagebox.showwarning(
+                "Warning", f"Sheet: {sheet_name} is not in the workbook"
+            )
             return
 
         self.current_sheet = sheet_name

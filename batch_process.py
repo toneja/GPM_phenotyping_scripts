@@ -121,7 +121,7 @@ def batch_process(image_folder="ECHO Images", prompt=True):
     # Compile the results into a workbook
     compile_workbook.main()
 
-    # Generate Dose-Response curves
+    # Generate Dose-Response curves and update workbook info
     workbook = "GPMPhenotypingAssay_Workbook.xlsx"
     if os.path.exists(workbook):
         uvc_workbook = openpyxl.load_workbook(workbook)
@@ -130,10 +130,32 @@ def batch_process(image_folder="ECHO Images", prompt=True):
             sheet = uvc_workbook[sheet_name]
             df = pd.DataFrame(sheet.values)
             df.columns = df.iloc[0]
-            for _, row in df[1:].iterrows():
+            for idx, row in df[1:].iterrows():
+                plate = row["Plate ID"]
                 # Only calculate ED50 if it is missing from the workbook
                 if row["Quality Check"] == "PASS" and pd.isna(row["ED50 (J/m^2)"]):
-                    calculate_ed50.main([row["Isolate"]], [row["Plate ID"]], False)
+                    calculate_ed50.main([row["Isolate"]], [plate], False)
+                # Fill in assay data from plate ID string
+                date = plate.split("-")[1]
+                mm, dd, yy = date[0:2], date[2:4], date[4:6]
+                date = f"{mm}/{dd}/20{yy}"
+                timepoint = plate.split("-")[2].split("hr")[0]
+                timepoint += " hour" if float(timepoint) == 1 else " hours"
+                wavelength = plate.split("-")[3]
+                sheet.cell(
+                    row=idx + 1, column=df.columns.get_loc("Date") + 1, value=date
+                )
+                sheet.cell(
+                    row=idx + 1,
+                    column=df.columns.get_loc("App Time") + 1,
+                    value=timepoint,
+                )
+                sheet.cell(
+                    row=idx + 1,
+                    column=df.columns.get_loc("Wavelength") + 1,
+                    value=wavelength,
+                )
+        uvc_workbook.save(workbook)
 
     # Fix up the workbook formatting
     format_workbook.main()

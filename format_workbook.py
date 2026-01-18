@@ -42,7 +42,7 @@ def format_workbook(workbook_file):
                     max_length = 13
                     break
                 if len(str(cell.value)) > max_length:
-                    max_length = len(cell.value)
+                    max_length = len(str(cell.value))
             adjusted_width = max_length + 2
             sheet.column_dimensions[column_letter].width = adjusted_width
     workbook.save(workbook_file)
