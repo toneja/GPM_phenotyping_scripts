@@ -25,6 +25,7 @@ import re
 import sys
 import tkinter as tk
 import traceback
+from datetime import datetime
 from io import StringIO
 from tkinter import filedialog, messagebox, simpledialog, ttk
 
@@ -313,10 +314,10 @@ class ExcelDataEditor:
             )
         # Properly handle sorting by date
         elif col == "Date":
-            # Sort with the year at the beginning - TODO: use datetime for this
+            # Sort with the year at the beginning
             data.sort(
                 key=lambda t: int(
-                    t[0].split("/")[2] + t[0].split("/")[0] + t[0].split("/")[1]
+                    datetime.strptime(t[0], "%m/%d/%Y").strftime("%Y%m%d")
                 ),
                 reverse=reverse,
             )
@@ -425,9 +426,7 @@ class ExcelDataEditor:
         parts = folder_path.split("_")
         isolate = parts[1]
         plate = parts[0].split("plate")[1]
-        date = plate.split("-")[1]
-        mm, dd, yy = date[0:2], date[2:4], date[4:6]
-        date = f"{mm}/{dd}/20{yy}"
+        date = datetime.strptime(plate.split("-")[1], "%m%d%y").strftime("%m/%d/%Y")
         timepoint = plate.split("-")[2].split("hr")[0]
         timepoint += " hour" if float(timepoint) == 1 else " hours"
 

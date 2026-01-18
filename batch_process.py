@@ -28,6 +28,7 @@ import os
 import subprocess
 import sys
 import time
+from datetime import datetime
 
 import openpyxl
 import pandas as pd
@@ -136,9 +137,9 @@ def batch_process(image_folder="ECHO Images", prompt=True):
                 if row["Quality Check"] == "PASS" and pd.isna(row["ED50 (J/m^2)"]):
                     calculate_ed50.main([row["Isolate"]], [plate], False)
                 # Fill in assay data from plate ID string
-                date = plate.split("-")[1]
-                mm, dd, yy = date[0:2], date[2:4], date[4:6]
-                date = f"{mm}/{dd}/20{yy}"
+                date = datetime.strptime(plate.split("-")[1], "%m%d%y").strftime(
+                    "%m/%d/%Y"
+                )
                 timepoint = plate.split("-")[2].split("hr")[0]
                 timepoint += " hour" if float(timepoint) == 1 else " hours"
                 wavelength = plate.split("-")[3]
@@ -155,7 +156,7 @@ def batch_process(image_folder="ECHO Images", prompt=True):
                     column=df.columns.get_loc("Wavelength") + 1,
                     value=wavelength,
                 )
-        uvc_workbook.save(workbook)
+            uvc_workbook.save(workbook)
 
     # Fix up the workbook formatting
     format_workbook.main()
