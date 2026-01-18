@@ -23,9 +23,9 @@ import openpyxl
 import pandas as pd
 
 
-def calculate_exposure(row, first, last):
+def calculate_exposure(row, cols):
     sampled_len = 250
-    exposure_time = sum(row[first:last]) / 3
+    exposure_time = row[cols].mean()
     exposure_time *= row["Lamp Length (mm)"] / sampled_len
     uvc_dose = int(round(exposure_time * row["Irradiance (W/m2)"], 0))
     return uvc_dose
@@ -46,12 +46,11 @@ def main():
             plate = row["Plate ID"]
             isolate = row["Isolate"]
             doses = {}
-            col = uvc_df.columns.get_loc("Time 1a")
             for index in range(1, 5 + 1):
+                cols = uvc_df.filter(like=f"Time {index}").columns
                 doses[
                     f"Speed {index}"
-                ] = f"{calculate_exposure(row, col, col + 3)} J/m2"
-                col += 3
+                ] = f"{calculate_exposure(row, cols)} J/m2"
             results_file = f"results/FinalResults_plate{plate}_{isolate}.csv"
             if os.path.exists(results_file):
                 assay_data = pd.read_csv(results_file)
