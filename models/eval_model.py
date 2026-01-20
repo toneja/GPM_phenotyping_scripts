@@ -154,6 +154,11 @@ def main(file):
         y_train,
         y_test,
     )
+    # save the separate datasets to a file
+    X_train["class"] = y_train
+    X_train.to_csv("training_dataset.csv")
+    X_test["class"] = y_test
+    X_test.to_csv("testing_dataset.csv")
     input("Model evaluation complete. Press ENTER to close.\n")
 
 
