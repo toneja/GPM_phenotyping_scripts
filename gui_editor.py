@@ -21,6 +21,7 @@
 
 
 import os
+import platform
 import re
 import sys
 import tkinter as tk
@@ -193,7 +194,10 @@ class ExcelDataEditor:
         )
         self.context_menu.add_command(label="Jump to sheet", command=self.jump_to_sheet)
 
-        self.tree.bind("<Button-3>", self.show_context_menu)  # Right-click
+        self.tree.bind(
+            "<Button-2>" if platform.system() == "Darwin" else "<Button-3>",
+            self.show_context_menu,
+        )  # Right-click
         self.tree.bind("<Double-1>", self.edit_cell)  # Double-click to edit
 
         # Status bar
