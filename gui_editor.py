@@ -210,6 +210,8 @@ class ExcelDataEditor:
 
     def show_context_menu(self, event):
         """docstring goes here."""
+        if not any(x in self.current_sheet for x in ("Assay Data", "Archived Runs")):
+            return
         try:
             self.context_menu.tk_popup(event.x_root, event.y_root)
         finally:
