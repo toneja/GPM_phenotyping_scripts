@@ -60,9 +60,19 @@ def plot_curve(index, plate, concentrations, germination_rates, popt, pcov, colo
     y_vals = logistic_4pl(x_vals, *popt)
     if index <= 0:
         plt.figure(figsize=(10, 6))
-    colors = ["green", "blue", "red", "orange"]
+    colors = {
+        0: "blue",
+        1: "orange",
+        4: "green",
+        6: "red",
+        7.5: "purple",
+        9: "brown",
+        23: "magenta",
+    }
     line_styles = ["-", "--", "-.", ":"]
     markers = ["o", "^", "s", "X"]
+    # extract timepoint from plate ID string
+    timepoint = extract_timepoint(plate)
     # Add a separator to the legend for readability
     if index > 0:
         plt.plot([], [], "", label="-" * 30, linestyle="None", marker="")
@@ -71,22 +81,22 @@ def plot_curve(index, plate, concentrations, germination_rates, popt, pcov, colo
         germination_rates,
         label="Data"
         if index < 0
-        else f"{extract_timepoint(plate)}hr ({plate.split('-')[0]} - {plate.split('-')[1]})",
-        color=colors[index] if (index >= 0 and color) else "black",
-        marker=markers[index if index >= 0 else 0],
+        else f"{timepoint}hr ({plate.split('-')[0]} - {plate.split('-')[1]})",
+        color=colors[timepoint] if (index >= 0 and color) else "black",
+        marker=markers[index if (index >= 0 and not color) else 0],
         edgecolors="black",
     )
     plt.plot(
         x_vals,
         y_vals,
         label="Fitted Curve",
-        color=colors[index] if (index >= 0 and color) else "black",
+        color=colors[timepoint] if (index >= 0 and color) else "black",
         linestyle=line_styles[index if (index >= 0 and not color) else 0],
     )
     plt.axvline(
         ed50,
         linestyle=line_styles[index if (index >= 0 and not color) else 1],
-        color=colors[index] if (index >= 0 and color) else "black",
+        color=colors[timepoint] if (index >= 0 and color) else "black",
         label=f"ED$_{{50}}$ = {ed50} ± {ed50_SE}",
     )
     # keep the y-axis scale consistent
