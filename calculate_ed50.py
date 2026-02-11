@@ -67,7 +67,7 @@ def plot_curve(index, plate, concentrations, germination_rates, popt, pcov, colo
         6: "red",
         7.5: "purple",
         9: "brown",
-        23: "magenta",
+        23: "pink",
     }
     line_styles = ["-", "--", "-.", ":"]
     markers = ["o", "^", "s", "X"]
@@ -116,8 +116,8 @@ def calculate_ed50(isolates, plates, show_plot=False):
     """docstring goes here"""
     # ignore annoying warnings
     warnings.filterwarnings("ignore")
-    # Plot up to 4 runs at a time
-    if len(isolates) > 4:
+    # Plot up to 7 runs at a time (only in color; max runs in black == 4)
+    if len(isolates) > 7:
         print(f"Can only plot up to 4 runs at a time, {len(isolates)} runs selected.")
         return
     # Load the data
