@@ -25,6 +25,7 @@
 
 
 import os
+import platform
 import subprocess
 import sys
 import time
@@ -82,8 +83,13 @@ def batch_process(image_folder="ECHO Images", prompt=True):
                         )
 
             # Execute the ImageJ macro for the current folder
+            imagej_bin = (
+                "/Applications/Fiji.app/Contents/MacOS/ImageJ-macosx"
+                if platform.system() == "Darwin"
+                else "./ImageJ/ImageJ.exe"
+            )
             command = [
-                "./ImageJ/ImageJ.exe",
+                imagej_bin,
                 "-macro",
                 "ImageJ/GPM/BatchProcess.ijm",
                 current_folder,
