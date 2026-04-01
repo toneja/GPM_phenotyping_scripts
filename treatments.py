@@ -47,13 +47,17 @@ QXF3 = "Quinoxyfen 0.1 μg/mL"
 QXF4 = "Quinoxyfen 1 μg/mL"
 QXF5 = "Quinoxyfen 10 μg/mL"
 QXF6 = "Quinoxyfen 100 μg/mL"
-# Definitions of UV-C treatments
+# Definitions of UV-C treatments (6 treatments, same wavelength with increasing doses)- OLD WAY
 UVC1 = "Speed 1"
 UVC2 = "Speed 2"
 UVC3 = "Speed 3"
 UVC4 = "Speed 4"
 UVC5 = "Speed 5"
-
+#Definitions of UV-C treatments (4 treatments, solo wavelengths and combination)- NEW WAY
+CNTL= "control"
+S254= "254 nm alone"
+S222= "222 nm alone"
+CMBO= "combination"
 
 # maps of treatment blocks
 def get_treatments(plate, block):
