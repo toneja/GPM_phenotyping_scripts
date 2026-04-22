@@ -45,12 +45,13 @@ def main():
         "QR1-2",
     ]
     for file in os.listdir("results"):
-        if file.endswith(".csv"):
+        if file.endswith(".csv") and "Control" not in file:
             plate = file.split("_")[1].upper()
             isolate = os.path.splitext(file)[0].split("_")[2].upper()
             discard_reasons = []
             if "UVC" in plate:
-                block_size = 4
+                plate_num = plate.split("UVC")[1].split("-")[0]
+                block_size = 4 if plate_num < 13 else 6
                 spore_min = 50
             else:
                 block_size = 8
