@@ -36,6 +36,7 @@ import pandas as pd
 from PIL import Image
 
 import analyze_results
+import calculate_deltas
 import calculate_ed50
 import check_results
 import compile_workbook
@@ -163,6 +164,9 @@ def batch_process(image_folder="ECHO Images", prompt=True):
                     value=wavelength,
                 )
             uvc_workbook.save(workbook)
+
+    # Calculate Deltas for new UV-C runs
+    calculate_deltas.main()
 
     # Fix up the workbook formatting
     format_workbook.main()
