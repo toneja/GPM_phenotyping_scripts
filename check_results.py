@@ -50,7 +50,7 @@ def main():
             isolate = os.path.splitext(file)[0].split("_")[2].upper()
             discard_reasons = []
             if "UVC" in plate:
-                plate_num = plate.split("UVC")[1].split("-")[0]
+                plate_num = int(plate.split("UVC")[1].split("-")[0])
                 block_size = 4 if plate_num < 13 else 6
                 spore_min = 50
             else:
