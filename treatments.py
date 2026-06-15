@@ -47,13 +47,17 @@ QXF3 = "Quinoxyfen 0.1 μg/mL"
 QXF4 = "Quinoxyfen 1 μg/mL"
 QXF5 = "Quinoxyfen 10 μg/mL"
 QXF6 = "Quinoxyfen 100 μg/mL"
-# Definitions of UV-C treatments
+# Definitions of UV-C treatments (6 treatments, same wavelength with increasing doses)- OLD WAY
 UVC1 = "Speed 1"
 UVC2 = "Speed 2"
 UVC3 = "Speed 3"
 UVC4 = "Speed 4"
 UVC5 = "Speed 5"
-
+#Definitions of UV-C treatments (4 treatments, solo wavelengths and combination)- NEW WAY
+CNTL= "control"
+S254= "254 nm alone"
+S222= "222 nm alone"
+CMBO= "combination"
 
 # maps of treatment blocks
 def get_treatments(plate, block):
@@ -403,4 +407,112 @@ def get_treatments(plate, block):
             UVC1, CNTL, UVC4, UVC5, UVC3, UVC2,
             UVC3, UVC4, CNTL, UVC2, UVC1, UVC5,
         ]
+    elif plate == "plateUVC13":
+	# CNTL=B, S254=A, S222=D, CMBO=C
+    treatments = [
+	    S222, S222, CNTL, S254, S222, CNTL,
+    	CNTL, CMBO, S222, CNTL, CMBO, CMBO,
+    	S254, CNTL, CMBO, S222, S254, S254,
+    	CMBO, S254, S254, CMBO, CNTL, S222,
+    ]
+
+    elif plate == "plateUVC14":
+    	# CNTL=C, S254=D, S222=B, CMBO=A
+        treatments = [
+    	    S254, S254, S222, CMBO, S254, S222,
+        	S222, CNTL, S254, S222, CNTL, CNTL,
+        	CMBO, S222, CNTL, S254, CMBO, CMBO,
+        	CNTL, CMBO, CMBO, CNTL, S222, S254,
+    ]
+
+    elif plate == "plateUVC15":
+    	# CNTL=A, S254=C, S222=B, CMBO=D
+        treatments = [
+        	CMBO, CMBO, S222, CNTL, CMBO, S222,
+        	S222, S254, CMBO, S222, S254, S254,
+        	CNTL, S222, S254, CMBO, CNTL, CNTL,
+        	S254, CNTL, CNTL, S254, S222, CMBO,
+    ]
+
+    elif plate == "plateUVC16":
+    	# CNTL=B, S254=D, S222=A, CMBO=C
+        treatments = [
+        	S254, S254, CNTL, S222, S254, CNTL,
+        	CNTL, CMBO, S254, CNTL, CMBO, CMBO,
+        	S222, CNTL, CMBO, S254, S222, S222,
+	        CMBO, S222, S222, CMBO, CNTL, S254,
+    ]
+
+    elif plate == "plateUVC17":
+    	# CNTL=C, S254=A, S222=D, CMBO=B
+        treatments = [
+        	S222, S222, CMBO, S254, S222, CMBO,
+        	CMBO, CNTL, S222, CMBO, CNTL, CNTL,
+        	S254, CMBO, CNTL, S222, S254, S254,
+	        CNTL, S254, S254, CNTL, CMBO, S222,
+    ]
+
+    elif plate == "plateUVC18":
+    	# CNTL=D, S254=B, S222=A, CMBO=C
+        treatments = [
+        	CNTL, CNTL, S254, S222, CNTL, S254,
+        	S254, CMBO, CNTL, S254, CMBO, CMBO,
+        	S222, S254, CMBO, CNTL, S222, S222,
+	        CMBO, S222, S222, CMBO, S254, CNTL,
+    ]
+
+    elif plate == "plateUVC19":
+    	# CNTL=D, S254=C, S222=A, CMBO=B
+        treatments = [
+    	    CNTL, CNTL, CMBO, S222, CNTL, CMBO,
+    	    CMBO, S254, CNTL, CMBO, S254, S254,
+        	S222, CMBO, S254, CNTL, S222, S222,
+        	S254, S222, S222, S254, CMBO, CNTL,
+    ]
+
+    elif plate == "plateUVC20":
+    	# CNTL=A, S254=D, S222=C, CMBO=B
+        treatments = [
+    	    S254, S254, CMBO, CNTL, S254, CMBO,
+    	    CMBO, S222, S254, CMBO, S222, S222,
+    	    CNTL, CMBO, S222, S254, CNTL, CNTL,
+        	S222, CNTL, CNTL, S222, CMBO, S254,
+    ]
+
+    elif plate == "plateUVC21":
+    	# CNTL=B, S254=C, S222=D, CMBO=A
+        treatments = [
+        	S222, S222, CNTL, CMBO, S222, CNTL,
+        	CNTL, S254, S222, CNTL, S254, S254,
+        	CMBO, CNTL, S254, S222, CMBO, CMBO,
+        	S254, CMBO, CMBO, S254, CNTL, S222,
+    ]
+
+    elif plate == "plateUVC22":
+    	# CNTL=A, S254=B, S222=C, CMBO=D
+        treatments = [
+        	CMBO, CMBO, S254, CNTL, CMBO, S254,
+    	    S254, S222, CMBO, S254, S222, S222,
+    	    CNTL, S254, S222, CMBO, CNTL, CNTL,
+	        S222, CNTL, CNTL, S222, S254, CMBO,
+    ]
+
+    elif plate == "plateUVC23":
+    	# CNTL=D, S254=A, S222=C, CMBO=B
+        treatments = [
+	        CNTL, CNTL, CMBO, S254, CNTL, CMBO,
+	        CMBO, S222, CNTL, CMBO, S222, S222,
+	        S254, CMBO, S222, CNTL, S254, S254,
+	        S222, S254, S254, S222, CMBO, CNTL,
+    ]
+
+    elif plate == "plateUVC24":
+    	# CNTL=C, S254=D, S222=B, CMBO=A
+        treatments = [
+        	S254, S254, S222, CMBO, S254, S222,
+        	S222, CNTL, S254, S222, CNTL, CNTL,
+        	CMBO, S222, CNTL, S254, CMBO, CMBO,
+        	CNTL, CMBO, CMBO, CNTL, S222, S254,
+    ]
+
     return treatments[block]
